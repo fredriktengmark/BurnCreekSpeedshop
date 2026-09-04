@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="sv" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadstars Anderstorp | Jänkebilsklubb</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome ikoner -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            headline: ['Oswald', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            carAmber: '#f59e0b',
+            carAmberDark: '#d97706',
+            garageDark: '#121316',
+            garageCard: '#1a1d21',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-garageDark text-gray-200 font-sans antialiased">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-garageDark/95 backdrop-blur-md border-b border-gray-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logotyp / Namn -->
+      <a href="#" class="flex items-center gap-3">
+        <i class="fa-solid fa-gauge-high text-carAmber text-2xl"></i>
+        <span class="font-headline text-2xl sm:text-3xl tracking-wider text-white uppercase">
+          Roadstars <span class="text-carAmber">Anderstorp</span>
+        </span>
+      </a>
+
+      <!-- Desktop-meny -->
+      <nav class="hidden md:flex items-center gap-8 font-medium">
+        <a href="#kalender" class="hover:text-carAmber transition">Träffar & Kalender</a>
+        <a href="#nyheter" class="hover:text-carAmber transition">Nyheter</a>
+        <a href="#galleri" class="hover:text-carAmber transition">Galleri</a>
+        <a href="#medlem" class="hover:text-carAmber transition">Bli Medlem</a>
+        <a href="#kontakt" class="bg-carAmber hover:bg-carAmberDark text-gray-950 px-5 py-2.5 rounded-lg font-bold transition shadow-md">
+          Kontakta oss
+        </a>
+      </nav>
+
+      <!-- Mobilmenyknapp -->
+      <button id="menu-btn" class="md:hidden text-gray-400 hover:text-white text-2xl focus:outline-none">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobilmeny dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-garageCard border-b border-gray-800 px-4 pt-2 pb-6 space-y-3 font-medium">
+      <a href="#kalender" class="block py-2 text-gray-300 hover:text-carAmber">Träffar & Kalender</a>
+      <a href="#nyheter" class="block py-2 text-gray-300 hover:text-carAmber">Nyheter</a>
+      <a href="#galleri" class="block py-2 text-gray-300 hover:text-carAmber">Galleri</a>
+      <a href="#medlem" class="block py-2 text-gray-300 hover:text-carAmber">Bli Medlem</a>
+      <a href="#kontakt" class="block py-2 text-carAmber font-bold">Kontakta oss</a>
+    </div>
+  </header>
+
+  <!-- HERO SEKTION -->
+  <section class="relative py-24 sm:py-32 bg-gradient-to-b from-garageCard via-garageDark to-garageDark overflow-hidden border-b border-gray-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-carAmber/10 border border-carAmber/30 text-carAmber text-sm font-semibold tracking-wide uppercase mb-6">
+        <i class="fa-solid fa-wrench"></i> Gemenskap sedan starten
+      </div>
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-headline font-bold text-white tracking-wide uppercase leading-tight mb-6">
+        Klassiskt stål, V8 & <span class="text-carAmber">Ren Passion</span>
+      </h1>
+      <p class="max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 mb-10">
+        Välkommen till Roadstars Anderstorp – klubben för oss med hjärtat i amerikanska bilar, gott fika och gemensamma cruisingrundor i Småland.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#kalender" class="bg-carAmber hover:bg-carAmberDark text-gray-950 font-bold px-8 py-3.5 rounded-lg transition shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-regular fa-calendar-days"></i> Se Träffkalendern
+        </a>
+        <a href="#medlem" class="border border-gray-700 hover:border-gray-500 bg-gray-900/60 hover:bg-gray-800 text-white font-semibold px-8 py-3.5 rounded-lg transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-id-card"></i> Bli Medlem
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRÄFFAR & KALENDER -->
+  <section id="kalender" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
+      <div>
+        <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide">Träffar & Kalender</h2>
+        <p class="text-gray-400 mt-2">Våra inbokade klubbträffar, fikakvällar och cruisingar.</p>
+      </div>
+      <span class="text-carAmber text-sm font-semibold mt-4 sm:mt-0 flex items-center gap-1.5">
+        <i class="fa-solid fa-location-dot"></i> Samling klubblokalen om ej annat anges
+      </span>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <!-- Event 1 -->
+      <div class="bg-garageCard border border-gray-800 rounded-xl p-6 flex flex-col justify-between hover:border-carAmber/40 transition">
+        <div>
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-carAmber mb-3">
+            <span>Cruising & Träff</span>
+            <span>Kl. 17:30</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Vårpremiär & Rundtur</h3>
+          <p class="text-gray-400 text-sm mb-4">Vi startar säsongen med samling, gemensam fika och en lugn tur runt bygden.</p>
+        </div>
+        <div class="pt-4 border-t border-gray-800/80 flex items-center text-xs text-gray-400">
+          <i class="fa-regular fa-calendar text-carAmber mr-2"></i> Lördag, Första helgen i Maj
+        </div>
+      </div>
+
+      <!-- Event 2 -->
+      <div class="bg-garageCard border border-gray-800 rounded-xl p-6 flex flex-col justify-between hover:border-carAmber/40 transition">
+        <div>
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-carAmber mb-3">
+            <span>Fikakväll</span>
+            <span>Kl. 18:00</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Onsdagsfika & Garagesnack</h3>
+          <p class="text-gray-400 text-sm mb-4">Kaffe, däckspark och planering inför sommarens stora utflykter. Alla välkomna!</p>
+        </div>
+        <div class="pt-4 border-t border-gray-800/80 flex items-center text-xs text-gray-400">
+          <i class="fa-regular fa-calendar text-carAmber mr-2"></i> Onsdagar (Jämna veckor)
+        </div>
+      </div>
+
+      <!-- Event 3 -->
+      <div class="bg-garageCard border border-gray-800 rounded-xl p-6 flex flex-col justify-between hover:border-carAmber/40 transition">
+        <div>
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-carAmber mb-3">
+            <span>Större Evenemang</span>
+            <span>Heldag</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Sommarträffen Roadstars</h3>
+          <p class="text-gray-400 text-sm mb-4">Utställning, publikomröstning, grill och finbilar från hela regionen.</p>
+        </div>
+        <div class="pt-4 border-t border-gray-800/80 flex items-center text-xs text-gray-400">
+          <i class="fa-regular fa-calendar text-carAmber mr-2"></i> Lördag i Juli
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NYHETER -->
+  <section id="nyheter" class="py-20 bg-garageCard/50 border-y border-gray-800/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide mb-3">Klubbnyheter</h2>
+      <p class="text-gray-400 mb-12">Senaste informationen från styrelsen och klubben.</p>
+
+      <div class="grid gap-8 md:grid-cols-2">
+        <article class="bg-garageCard border border-gray-800 rounded-xl p-6">
+          <span class="text-xs text-carAmber font-semibold uppercase">Information</span>
+          <h3 class="text-xl font-bold text-white mt-1 mb-2">Årsmöte och planering för säsongen</h3>
+          <p class="text-gray-400 text-sm leading-relaxed mb-4">
+            Protokollet från det senaste årsmötet finns nu tillgängligt för alla medlemmar. Vi gick igenom datum för sommarens evenemang och kommande garageprojekt.
+          </p>
+          <span class="text-xs text-gray-500">Publicerad: Våren 2026</span>
+        </article>
+
+        <article class="bg-garageCard border border-gray-800 rounded-xl p-6">
+          <span class="text-xs text-carAmber font-semibold uppercase">Lokal & Garage</span>
+          <h3 class="text-xl font-bold text-white mt-1 mb-2">Fixardag i klubblokalen</h3>
+          <p class="text-gray-400 text-sm leading-relaxed mb-4">
+            Stort tack till alla som slöt upp och hjälpte till att städa gårdsplanen och fixa i fikarummet inför de varmare månaderna!
+          </p>
+          <span class="text-xs text-gray-500">Publicerad: Nyligen</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- BILDGALLERI -->
+  <section id="galleri" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide">Bilder från Event</h2>
+      <p class="text-gray-400 mt-2">Ögonblick från våra cruisingar, utställningar och träffar.</p>
+    </div>
+
+    <!-- Bildrutnät (Ersätt src med era egna bildfiler i repot, t.ex. images/traff1.jpg) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="group relative bg-gray-900 rounded-xl overflow-hidden h-64 border border-gray-800">
+        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80" alt="Klassisk bil" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition p-4 flex items-end">
+          <p class="text-sm font-semibold text-white">Vårcruising</p>
+        </div>
+      </div>
+      <div class="group relative bg-gray-900 rounded-xl overflow-hidden h-64 border border-gray-800">
+        <img src="https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=800&q=80" alt="Muscle car" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition p-4 flex items-end">
+          <p class="text-sm font-semibold text-white">Fikakväll vid klubben</p>
+        </div>
+      </div>
+      <div class="group relative bg-gray-900 rounded-xl overflow-hidden h-64 border border-gray-800">
+        <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80" alt="Veteranbil detalj" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition p-4 flex items-end">
+          <p class="text-sm font-semibold text-white">Klassiskt krom</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEDLEMSSEKTION -->
+  <section id="medlem" class="py-20 bg-garageCard border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="w-16 h-16 bg-carAmber/10 text-carAmber rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl border border-carAmber/20">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide mb-4">Bli en del av Roadstars</h2>
+      <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+        Äger du en amerikansk entusiastbil, eller har du bara ett brinnande intresse för V8-muller och gemenskap? Vi välkomnar alltid nya medlemmar.
+      </p>
+
+      <div class="bg-garageDark border border-gray-800 rounded-2xl p-6 sm:p-8 text-left mb-8">
+        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-check text-carAmber"></i> Medlemsförmåner
+        </h3>
+        <ul class="space-y-2 text-gray-400 text-sm sm:text-base">
+          <li>• Tillgång till klubbens fikakvällar och medlemsaktiviteter.</li>
+          <li>• Möjlighet att köra med på våra samlade cruisingar och träffresor.</li>
+          <li>• Medlemskap i klubbens interna diskussionsgrupp och gemenskap.</li>
+        </ul>
+        <div class="mt-6 pt-6 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div>
+            <span class="text-xs uppercase text-gray-500 block">Medlemsavgift</span>
+            <span class="text-xl font-bold text-white">300 kr / år</span>
+          </div>
+          <a href="#kontakt" class="bg-carAmber hover:bg-carAmberDark text-gray-950 font-bold px-6 py-2.5 rounded-lg transition text-sm">
+            Ansök om medlemskap
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER & KONTAKT -->
+  <footer id="kontakt" class="bg-garageDark border-t border-gray-800 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+        <div>
+          <span class="font-headline text-2xl tracking-wider text-white uppercase block mb-3">
+            Roadstars <span class="text-carAmber">Anderstorp</span>
+          </span>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            Mötesplatsen för jänkebilsentusiaster i Anderstorp med omnejd.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold mb-3 text-sm uppercase tracking-wider">Hitta hit & Kontakt</h4>
+          <ul class="text-gray-400 text-sm space-y-2">
+            <li><i class="fa-solid fa-location-dot text-carAmber mr-2"></i> Anderstorp, Sverige</li>
+            <li><i class="fa-solid fa-envelope text-carAmber mr-2"></i> kontakt@roadstars-anderstorp.se</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold mb-3 text-sm uppercase tracking-wider">Följ Klubben</h4>
+          <p class="text-gray-400 text-sm mb-4">Håll dig uppdaterad om spontana åkturer och fikakvällar:</p>
+          <div class="flex gap-4 text-xl">
+            <a href="#" class="text-gray-400 hover:text-carAmber transition"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="text-gray-400 hover:text-carAmber transition"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-gray-800/80 text-center text-xs text-gray-500">
+        &copy; 2026 Roadstars Anderstorp. Alla rättigheter förbehållna.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Enkel script för mobilmenyn -->
+  <script>
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('mobile-menu');
+
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+      });
+    });
+  </script>
+</body>
+</html>
