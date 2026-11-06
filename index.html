@@ -355,13 +355,14 @@
         </div>
       </div>
 
-      <!-- Ljudkontroll för garagekänsla -->
+      <!-- Radiokanal: Go Country 105 -->
       <div class="mt-2 bg-bcs-black/90 border border-bcs-border p-1.5 rounded-lg flex items-center justify-between gap-2 flex-shrink-0">
-        <button id="v8SoundBtn" class="flex-1 py-1.5 px-2 rounded bg-bcs-charcoal hover:bg-bcs-border text-bcs-cream font-oswald text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 border border-bcs-copper/40">
-          <i class="ph-bold ph-engine text-bcs-copper"></i>
-          <span id="v8BtnText">Starta V8 Idle</span>
+        <audio id="radioAudio" preload="none" src="https://stream.revma.ihrhls.com/zc7452"></audio>
+        <button id="radioPlayBtn" class="flex-1 py-1.5 px-2 rounded bg-bcs-charcoal hover:bg-bcs-border text-bcs-cream font-oswald text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 border border-bcs-copper/40 transition-colors">
+          <i id="radioPlayIcon" class="ph-bold ph-broadcast text-bcs-copper text-base"></i>
+          <span id="radioBtnText">Starta Go Country</span>
         </button>
-        <span id="audioStatus" class="font-mono text-[10px] text-zinc-500 whitespace-nowrap">Standby</span>
+        <span id="radioStatus" class="font-mono text-[10px] text-zinc-500 whitespace-nowrap">Go Country 105</span>
       </div>
     </section>
 
@@ -651,79 +652,47 @@
     setInterval(renderNewsBatch, 12000); // Roterar batch var 12:e sekund för TV:n
     setInterval(fetchMotorsportRSS, 5 * 60 * 1000); // Ny data var 5:e minut
 
-    /* 5. V8 TOMGÅNGSLJUD */
-    let audioCtx = null;
-    let isV8Playing = false;
-    let v8Nodes = [];
+    /* 5. RADIO: GO COUNTRY */
+    const radioAudio = document.getElementById('radioAudio');
+    const radioBtn = document.getElementById('radioPlayBtn');
+    const radioBtnText = document.getElementById('radioBtnText');
+    const radioPlayIcon = document.getElementById('radioPlayIcon');
+    const radioStatus = document.getElementById('radioStatus');
+    let isRadioPlaying = false;
 
-    function toggleV8Engine() {
-      const btn = document.getElementById('v8SoundBtn');
-      const label = document.getElementById('v8BtnText');
-      const status = document.getElementById('audioStatus');
-
-      if (!isV8Playing) {
-        try {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc1 = audioCtx.createOscillator();
-          const osc2 = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          const filter = audioCtx.createBiquadFilter();
-
-          osc1.type = 'sawtooth';
-          osc1.frequency.setValueAtTime(32, audioCtx.currentTime);
-          osc2.type = 'triangle';
-          osc2.frequency.setValueAtTime(16, audioCtx.currentTime);
-          filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(125, audioCtx.currentTime);
-
-          const lfo = audioCtx.createOscillator();
-          const lfoGain = audioCtx.createGain();
-          lfo.type = 'sine';
-          lfo.frequency.setValueAtTime(6.0, audioCtx.currentTime);
-          lfoGain.gain.setValueAtTime(12, audioCtx.currentTime);
-          lfo.connect(osc1.frequency);
-
-          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-
-          osc1.connect(filter);
-          osc2.connect(filter);
-          filter.connect(gain);
-          gain.connect(audioCtx.destination);
-
-          osc1.start();
-          osc2.start();
-          lfo.start();
-
-          v8Nodes = [osc1, osc2, lfo, gain, filter];
-          isV8Playing = true;
-
-          btn.classList.add('bg-bcs-copper', 'text-white');
-          label.textContent = "Stoppa V8";
-          status.textContent = "V8 Small Block Aktiv";
-          status.className = "font-mono text-[10px] text-bcs-gold";
-        } catch (e) {
-          console.error(e);
-        }
+    radioBtn.addEventListener('click', () => {
+      if (!isRadioPlaying) {
+        radioAudio.play().then(() => {
+          isRadioPlaying = true;
+          radioBtn.classList.add('bg-bcs-copper', 'text-white');
+          radioPlayIcon.className = "ph-bold ph-speaker-high text-white animate-pulse";
+          radioBtnText.textContent = "Pausa Radio";
+          radioStatus.textContent = "Sänder Live";
+          radioStatus.className = "font-mono text-[10px] text-emerald-400 font-bold";
+        }).catch(err => {
+          console.warn("Kunde inte starta Go Country:", err);
+          radioStatus.textContent = "Anslutningsfel";
+          radioStatus.className = "font-mono text-[10px] text-amber-400";
+        });
       } else {
-        if (v8Nodes.length > 0) {
-          v8Nodes.forEach(node => {
-            if (node.stop) node.stop();
-            if (node.disconnect) node.disconnect();
-          });
-          v8Nodes = [];
-        }
-        if (audioCtx) {
-          audioCtx.close();
-          audioCtx = null;
-        }
-        isV8Playing = false;
-        btn.classList.remove('bg-bcs-copper', 'text-white');
-        label.textContent = "Starta V8 Idle";
-        status.textContent = "Standby";
-        status.className = "font-mono text-[10px] text-zinc-500";
+        radioAudio.pause();
+        isRadioPlaying = false;
+        radioBtn.classList.remove('bg-bcs-copper', 'text-white');
+        radioPlayIcon.className = "ph-bold ph-broadcast text-bcs-copper";
+        radioBtnText.textContent = "Starta Go Country";
+        radioStatus.textContent = "Go Country 105";
+        radioStatus.className = "font-mono text-[10px] text-zinc-500";
       }
-    }
-    document.getElementById('v8SoundBtn').addEventListener('click', toggleV8Engine);
+    });
+
+    radioAudio.addEventListener('error', () => {
+      // Reservstream för Go Country om huvudströmmen blockeras
+      if (!radioAudio.dataset.fallbackTried) {
+        radioAudio.dataset.fallbackTried = "true";
+        radioAudio.src = "https://ice6.securenetsystems.net/KKGO";
+        if (isRadioPlaying) radioAudio.play().catch(() => {});
+      }
+    });
 
     /* 6. FULLSKÄRM & UPPDATERINGSKNAPP */
     document.getElementById('fullscreenBtn').addEventListener('click', () => {
