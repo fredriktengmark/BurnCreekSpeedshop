@@ -109,71 +109,13 @@
     <!-- LOGO & TITEL (STÖRRE FORMAT) -->
     <div class="flex items-center gap-4">
       <div class="relative w-20 h-20 flex-shrink-0 rounded-full border-2 border-bcs-copper p-0.5 bg-bcs-black shadow-2xl overflow-hidden flex items-center justify-center">
-        <!-- Försöker först ladda extern bild om den finns, annars visas den inbäddade Speedshop-loggan -->
+        <!-- Er uppladdade bildfil från GitHub -->
         <img 
           id="shopLogoImg" 
           src="Burn_Creek_Speedshop_rund_est.jpg" 
           alt="Burn Creek Speedshop Logo"
           class="w-full h-full object-cover rounded-full"
-          onerror="this.style.display='none'; document.getElementById('embeddedVectorLogo').style.display='block';"
         />
-        
-        <!-- INBÄDDAD VEKTORLOGGA (VISAS OM BILDEN INTE HITTAS PÅ DISK/GITHUB) -->
-        <div id="embeddedVectorLogo" class="w-full h-full rounded-full bg-[#121110] relative flex items-center justify-center" style="display: none;">
-          <svg viewBox="0 0 200 200" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-            <!-- Yttre kant med stjärnor och nitar -->
-            <circle cx="100" cy="100" r="98" fill="#121110" stroke="#b25329" stroke-width="3"/>
-            <circle cx="100" cy="100" r="92" fill="#b25329" stroke="#f4ecd8" stroke-width="1.5" stroke-dasharray="3,3"/>
-            
-            <!-- Inre vintage-skyltbotten -->
-            <circle cx="100" cy="100" r="76" fill="#1c1a18" stroke="#f4ecd8" stroke-width="2"/>
-            
-            <!-- Bågad text: BURN CREEK -->
-            <path id="curveTop" d="M 30,100 A 70,70 0 0,1 170,100" fill="none"/>
-            <text font-family="'Rye', 'Oswald', serif" font-size="19" font-weight="900" fill="#f4ecd8" letter-spacing="2">
-              <textPath href="#curveTop" startOffset="50%" text-anchor="middle">BURN CREEK</textPath>
-            </text>
-            
-            <!-- Undertext: BRÄNNEHYLTE -->
-            <text x="100" y="58" font-family="'Oswald', sans-serif" font-size="9" font-weight="700" fill="#df9837" text-anchor="middle" letter-spacing="2">
-              ★ BRÄNNEHYLTE ★
-            </text>
-
-            <!-- Korslagda racing-kolvar och vevstakar i mitten -->
-            <g transform="translate(100,105) scale(0.68)">
-              <!-- Korslagd vevstake 1 -->
-              <rect x="-8" y="-55" width="16" height="110" rx="4" fill="#f4ecd8" stroke="#121110" stroke-width="2" transform="rotate(45)"/>
-              <circle cx="0" cy="0" r="16" fill="#b25329" stroke="#f4ecd8" stroke-width="2"/>
-              <!-- Korslagd vevstake 2 -->
-              <rect x="-8" y="-55" width="16" height="110" rx="4" fill="#f4ecd8" stroke="#121110" stroke-width="2" transform="rotate(-45)"/>
-              
-              <!-- Kolvtoppar -->
-              <g transform="translate(-40,-40) rotate(-45)">
-                <rect x="-16" y="-22" width="32" height="26" rx="3" fill="#b25329" stroke="#f4ecd8" stroke-width="2"/>
-                <line x1="-14" y1="-14" x2="14" y2="-14" stroke="#f4ecd8" stroke-width="1.5"/>
-                <line x1="-14" y1="-8" x2="14" y2="-8" stroke="#f4ecd8" stroke-width="1.5"/>
-              </g>
-              <g transform="translate(40,-40) rotate(45)">
-                <rect x="-16" y="-22" width="32" height="26" rx="3" fill="#b25329" stroke="#f4ecd8" stroke-width="2"/>
-                <line x1="-14" y1="-14" x2="14" y2="-14" stroke="#f4ecd8" stroke-width="1.5"/>
-                <line x1="-14" y1="-8" x2="14" y2="-8" stroke="#f4ecd8" stroke-width="1.5"/>
-              </g>
-              <circle cx="0" cy="0" r="10" fill="#121110" stroke="#df9837" stroke-width="2"/>
-            </g>
-
-            <!-- Bågad text nertill: SPEEDSHOP -->
-            <path id="curveBottom" d="M 28,105 A 72,72 0 0,0 172,105" fill="none"/>
-            <text font-family="'Rye', 'Oswald', serif" font-size="18" font-weight="900" fill="#f4ecd8" letter-spacing="3">
-              <textPath href="#curveBottom" startOffset="50%" text-anchor="middle">SPEEDSHOP</textPath>
-            </text>
-            
-            <!-- EST. 2026 tagg i botten -->
-            <rect x="70" y="176" width="60" height="15" rx="4" fill="#121110" stroke="#b25329" stroke-width="1.5"/>
-            <text x="100" y="187" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="800" fill="#df9837" text-anchor="middle">
-              EST. 2026
-            </text>
-          </svg>
-        </div>
       </div>
 
       <div>
