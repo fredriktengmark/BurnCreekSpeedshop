@@ -282,14 +282,17 @@
         
         <!-- Snabbval för kanaler & anpassad stream -->
         <div class="flex items-center gap-1.5">
-          <button onclick="switchStream('1gqYw81lUjE')" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
-            Ch 1
+          <button onclick="switchStream('IW4TXPrB8Ug')" title="NHRA Top Fuel & Nitro Highlights" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
+            Nitro Runs
           </button>
-          <button onclick="switchStream('live_stream')" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
-            Ch 2
+          <button onclick="switchStream('bCNnpkqhJVM')" title="NHRA Las Vegas Nationals Highlights" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
+            Nationals
+          </button>
+          <button onclick="switchStream('playlist:PL_o4XbF_Lz93Tsm3xM_zXq-63g_k_f8p-')" title="NHRA Drag Racing Playlist" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
+            24/7 Mix
           </button>
           <button id="customStreamBtn" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-copper text-white font-bold hover:bg-bcs-copperLight transition-colors">
-            Byt Stream
+            Klistra länk
           </button>
         </div>
       </div>
@@ -299,7 +302,7 @@
         <iframe 
           id="dragTvFrame"
           class="w-full h-full object-cover"
-          src="https://www.youtube.com/embed/1gqYw81lUjE?autoplay=1&mute=1&controls=0&loop=1&playlist=1gqYw81lUjE&modestbranding=1&rel=0" 
+          src="https://www.youtube.com/embed/IW4TXPrB8Ug?autoplay=1&mute=1&controls=1&loop=1&playlist=IW4TXPrB8Ug&modestbranding=1&rel=0&enablejsapi=1" 
           title="Dragstrip Live TV" 
           frameborder="0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -310,9 +313,9 @@
       <!-- TV Footer Info -->
       <div class="pt-1.5 border-t border-bcs-border flex items-center justify-between text-[10px] font-mono text-zinc-400 flex-shrink-0">
         <span class="flex items-center gap-1 text-emerald-400">
-          <i class="ph-bold ph-broadcast"></i> Sänder 24/7 Heads-Up & Strip Action
+          <i class="ph-bold ph-broadcast"></i> Sänder Heads-Up, Pro Mod & Nitro Action
         </span>
-        <span class="text-zinc-500">Muted Autoplay för verkstadsskärm</span>
+        <span class="text-zinc-500">Muted Autoplay (Klicka på videon för ljud)</span>
       </div>
     </section>
 
@@ -674,20 +677,51 @@
     setInterval(fetchMotorsportRSS, 5 * 60 * 1000); // Ny data var 5:e minut
 
     /* 5. DRAGSTRIP LIVE TV STREAM CONTROLLER */
-    function switchStream(videoId) {
+    function switchStream(source) {
       const frame = document.getElementById('dragTvFrame');
-      if (videoId.includes('youtube.com') || videoId.includes('youtu.be')) {
-        let id = videoId.split('v=')[1] || videoId.split('/').pop();
-        if (id.includes('&')) id = id.split('&')[0];
-        frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}&modestbranding=1&rel=0`;
-      } else {
-        frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0`;
+      if (!frame) return;
+
+      let embedUrl = "";
+      source = (source || '').trim();
+
+      // Om det är en spellista
+      if (source.startsWith('playlist:')) {
+        const listId = source.replace('playlist:', '');
+        embedUrl = `https://www.youtube.com/embed?listType=playlist&list=${listId}&autoplay=1&mute=1&loop=1`;
+      } 
+      // Om det är en full YouTube-URL
+      else if (source.includes('youtube.com') || source.includes('youtu.be')) {
+        try {
+          const urlObj = new URL(source);
+          let videoId = "";
+          if (urlObj.hostname.includes('youtu.be')) {
+            videoId = urlObj.pathname.slice(1);
+          } else if (urlObj.searchParams.has('v')) {
+            videoId = urlObj.searchParams.get('v');
+          } else if (urlObj.pathname.includes('/live/')) {
+            videoId = urlObj.pathname.split('/live/')[1];
+          } else if (urlObj.pathname.includes('/embed/')) {
+            videoId = urlObj.pathname.split('/embed/')[1];
+          }
+          if (videoId) {
+            embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&loop=1&playlist=${videoId}&modestbranding=1&rel=0`;
+          } else {
+            embedUrl = source;
+          }
+        } catch (e) {
+          embedUrl = source;
+        }
+      } 
+      // Om det är ett rent video-ID
+      else {
+        embedUrl = `https://www.youtube.com/embed/${source}?autoplay=1&mute=1&controls=1&loop=1&playlist=${source}&modestbranding=1&rel=0`;
       }
+
+      frame.src = embedUrl;
     }
 
     document.getElementById('customStreamBtn').addEventListener('click', () => {
-      // Skonsam inmatning utan standard alert/prompt dialog
-      const customUrl = window.prompt("Klistra in YouTube-länk eller Video-ID till helgens Live Drag Event:");
+      const customUrl = window.prompt("Klistra in YouTube-länk till Live Drag Racing eller tävling:\n(T.ex: https://www.youtube.com/watch?v=... eller /live/...)");
       if (customUrl && customUrl.trim()) {
         switchStream(customUrl.trim());
       }
