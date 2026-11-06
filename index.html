@@ -1,301 +1,802 @@
 <!DOCTYPE html>
-<html lang="sv" class="scroll-smooth">
+<html lang="sv">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roadstars Anderstorp | Jänkebilsklubb</title>
+  <title>Burn Creek Speedshop - Verkstad Dashboard</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome ikoner -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts -->
+  
+  <!-- Google Fonts: Rye / Oswald för klassisk hot-rod & vintage typography, JetBrains Mono för siffror -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Rye&display=swap" rel="stylesheet">
+  
+  <!-- Phosphor Icons CDN -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            headline: ['Oswald', 'sans-serif'],
-            sans: ['Inter', 'sans-serif'],
-          },
           colors: {
-            carAmber: '#f59e0b',
-            carAmberDark: '#d97706',
-            garageDark: '#121316',
-            garageCard: '#1a1d21',
+            bcs: {
+              copper: '#b25329',      // Logotypens brända terrakotta/koppar
+              copperDark: '#853716',  // Mörkare skugga
+              copperLight: '#c86332', // Ljusare kopparaccent
+              cream: '#f4ecd8',       // Vintage ivory / krämvit
+              creamMuted: '#d3c5a6',  // Dämpad cream
+              black: '#121110',       // Matt kolsvart
+              charcoal: '#1c1a18',    // Paneler
+              charcoalDark: '#161413',// Bakgrunder
+              border: '#38322b',      // Kantlinjer
+              gold: '#df9837'         // Stjärnor & accenter
+            }
+          },
+          fontFamily: {
+            brand: ['Rye', 'Oswald', 'serif'],
+            oswald: ['Oswald', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            sans: ['Oswald', 'sans-serif']
           }
         }
       }
     }
   </script>
+
+  <style>
+    /* Bakgrund med mörk vintage-struktur och motorsport-känsla */
+    body {
+      background-color: #100f0e;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(178, 83, 41, 0.15), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(178, 83, 41, 0.08), transparent 45%),
+        linear-gradient(to right, rgba(244, 236, 216, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(244, 236, 216, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      color: #f4ecd8;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Schackrutig kantband (Checkered Flag Strip) */
+    .checkered-border {
+      background-image: 
+        linear-gradient(45deg, #121110 25%, transparent 25%), 
+        linear-gradient(-45deg, #121110 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #121110 75%), 
+        linear-gradient(-45deg, transparent 75%, #121110 75%);
+      background-size: 14px 14px;
+      background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
+      background-color: #f4ecd8;
+    }
+
+    /* Nitar-effekt för vintage verkstadsskyltar */
+    .rivet {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #df9837, #4a2817);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.6), 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    /* Ticker animation */
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 32s linear infinite;
+    }
+  </style>
 </head>
-<body class="bg-garageDark text-gray-200 font-sans antialiased">
+<body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
 
-  <!-- NAVBAR -->
-  <header class="sticky top-0 z-50 bg-garageDark/95 backdrop-blur-md border-b border-gray-800 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <!-- Logotyp / Namn -->
-      <a href="#" class="flex items-center gap-3">
-        <i class="fa-solid fa-gauge-high text-carAmber text-2xl"></i>
-        <span class="font-headline text-2xl sm:text-3xl tracking-wider text-white uppercase">
-          Roadstars <span class="text-carAmber">Anderstorp</span>
-        </span>
-      </a>
+  <!-- ========================================================== -->
+  <!-- 1. HEADER (FÖRSTORAD, LUFTIG & MAJESTÄTISK FÖR 42" TV)    -->
+  <!-- ========================================================== -->
+  <header class="w-full h-[115px] flex-shrink-0 bg-bcs-charcoal border-2 border-bcs-border rounded-xl shadow-2xl px-5 py-2.5 relative overflow-hidden flex items-center justify-between">
+    <!-- Topp-kant: Schackrutig flaggrand -->
+    <div class="checkered-border h-2 w-full absolute top-0 left-0 opacity-85"></div>
+    <div class="rivet absolute top-3 left-3"></div>
+    <div class="rivet absolute top-3 right-3"></div>
 
-      <!-- Desktop-meny -->
-      <nav class="hidden md:flex items-center gap-8 font-medium">
-        <a href="#kalender" class="hover:text-carAmber transition">Träffar & Kalender</a>
-        <a href="#nyheter" class="hover:text-carAmber transition">Nyheter</a>
-        <a href="#galleri" class="hover:text-carAmber transition">Galleri</a>
-        <a href="#medlem" class="hover:text-carAmber transition">Bli Medlem</a>
-        <a href="#kontakt" class="bg-carAmber hover:bg-carAmberDark text-gray-950 px-5 py-2.5 rounded-lg font-bold transition shadow-md">
-          Kontakta oss
-        </a>
-      </nav>
+    <!-- LOGO & TITEL (STÖRRE FORMAT) -->
+    <div class="flex items-center gap-4">
+      <div class="relative w-20 h-20 flex-shrink-0 rounded-full border-2 border-bcs-copper p-0.5 bg-bcs-black shadow-2xl overflow-hidden flex items-center justify-center">
+        <!-- Försöker först ladda extern bild om den finns, annars visas den inbäddade Speedshop-loggan -->
+        <img 
+          id="shopLogoImg" 
+          src="Burn_Creek_Speedshop_rund_est.jpg" 
+          alt="Burn Creek Speedshop Logo"
+          class="w-full h-full object-cover rounded-full"
+          onerror="this.style.display='none'; document.getElementById('embeddedVectorLogo').style.display='block';"
+        />
+        
+        <!-- INBÄDDAD VEKTORLOGGA (VISAS OM BILDEN INTE HITTAS PÅ DISK/GITHUB) -->
+        <div id="embeddedVectorLogo" class="w-full h-full rounded-full bg-[#121110] relative flex items-center justify-center" style="display: none;">
+          <svg viewBox="0 0 200 200" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <!-- Yttre kant med stjärnor och nitar -->
+            <circle cx="100" cy="100" r="98" fill="#121110" stroke="#b25329" stroke-width="3"/>
+            <circle cx="100" cy="100" r="92" fill="#b25329" stroke="#f4ecd8" stroke-width="1.5" stroke-dasharray="3,3"/>
+            
+            <!-- Inre vintage-skyltbotten -->
+            <circle cx="100" cy="100" r="76" fill="#1c1a18" stroke="#f4ecd8" stroke-width="2"/>
+            
+            <!-- Bågad text: BURN CREEK -->
+            <path id="curveTop" d="M 30,100 A 70,70 0 0,1 170,100" fill="none"/>
+            <text font-family="'Rye', 'Oswald', serif" font-size="19" font-weight="900" fill="#f4ecd8" letter-spacing="2">
+              <textPath href="#curveTop" startOffset="50%" text-anchor="middle">BURN CREEK</textPath>
+            </text>
+            
+            <!-- Undertext: BRÄNNEHYLTE -->
+            <text x="100" y="58" font-family="'Oswald', sans-serif" font-size="9" font-weight="700" fill="#df9837" text-anchor="middle" letter-spacing="2">
+              ★ BRÄNNEHYLTE ★
+            </text>
 
-      <!-- Mobilmenyknapp -->
-      <button id="menu-btn" class="md:hidden text-gray-400 hover:text-white text-2xl focus:outline-none">
-        <i class="fa-solid fa-bars"></i>
-      </button>
+            <!-- Korslagda racing-kolvar och vevstakar i mitten -->
+            <g transform="translate(100,105) scale(0.68)">
+              <!-- Korslagd vevstake 1 -->
+              <rect x="-8" y="-55" width="16" height="110" rx="4" fill="#f4ecd8" stroke="#121110" stroke-width="2" transform="rotate(45)"/>
+              <circle cx="0" cy="0" r="16" fill="#b25329" stroke="#f4ecd8" stroke-width="2"/>
+              <!-- Korslagd vevstake 2 -->
+              <rect x="-8" y="-55" width="16" height="110" rx="4" fill="#f4ecd8" stroke="#121110" stroke-width="2" transform="rotate(-45)"/>
+              
+              <!-- Kolvtoppar -->
+              <g transform="translate(-40,-40) rotate(-45)">
+                <rect x="-16" y="-22" width="32" height="26" rx="3" fill="#b25329" stroke="#f4ecd8" stroke-width="2"/>
+                <line x1="-14" y1="-14" x2="14" y2="-14" stroke="#f4ecd8" stroke-width="1.5"/>
+                <line x1="-14" y1="-8" x2="14" y2="-8" stroke="#f4ecd8" stroke-width="1.5"/>
+              </g>
+              <g transform="translate(40,-40) rotate(45)">
+                <rect x="-16" y="-22" width="32" height="26" rx="3" fill="#b25329" stroke="#f4ecd8" stroke-width="2"/>
+                <line x1="-14" y1="-14" x2="14" y2="-14" stroke="#f4ecd8" stroke-width="1.5"/>
+                <line x1="-14" y1="-8" x2="14" y2="-8" stroke="#f4ecd8" stroke-width="1.5"/>
+              </g>
+              <circle cx="0" cy="0" r="10" fill="#121110" stroke="#df9837" stroke-width="2"/>
+            </g>
+
+            <!-- Bågad text nertill: SPEEDSHOP -->
+            <path id="curveBottom" d="M 28,105 A 72,72 0 0,0 172,105" fill="none"/>
+            <text font-family="'Rye', 'Oswald', serif" font-size="18" font-weight="900" fill="#f4ecd8" letter-spacing="3">
+              <textPath href="#curveBottom" startOffset="50%" text-anchor="middle">SPEEDSHOP</textPath>
+            </text>
+            
+            <!-- EST. 2026 tagg i botten -->
+            <rect x="70" y="176" width="60" height="15" rx="4" fill="#121110" stroke="#b25329" stroke-width="1.5"/>
+            <text x="100" y="187" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="800" fill="#df9837" text-anchor="middle">
+              EST. 2026
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <div>
+        <h1 class="font-brand text-3xl xl:text-4xl text-bcs-cream tracking-wide uppercase drop-shadow-md leading-none">
+          Burn Creek <span class="text-bcs-copper">Speedshop</span>
+        </h1>
+        <div class="flex items-center gap-2.5 text-xs xl:text-sm font-oswald uppercase tracking-widest text-bcs-creamMuted mt-1">
+          <span class="text-bcs-gold">★</span>
+          <span class="text-bcs-cream font-bold">Brännehylte HQ</span>
+          <span class="text-bcs-copper">•</span>
+          <span>Gnosjö / Småland</span>
+          <span class="text-bcs-copper">•</span>
+          <span class="text-bcs-gold font-bold">EST. 2026</span>
+          <span class="text-bcs-gold">★</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Mobilmeny dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-garageCard border-b border-gray-800 px-4 pt-2 pb-6 space-y-3 font-medium">
-      <a href="#kalender" class="block py-2 text-gray-300 hover:text-carAmber">Träffar & Kalender</a>
-      <a href="#nyheter" class="block py-2 text-gray-300 hover:text-carAmber">Nyheter</a>
-      <a href="#galleri" class="block py-2 text-gray-300 hover:text-carAmber">Galleri</a>
-      <a href="#medlem" class="block py-2 text-gray-300 hover:text-carAmber">Bli Medlem</a>
-      <a href="#kontakt" class="block py-2 text-carAmber font-bold">Kontakta oss</a>
+    <!-- KLOCKA & DATUM I MITTEN (ÖKAD SKALA) -->
+    <div class="bg-bcs-black/95 border-2 border-bcs-copper/70 px-6 py-1.5 rounded-xl shadow-inner text-center">
+      <div id="liveClock" class="font-mono text-3xl xl:text-4xl font-extrabold text-bcs-cream tracking-widest leading-none">
+        00:00:00
+      </div>
+      <div id="liveDate" class="text-xs uppercase font-oswald tracking-wider text-bcs-gold font-bold mt-1">
+        Laddar datum...
+      </div>
+    </div>
+
+    <!-- PRIVAT STATUS & TV-KONTROLLER -->
+    <div class="flex items-center gap-3">
+      <div class="px-3.5 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70">
+        <span class="h-3 w-3 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
+        <span>PRIVAT VERKSTAD • CREW ONLY</span>
+      </div>
+
+      <button id="fullscreenBtn" title="Fullskärm på TV" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow">
+        <i class="ph-bold ph-corners-out text-xl"></i>
+      </button>
+
+      <button id="refreshBtn" title="Uppdatera" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow">
+        <i class="ph-bold ph-arrows-clockwise text-xl"></i>
+      </button>
     </div>
   </header>
 
-  <!-- HERO SEKTION -->
-  <section class="relative py-24 sm:py-32 bg-gradient-to-b from-garageCard via-garageDark to-garageDark overflow-hidden border-b border-gray-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-carAmber/10 border border-carAmber/30 text-carAmber text-sm font-semibold tracking-wide uppercase mb-6">
-        <i class="fa-solid fa-wrench"></i> Gemenskap sedan starten
-      </div>
-      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-headline font-bold text-white tracking-wide uppercase leading-tight mb-6">
-        Klassiskt stål, V8 & <span class="text-carAmber">Ren Passion</span>
-      </h1>
-      <p class="max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 mb-10">
-        Välkommen till Roadstars Anderstorp – klubben för oss med hjärtat i amerikanska bilar, gott fika och gemensamma cruisingrundor i Småland.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#kalender" class="bg-carAmber hover:bg-carAmberDark text-gray-950 font-bold px-8 py-3.5 rounded-lg transition shadow-lg flex items-center justify-center gap-2">
-          <i class="fa-regular fa-calendar-days"></i> Se Träffkalendern
-        </a>
-        <a href="#medlem" class="border border-gray-700 hover:border-gray-500 bg-gray-900/60 hover:bg-gray-800 text-white font-semibold px-8 py-3.5 rounded-lg transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-id-card"></i> Bli Medlem
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRÄFFAR & KALENDER -->
-  <section id="kalender" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
+  <!-- ========================================================== -->
+  <!-- 2. HUVUDINNEHÅLL (100% FYLLNAD UTAN SCROLL I 1080p)        -->
+  <!-- ========================================================== -->
+  <main class="grid grid-cols-12 gap-2.5 my-2 flex-1 min-h-0">
+    
+    <!-- ======================================================== -->
+    <!-- KOLUMN 1: VÄDER & TRAFIKMEDDELANDEN JÖNKÖPING (3 cols)   -->
+    <!-- ======================================================== -->
+    <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden">
       <div>
-        <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide">Träffar & Kalender</h2>
-        <p class="text-gray-400 mt-2">Våra inbokade klubbträffar, fikakvällar och cruisingar.</p>
-      </div>
-      <span class="text-carAmber text-sm font-semibold mt-4 sm:mt-0 flex items-center gap-1.5">
-        <i class="fa-solid fa-location-dot"></i> Samling klubblokalen om ej annat anges
-      </span>
-    </div>
-
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <!-- Event 1 -->
-      <div class="bg-garageCard border border-gray-800 rounded-xl p-6 flex flex-col justify-between hover:border-carAmber/40 transition">
-        <div>
-          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-carAmber mb-3">
-            <span>Cruising & Träff</span>
-            <span>Kl. 17:30</span>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Vårpremiär & Rundtur</h3>
-          <p class="text-gray-400 text-sm mb-4">Vi startar säsongen med samling, gemensam fika och en lugn tur runt bygden.</p>
-        </div>
-        <div class="pt-4 border-t border-gray-800/80 flex items-center text-xs text-gray-400">
-          <i class="fa-regular fa-calendar text-carAmber mr-2"></i> Lördag, Första helgen i Maj
-        </div>
-      </div>
-
-      <!-- Event 2 -->
-      <div class="bg-garageCard border border-gray-800 rounded-xl p-6 flex flex-col justify-between hover:border-carAmber/40 transition">
-        <div>
-          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-carAmber mb-3">
-            <span>Fikakväll</span>
-            <span>Kl. 18:00</span>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Onsdagsfika & Garagesnack</h3>
-          <p class="text-gray-400 text-sm mb-4">Kaffe, däckspark och planering inför sommarens stora utflykter. Alla välkomna!</p>
-        </div>
-        <div class="pt-4 border-t border-gray-800/80 flex items-center text-xs text-gray-400">
-          <i class="fa-regular fa-calendar text-carAmber mr-2"></i> Onsdagar (Jämna veckor)
-        </div>
-      </div>
-
-      <!-- Event 3 -->
-      <div class="bg-garageCard border border-gray-800 rounded-xl p-6 flex flex-col justify-between hover:border-carAmber/40 transition">
-        <div>
-          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-carAmber mb-3">
-            <span>Större Evenemang</span>
-            <span>Heldag</span>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Sommarträffen Roadstars</h3>
-          <p class="text-gray-400 text-sm mb-4">Utställning, publikomröstning, grill och finbilar från hela regionen.</p>
-        </div>
-        <div class="pt-4 border-t border-gray-800/80 flex items-center text-xs text-gray-400">
-          <i class="fa-regular fa-calendar text-carAmber mr-2"></i> Lördag i Juli
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NYHETER -->
-  <section id="nyheter" class="py-20 bg-garageCard/50 border-y border-gray-800/70">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide mb-3">Klubbnyheter</h2>
-      <p class="text-gray-400 mb-12">Senaste informationen från styrelsen och klubben.</p>
-
-      <div class="grid gap-8 md:grid-cols-2">
-        <article class="bg-garageCard border border-gray-800 rounded-xl p-6">
-          <span class="text-xs text-carAmber font-semibold uppercase">Information</span>
-          <h3 class="text-xl font-bold text-white mt-1 mb-2">Årsmöte och planering för säsongen</h3>
-          <p class="text-gray-400 text-sm leading-relaxed mb-4">
-            Protokollet från det senaste årsmötet finns nu tillgängligt för alla medlemmar. Vi gick igenom datum för sommarens evenemang och kommande garageprojekt.
-          </p>
-          <span class="text-xs text-gray-500">Publicerad: Våren 2026</span>
-        </article>
-
-        <article class="bg-garageCard border border-gray-800 rounded-xl p-6">
-          <span class="text-xs text-carAmber font-semibold uppercase">Lokal & Garage</span>
-          <h3 class="text-xl font-bold text-white mt-1 mb-2">Fixardag i klubblokalen</h3>
-          <p class="text-gray-400 text-sm leading-relaxed mb-4">
-            Stort tack till alla som slöt upp och hjälpte till att städa gårdsplanen och fixa i fikarummet inför de varmare månaderna!
-          </p>
-          <span class="text-xs text-gray-500">Publicerad: Nyligen</span>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- BILDGALLERI -->
-  <section id="galleri" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-      <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide">Bilder från Event</h2>
-      <p class="text-gray-400 mt-2">Ögonblick från våra cruisingar, utställningar och träffar.</p>
-    </div>
-
-    <!-- Bildrutnät (Ersätt src med era egna bildfiler i repot, t.ex. images/traff1.jpg) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="group relative bg-gray-900 rounded-xl overflow-hidden h-64 border border-gray-800">
-        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80" alt="Klassisk bil" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition p-4 flex items-end">
-          <p class="text-sm font-semibold text-white">Vårcruising</p>
-        </div>
-      </div>
-      <div class="group relative bg-gray-900 rounded-xl overflow-hidden h-64 border border-gray-800">
-        <img src="https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=800&q=80" alt="Muscle car" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition p-4 flex items-end">
-          <p class="text-sm font-semibold text-white">Fikakväll vid klubben</p>
-        </div>
-      </div>
-      <div class="group relative bg-gray-900 rounded-xl overflow-hidden h-64 border border-gray-800">
-        <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80" alt="Veteranbil detalj" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition p-4 flex items-end">
-          <p class="text-sm font-semibold text-white">Klassiskt krom</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MEDLEMSSEKTION -->
-  <section id="medlem" class="py-20 bg-garageCard border-t border-gray-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="w-16 h-16 bg-carAmber/10 text-carAmber rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl border border-carAmber/20">
-        <i class="fa-solid fa-users"></i>
-      </div>
-      <h2 class="font-headline text-3xl sm:text-4xl uppercase text-white tracking-wide mb-4">Bli en del av Roadstars</h2>
-      <p class="text-gray-300 text-lg mb-8 leading-relaxed">
-        Äger du en amerikansk entusiastbil, eller har du bara ett brinnande intresse för V8-muller och gemenskap? Vi välkomnar alltid nya medlemmar.
-      </p>
-
-      <div class="bg-garageDark border border-gray-800 rounded-2xl p-6 sm:p-8 text-left mb-8">
-        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-check text-carAmber"></i> Medlemsförmåner
-        </h3>
-        <ul class="space-y-2 text-gray-400 text-sm sm:text-base">
-          <li>• Tillgång till klubbens fikakvällar och medlemsaktiviteter.</li>
-          <li>• Möjlighet att köra med på våra samlade cruisingar och träffresor.</li>
-          <li>• Medlemskap i klubbens interna diskussionsgrupp och gemenskap.</li>
-        </ul>
-        <div class="mt-6 pt-6 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div>
-            <span class="text-xs uppercase text-gray-500 block">Medlemsavgift</span>
-            <span class="text-xl font-bold text-white">300 kr / år</span>
-          </div>
-          <a href="#kontakt" class="bg-carAmber hover:bg-carAmberDark text-gray-950 font-bold px-6 py-2.5 rounded-lg transition text-sm">
-            Ansök om medlemskap
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER & KONTAKT -->
-  <footer id="kontakt" class="bg-garageDark border-t border-gray-800 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-        <div>
-          <span class="font-headline text-2xl tracking-wider text-white uppercase block mb-3">
-            Roadstars <span class="text-carAmber">Anderstorp</span>
+        <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border">
+          <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+            <i class="ph-bold ph-cloud-sun text-bcs-copper text-lg"></i>
+            Väder Brännehylte
+          </h2>
+          <span class="font-mono text-[10px] bg-bcs-black px-1.5 py-0.5 rounded text-bcs-gold border border-bcs-border">
+            57.3°N, 13.8°E
           </span>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            Mötesplatsen för jänkebilsentusiaster i Anderstorp med omnejd.
-          </p>
         </div>
 
-        <div>
-          <h4 class="text-white font-bold mb-3 text-sm uppercase tracking-wider">Hitta hit & Kontakt</h4>
-          <ul class="text-gray-400 text-sm space-y-2">
-            <li><i class="fa-solid fa-location-dot text-carAmber mr-2"></i> Anderstorp, Sverige</li>
-            <li><i class="fa-solid fa-envelope text-carAmber mr-2"></i> kontakt@roadstars-anderstorp.se</li>
-          </ul>
+        <!-- Nuvarande temp -->
+        <div class="my-1.5 flex items-center justify-between px-1">
+          <div>
+            <div class="flex items-baseline gap-1">
+              <span id="weatherTemp" class="font-oswald text-3xl xl:text-4xl font-black text-bcs-cream">--</span>
+              <span class="text-lg xl:text-xl font-oswald text-bcs-copper font-bold">°C</span>
+            </div>
+            <p id="weatherDesc" class="text-xs font-oswald text-bcs-creamMuted">Hämtar data...</p>
+          </div>
+          <div id="weatherIcon" class="w-10 h-10 rounded-xl bg-bcs-black border border-bcs-border flex items-center justify-center text-2xl text-bcs-gold">
+            <i class="ph-fill ph-sun"></i>
+          </div>
         </div>
 
-        <div>
-          <h4 class="text-white font-bold mb-3 text-sm uppercase tracking-wider">Följ Klubben</h4>
-          <p class="text-gray-400 text-sm mb-4">Håll dig uppdaterad om spontana åkturer och fikakvällar:</p>
-          <div class="flex gap-4 text-xl">
-            <a href="#" class="text-gray-400 hover:text-carAmber transition"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="text-gray-400 hover:text-carAmber transition"><i class="fa-brands fa-instagram"></i></a>
+        <!-- Barometriska mätvärden -->
+        <div class="grid grid-cols-3 gap-1 bg-bcs-black/80 p-1.5 rounded-lg border border-bcs-border text-center font-mono">
+          <div>
+            <span class="text-zinc-500 block text-[9px] uppercase font-bold">Tryck</span>
+            <span id="weatherPressure" class="font-bold text-bcs-gold text-xs">-- hPa</span>
+          </div>
+          <div class="border-x border-bcs-border">
+            <span class="text-zinc-500 block text-[9px] uppercase font-bold">Fukt</span>
+            <span id="weatherHumidity" class="font-bold text-bcs-cream text-xs">-- %</span>
+          </div>
+          <div>
+            <span class="text-zinc-500 block text-[9px] uppercase font-bold">Vind</span>
+            <span id="weatherWind" class="font-bold text-bcs-cream text-xs">-- m/s</span>
+          </div>
+        </div>
+
+        <!-- DA (Density Altitude) & Bestyckning -->
+        <div class="mt-1.5 bg-bcs-copper/15 border border-bcs-copper/40 p-1.5 rounded-lg flex items-start gap-1.5">
+          <i class="ph-bold ph-gauge text-bcs-copper text-base flex-shrink-0 mt-0.5"></i>
+          <div class="text-[10px] font-oswald leading-tight">
+            <span class="font-bold text-bcs-copper block uppercase tracking-wide">Densitet & Tune:</span>
+            <span id="carbAdvice" class="text-bcs-creamMuted">Läser av barometertryck...</span>
           </div>
         </div>
       </div>
 
-      <div class="pt-8 border-t border-gray-800/80 text-center text-xs text-gray-500">
-        &copy; 2026 Roadstars Anderstorp. Alla rättigheter förbehållna.
+      <!-- TRAFIKMEDDELANDEN JÖNKÖPINGS LÄN (P4 Trafik) -->
+      <div class="mt-2 pt-2 border-t border-bcs-border flex-1 flex flex-col justify-between min-h-0">
+        <div class="flex items-center justify-between pb-1 mb-1 border-b border-bcs-border/60">
+          <h3 class="font-oswald text-xs xl:text-sm uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+            <i class="ph-bold ph-traffic-cone text-bcs-copper"></i>
+            Trafik Jönköpings Län
+          </h3>
+          <span id="trafficBadge" class="text-[9px] font-mono px-1 rounded bg-bcs-black border border-bcs-border text-bcs-gold">
+            P4 Trafik
+          </span>
+        </div>
+
+        <!-- Trafiklista -->
+        <div id="trafficContainer" class="flex-1 space-y-1.5 overflow-hidden text-xs">
+          <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border text-center">
+            <span class="text-zinc-400 font-mono text-[10px]">Hämtar trafikläge...</span>
+          </div>
+        </div>
+
+        <div class="pt-1 mt-1 border-t border-bcs-border/40 flex items-center justify-between text-[9px] font-mono text-zinc-500">
+          <span>E4 • RV 27 • RV 40 • LV 151</span>
+          <span id="trafficUpdated">Uppdateras live</span>
+        </div>
       </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- KOLUMN 2: MOTORSPORT & DRAG LIVE FEED (5 cols)           -->
+    <!-- Visar 3 artiklar med automatisk rotation för TV          -->
+    <!-- ======================================================== -->
+    <section class="col-span-5 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden">
+      <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border flex-shrink-0">
+        <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+          <i class="ph-bold ph-newspaper text-bcs-copper text-lg"></i>
+          Motorsport & Dragstrip Live
+        </h2>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1 font-mono text-[9px] bg-bcs-black px-1.5 py-0.5 rounded text-bcs-copper border border-bcs-border">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="rssLastUpdated">Hämtar flöde...</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Feed Container med 3 roterande artiklar -->
+      <div id="rssFeedContainer" class="flex-1 flex flex-col justify-around gap-2 my-2 min-h-0">
+        <div class="p-3 rounded-lg bg-bcs-black/80 border border-bcs-border text-center text-zinc-400 font-mono text-xs">
+          Ansluter till Drag Illustrated & Motorsport.com...
+        </div>
+      </div>
+
+      <!-- Fotnot för nyhetsflödet -->
+      <div class="pt-1 border-t border-bcs-border flex items-center justify-between text-[10px] font-mono text-zinc-400 flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="text-bcs-copper font-bold">[Drag Illustrated]</span>
+          <span class="text-zinc-600">•</span>
+          <span class="text-bcs-gold font-bold">[Motorsport.com]</span>
+        </div>
+        <span class="text-zinc-500 text-[9px]">Roterar var 12:e sekund</span>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- KOLUMN 3: V8 TÄNDFÖLJD & SPEEDSHOP TECH REF (4 cols)     -->
+    <!-- ======================================================== -->
+    <section class="col-span-4 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden">
+      <div class="flex-1 flex flex-col justify-between">
+        <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border flex-shrink-0">
+          <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+            <i class="ph-bold ph-engine text-bcs-copper text-lg"></i>
+            V8 Tändföljd & Speedshop Tech
+          </h2>
+          <span class="font-mono text-[10px] text-bcs-gold uppercase font-bold">Firing Orders</span>
+        </div>
+
+        <!-- V8 TÄNDFÖLJD PANEL (UTÖKAD & RENODLAD) -->
+        <div class="mt-2 bg-bcs-black/95 p-2.5 rounded-lg border border-bcs-border flex flex-col gap-2 flex-1 justify-around">
+          <div class="flex justify-between items-center pb-1 border-b border-bcs-border/60">
+            <span class="text-xs font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
+              <i class="ph-bold ph-lightning text-bcs-copper"></i>
+              V8 Tändföljder (Amerikanska V8)
+            </span>
+            <span class="text-[9px] font-mono text-bcs-gold font-bold">Snabbguide</span>
+          </div>
+
+          <!-- Tabell över motorer -->
+          <div class="space-y-1.5 font-mono text-xs leading-tight">
+            <!-- Chevy SBC/BBC -->
+            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
+              <span class="text-zinc-200 font-bold">Chevy SBC / BBC <span class="text-zinc-500 text-[9px] font-normal">(Medsols)</span></span>
+              <span class="text-bcs-copper font-extrabold text-sm tracking-wider">1-8-4-3-6-5-7-2</span>
+            </div>
+
+            <!-- Chevy LS / Gen 3+ -->
+            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
+              <span class="text-zinc-200 font-bold">Chevy LS / Gen 3+ <span class="text-zinc-500 text-[9px] font-normal">(4.8/5.3/6.0/LS1)</span></span>
+              <span class="text-bcs-gold font-extrabold text-sm tracking-wider">1-8-7-2-6-5-4-3</span>
+            </div>
+
+            <!-- Ford 289 / 302 / FE -->
+            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
+              <span class="text-zinc-200 font-bold">Ford 289/302/FE <span class="text-zinc-500 text-[9px] font-normal">(Motsols)</span></span>
+              <span class="text-bcs-cream font-extrabold text-sm tracking-wider">1-5-4-2-6-3-7-8</span>
+            </div>
+
+            <!-- Ford 351W / 302 HO -->
+            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
+              <span class="text-zinc-200 font-bold">Ford 351W / 302 HO <span class="text-zinc-500 text-[9px] font-normal">(5.0 Roller)</span></span>
+              <span class="text-bcs-copper font-extrabold text-sm tracking-wider">1-3-7-2-6-5-4-8</span>
+            </div>
+
+            <!-- Mopar & Pontiac -->
+            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
+              <span class="text-zinc-200 font-bold">Mopar / Pontiac <span class="text-zinc-500 text-[9px] font-normal">(LA, B/RB, 400, 455)</span></span>
+              <span class="text-bcs-gold font-extrabold text-sm tracking-wider">1-8-4-3-6-5-7-2</span>
+            </div>
+          </div>
+
+          <!-- Cylinder- och banknumrering -->
+          <div class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-bcs-border/60 font-mono text-[10px]">
+            <div class="bg-bcs-charcoal/90 p-1.5 rounded border border-bcs-border">
+              <span class="text-bcs-gold block font-bold uppercase text-[9px]">GM & Mopar Cylindrar</span>
+              <span class="text-zinc-300 block">Vänst (Förare): <strong class="text-bcs-cream">1-3-5-7</strong></span>
+              <span class="text-zinc-300 block">Hög (Passag): <strong class="text-bcs-cream">2-4-6-8</strong></span>
+            </div>
+            <div class="bg-bcs-charcoal/90 p-1.5 rounded border border-bcs-border">
+              <span class="text-bcs-copper block font-bold uppercase text-[9px]">Ford Cylindrar</span>
+              <span class="text-zinc-300 block">Hög (Passag): <strong class="text-bcs-cream">1-2-3-4</strong></span>
+              <span class="text-zinc-300 block">Vänst (Förare): <strong class="text-bcs-cream">5-6-7-8</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ljudkontroll för garagekänsla -->
+      <div class="mt-2 bg-bcs-black/90 border border-bcs-border p-1.5 rounded-lg flex items-center justify-between gap-2 flex-shrink-0">
+        <button id="v8SoundBtn" class="flex-1 py-1.5 px-2 rounded bg-bcs-charcoal hover:bg-bcs-border text-bcs-cream font-oswald text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 border border-bcs-copper/40">
+          <i class="ph-bold ph-engine text-bcs-copper"></i>
+          <span id="v8BtnText">Starta V8 Idle</span>
+        </button>
+        <span id="audioStatus" class="font-mono text-[10px] text-zinc-500 whitespace-nowrap">Standby</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================== -->
+  <!-- 3. FOOTER (KOMPAKT STATUSLIST & TICKER)                    -->
+  <!-- ========================================================== -->
+  <footer class="w-full h-8 flex-shrink-0 bg-bcs-black border border-bcs-border rounded-lg px-3 flex items-center justify-between overflow-hidden shadow-inner font-mono text-xs text-bcs-creamMuted">
+    <div class="flex items-center gap-2 flex-shrink-0 pr-3 border-r border-bcs-border font-oswald uppercase tracking-wider text-bcs-gold font-bold">
+      <i class="ph-bold ph-wrench text-bcs-copper"></i>
+      <span>GARAGE FEED</span>
+    </div>
+    <div class="overflow-hidden whitespace-nowrap flex-1 px-3">
+      <div class="animate-marquee font-mono text-zinc-300">
+        BURN CREEK SPEEDSHOP • BRÄNNEHYLTE • HÄNG TILLBAKA VERKTYGEN PÅ PLATS • KOLLA OLJETRYCK OCH STIFT • STÄNG AV GASTUBER & SVETS EFTER ARBETSPASSET • TÖM KOMPRESSORN PÅ KONDENSVATTEN • ALLTID NYBRYGGT KAFFE I HÖRNET • KEEP RACING ALIVE •
+      </div>
+    </div>
+    <div class="flex-shrink-0 pl-3 border-l border-bcs-border text-[10px] text-zinc-500">
+      42" WORKSHOP KIOSK
     </div>
   </footer>
 
-  <!-- Enkel script för mobilmenyn -->
+  <!-- ========================================================== -->
+  <!-- JAVASCRIPT-LOGIK                                           -->
+  <!-- ========================================================== -->
   <script>
-    const btn = document.getElementById('menu-btn');
-    const menu = document.getElementById('mobile-menu');
+    /* 1. KLOCKA & DATUM */
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').textContent = `${h}:${m}:${s}`;
 
-    btn.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      let str = now.toLocaleDateString('sv-SE', options);
+      str = str.charAt(0).toUpperCase() + str.slice(1);
+      document.getElementById('liveDate').textContent = str;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    /* 2. VÄDER & LUFTTRYCK */
+    async function fetchWeather() {
+      const lat = 57.316;
+      const lon = 13.783;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,weather_code&hourly=temperature_2m&wind_speed_unit=ms&timezone=Europe%2FBerlin`;
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Väder-fel');
+        const data = await res.json();
+        const cur = data.current;
+
+        document.getElementById('weatherTemp').textContent = Math.round(cur.temperature_2m);
+        document.getElementById('weatherPressure').textContent = `${Math.round(cur.surface_pressure)} hPa`;
+        document.getElementById('weatherHumidity').textContent = `${cur.relative_humidity_2m} %`;
+        document.getElementById('weatherWind').textContent = `${cur.wind_speed_10m.toFixed(1)} m/s`;
+
+        const code = cur.weather_code;
+        let desc = 'Klart väder';
+        let iconHtml = '<i class="ph-fill ph-sun text-bcs-gold"></i>';
+
+        if ([1, 2, 3].includes(code)) {
+          desc = 'Växlande molnighet';
+          iconHtml = '<i class="ph-fill ph-cloud-sun text-bcs-gold"></i>';
+        } else if ([45, 48].includes(code)) {
+          desc = 'Dimma i Småland';
+          iconHtml = '<i class="ph-fill ph-cloud-fog text-zinc-400"></i>';
+        } else if ([51, 53, 55, 61, 63, 65].includes(code)) {
+          desc = 'Regn / Våt bana';
+          iconHtml = '<i class="ph-fill ph-cloud-rain text-sky-400"></i>';
+        } else if ([71, 73, 75].includes(code)) {
+          desc = 'Snö';
+          iconHtml = '<i class="ph-fill ph-snowflake text-sky-200"></i>';
+        }
+
+        document.getElementById('weatherDesc').textContent = desc;
+        document.getElementById('weatherIcon').innerHTML = iconHtml;
+
+        const press = cur.surface_pressure;
+        const advice = document.getElementById('carbAdvice');
+        if (press >= 1020) {
+          advice.textContent = `Högtryck (${Math.round(press)} hPa). Hög syredensitet – bestycka 1-2 jet sizes fetare för toppeffekt.`;
+        } else if (press <= 995) {
+          advice.textContent = `Lågtryck (${Math.round(press)} hPa). Lägre syredensitet – går något fett om den är på gränsen.`;
+        } else {
+          advice.textContent = `Optimalt tryck (${Math.round(press)} hPa). Idealiska grundförhållanden för förgasare och tändning.`;
+        }
+      } catch (e) {
+        console.warn("Weather error:", e);
+      }
+    }
+    fetchWeather();
+    setInterval(fetchWeather, 15 * 60 * 1000);
+
+    /* 3. TRAFIKMEDDELANDEN JÖNKÖPINGS LÄN (Sveriges Radio P4 Jönköping Trafik) */
+    async function fetchTrafficAlerts() {
+      const container = document.getElementById('trafficContainer');
+      const updatedEl = document.getElementById('trafficUpdated');
+      const badge = document.getElementById('trafficBadge');
+
+      try {
+        // P4 Jönköping Trafik RSS
+        const trafficRssUrl = "https://api.sr.se/api/rss/traffic/2065";
+        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(trafficRssUrl)}`;
+        const res = await fetch(proxyUrl);
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        updatedEl.textContent = `Kollat kl ${timeStr}`;
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'ok' && Array.isArray(data.items) && data.items.length > 0) {
+            badge.className = "text-[9px] font-mono px-1 rounded bg-amber-900/60 border border-amber-600 text-amber-300 font-bold";
+            badge.textContent = `${data.items.length} händelser`;
+            container.innerHTML = '';
+
+            // Visa max 2-3 akuta händelser så det passar i rutan
+            data.items.slice(0, 2).forEach(item => {
+              const temp = document.createElement('div');
+              temp.innerHTML = item.description || '';
+              const text = (temp.textContent || temp.innerText || '').slice(0, 80);
+
+              const card = document.createElement('div');
+              card.className = "p-1.5 rounded bg-bcs-black/90 border border-bcs-border flex flex-col gap-0.5";
+              card.innerHTML = `
+                <div class="flex items-center justify-between font-mono text-[9px]">
+                  <span class="text-bcs-copper font-bold uppercase truncate max-w-[150px] flex items-center gap-1">
+                    <i class="ph-bold ph-warning text-amber-400"></i> ${item.title}
+                  </span>
+                  <span class="text-zinc-500">${item.pubDate ? item.pubDate.split(' ')[1]?.slice(0,5) || '' : ''}</span>
+                </div>
+                <p class="font-mono text-[10px] text-zinc-300 line-clamp-2 leading-tight">${text}...</p>
+              `;
+              container.appendChild(card);
+            });
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Trafik-hämtning misslyckades:", e);
+      }
+
+      // Normalt läge / inga akuta hinder rapporterade
+      badge.className = "text-[9px] font-mono px-1 rounded bg-emerald-950/60 border border-emerald-600 text-emerald-400 font-bold";
+      badge.textContent = "Lugnt läge";
+      container.innerHTML = `
+        <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-950/80 border border-emerald-500/50 flex items-center justify-center flex-shrink-0 text-emerald-400 text-sm">
+            <i class="ph-bold ph-check"></i>
+          </div>
+          <div>
+            <span class="text-[11px] font-oswald uppercase font-bold text-bcs-cream block leading-tight">Flytande trafikläge</span>
+            <span class="text-[9px] font-mono text-zinc-400 block leading-tight">Inga akuta hinder rapporterade på E4, RV 27 eller RV 40</span>
+          </div>
+        </div>
+      `;
+    }
+    fetchTrafficAlerts();
+    setInterval(fetchTrafficAlerts, 4 * 60 * 1000); // Koll var 4:e minut
+
+    /* 4. MOTORSPORT & DRAG ILLUSTRATED RSS MED SAMMANSLAGNING OCH CYKLING */
+    let allNewsArticles = [];
+    let newsPage = 0;
+
+    async function fetchSingleRSS(url, sourceName, defaultCategory) {
+      try {
+        const feedUrl = encodeURIComponent(url);
+        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}`;
+        const res = await fetch(proxyUrl);
+        if (!res.ok) return [];
+        const data = await res.json();
+        if (data.status === 'ok' && Array.isArray(data.items)) {
+          return data.items.map(item => ({
+            ...item,
+            source: sourceName,
+            categoryBadge: defaultCategory || sourceName
+          }));
+        }
+      } catch (e) {
+        console.warn(`Fel vid hämtning av ${sourceName}:`, e);
+      }
+      return [];
+    }
+
+    async function fetchMotorsportRSS() {
+      const lastUpdateEl = document.getElementById('rssLastUpdated');
+      
+      try {
+        // Hämta parallellt från Drag Illustrated och Motorsport.com
+        const [dragIllustratedItems, motorsportItems] = await Promise.all([
+          fetchSingleRSS("https://dragillustrated.com/feed/", "Drag Illustrated", "Drag Racing"),
+          fetchSingleRSS("https://www.motorsport.com/rss/all/news/", "Motorsport.com", "Motorsport")
+        ]);
+
+        // Förena och varva artiklarna (prioritera dragracing)
+        const combined = [];
+        const maxLen = Math.max(dragIllustratedItems.length, motorsportItems.length);
+        for (let i = 0; i < maxLen; i++) {
+          if (dragIllustratedItems[i]) combined.push(dragIllustratedItems[i]);
+          if (motorsportItems[i]) combined.push(motorsportItems[i]);
+        }
+
+        if (combined.length > 0) {
+          allNewsArticles = combined;
+          const timeNow = new Date();
+          if (lastUpdateEl) {
+            lastUpdateEl.textContent = `Live: ${String(timeNow.getHours()).padStart(2,'0')}:${String(timeNow.getMinutes()).padStart(2,'0')}`;
+          }
+          renderNewsBatch();
+          return;
+        }
+      } catch (err) {
+        console.warn("RSS samlingsfel:", err);
+      }
+
+      // Fallback-artiklar om nätverk eller proxy är nere
+      if (allNewsArticles.length === 0) {
+        allNewsArticles = [
+          { title: "Drag Illustrated: Pro Mod & Radial vs the World laddar för Lights Out", source: "Drag Illustrated", categoryBadge: "Pro Mod", author: "Drag Illustrated", pubDate: new Date().toISOString(), description: "Extrema dörrbilar med dubbelturbo och kompressor gör upp om titeln." },
+          { title: "Street Week Sweden: Förberedelserna igång för sommarens snabbaste gatbilar", source: "Dragstrip", categoryBadge: "Street & Strip", author: "Burn Creek", pubDate: new Date().toISOString(), description: "Besiktningar och motorbyggen pågår för fullt i garagen runt om i landet." },
+          { title: "NHRA Top Fuel: Rekordtider väntas under säsongsöppningen i Gainesville", source: "Motorsport.com", categoryBadge: "NHRA", author: "Motorsport", pubDate: new Date().toISOString(), description: "Nitrometan och över 11 000 hästkrafter gör sig redo för premiären." },
+          { title: "Drag Illustrated: Ny chassiteknologi sänker 60-fotstiderna ytterligare", source: "Drag Illustrated", categoryBadge: "Tech", author: "Drag Illustrated", pubDate: new Date().toISOString(), description: "Fyrlinkinställningar och stötdämparjustering för maximalt bett i plattan." }
+        ];
+        renderNewsBatch();
+      }
+    }
+
+    function renderNewsBatch() {
+      const container = document.getElementById('rssFeedContainer');
+      if (!container || !allNewsArticles || allNewsArticles.length === 0) return;
+
+      const pageSize = 3;
+      const startIndex = (newsPage * pageSize) % allNewsArticles.length;
+      const items = allNewsArticles.slice(startIndex, startIndex + pageSize);
+
+      // Om det inte räcker till 3, fyll på från början
+      while (items.length < 3 && allNewsArticles.length > items.length) {
+        items.push(allNewsArticles[items.length]);
+      }
+
+      container.innerHTML = '';
+      items.forEach(item => {
+        let imageUrl = item.thumbnail || (item.enclosure && item.enclosure.link ? item.enclosure.link : null);
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = item.description || '';
+        const cleanDesc = tempDiv.textContent || tempDiv.innerText || '';
+        const snippet = cleanDesc.length > 85 ? cleanDesc.slice(0, 85) + '...' : cleanDesc;
+        const isDragIllustrated = item.source === 'Drag Illustrated';
+
+        const card = document.createElement('div');
+        card.className = "p-2 rounded-lg bg-bcs-black/80 border border-bcs-border flex gap-2.5 items-center overflow-hidden transition-all duration-300";
+        card.innerHTML = `
+          ${imageUrl ? `
+            <div class="w-16 h-14 flex-shrink-0 rounded bg-bcs-charcoal overflow-hidden border border-bcs-border">
+              <img src="${imageUrl}" alt="" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
+            </div>
+          ` : `
+            <div class="w-10 h-10 flex-shrink-0 rounded bg-bcs-charcoal border border-bcs-border flex items-center justify-center ${isDragIllustrated ? 'text-bcs-copper' : 'text-bcs-gold'}">
+              <i class="ph-bold ${isDragIllustrated ? 'ph-flame' : 'ph-flag-checkered'} text-lg"></i>
+            </div>
+          `}
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between text-[9px] font-mono mb-0.5">
+              <span class="font-bold uppercase truncate max-w-[170px] ${isDragIllustrated ? 'text-bcs-copper' : 'text-bcs-gold'}">
+                [${item.source || 'Drag Illustrated'}] ${item.categoryBadge ? '• ' + item.categoryBadge : ''}
+              </span>
+              <span class="text-zinc-500 font-bold">Live</span>
+            </div>
+            <h3 class="font-oswald text-xs font-bold text-bcs-cream truncate leading-tight">
+              ${item.title}
+            </h3>
+            <p class="font-mono text-[10px] text-zinc-400 truncate mt-0.5">
+              ${snippet}
+            </p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      newsPage++;
+    }
+
+    fetchMotorsportRSS();
+    setInterval(renderNewsBatch, 12000); // Roterar batch var 12:e sekund för TV:n
+    setInterval(fetchMotorsportRSS, 5 * 60 * 1000); // Ny data var 5:e minut
+
+    /* 5. V8 TOMGÅNGSLJUD */
+    let audioCtx = null;
+    let isV8Playing = false;
+    let v8Nodes = [];
+
+    function toggleV8Engine() {
+      const btn = document.getElementById('v8SoundBtn');
+      const label = document.getElementById('v8BtnText');
+      const status = document.getElementById('audioStatus');
+
+      if (!isV8Playing) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(32, audioCtx.currentTime);
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(16, audioCtx.currentTime);
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(125, audioCtx.currentTime);
+
+          const lfo = audioCtx.createOscillator();
+          const lfoGain = audioCtx.createGain();
+          lfo.type = 'sine';
+          lfo.frequency.setValueAtTime(6.0, audioCtx.currentTime);
+          lfoGain.gain.setValueAtTime(12, audioCtx.currentTime);
+          lfo.connect(osc1.frequency);
+
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+
+          osc1.connect(filter);
+          osc2.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc1.start();
+          osc2.start();
+          lfo.start();
+
+          v8Nodes = [osc1, osc2, lfo, gain, filter];
+          isV8Playing = true;
+
+          btn.classList.add('bg-bcs-copper', 'text-white');
+          label.textContent = "Stoppa V8";
+          status.textContent = "V8 Small Block Aktiv";
+          status.className = "font-mono text-[10px] text-bcs-gold";
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        if (v8Nodes.length > 0) {
+          v8Nodes.forEach(node => {
+            if (node.stop) node.stop();
+            if (node.disconnect) node.disconnect();
+          });
+          v8Nodes = [];
+        }
+        if (audioCtx) {
+          audioCtx.close();
+          audioCtx = null;
+        }
+        isV8Playing = false;
+        btn.classList.remove('bg-bcs-copper', 'text-white');
+        label.textContent = "Starta V8 Idle";
+        status.textContent = "Standby";
+        status.className = "font-mono text-[10px] text-zinc-500";
+      }
+    }
+    document.getElementById('v8SoundBtn').addEventListener('click', toggleV8Engine);
+
+    /* 6. FULLSKÄRM & UPPDATERINGSKNAPP */
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
     });
 
-    menu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        menu.classList.add('hidden');
-      });
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      fetchWeather();
+      fetchTrafficAlerts();
+      fetchMotorsportRSS();
+      updateClock();
     });
   </script>
 </body>
