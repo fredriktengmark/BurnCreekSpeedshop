@@ -8,10 +8,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Rye / Oswald för klassisk hot-rod & vintage typography, JetBrains Mono för siffror -->
+  <!-- Google Fonts: Rye / Oswald för hot-rod stil, JetBrains Mono för siffror -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Rye&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&family=Rye&display=swap" rel="stylesheet">
   
   <!-- Phosphor Icons CDN -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -24,7 +24,7 @@
           colors: {
             bcs: {
               copper: '#b25329',      // Logotypens brända terrakotta/koppar
-              copperDark: '#853716',  // Mörkare skugga
+              copperDark: '#853716',  // Mörkare kopparskugga
               copperLight: '#c86332', // Ljusare kopparaccent
               cream: '#f4ecd8',       // Vintage ivory / krämvit
               creamMuted: '#d3c5a6',  // Dämpad cream
@@ -47,11 +47,11 @@
   </script>
 
   <style>
-    /* Bakgrund med mörk vintage-struktur och motorsport-känsla */
+    /* Bakgrund med mörk racing-struktur */
     body {
       background-color: #100f0e;
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(178, 83, 41, 0.15), transparent 60%),
+        radial-gradient(circle at 50% 0%, rgba(178, 83, 41, 0.16), transparent 60%),
         radial-gradient(circle at 100% 100%, rgba(178, 83, 41, 0.08), transparent 45%),
         linear-gradient(to right, rgba(244, 236, 216, 0.02) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(244, 236, 216, 0.02) 1px, transparent 1px);
@@ -62,7 +62,7 @@
       width: 100vw;
     }
 
-    /* Schackrutig kantband (Checkered Flag Strip) */
+    /* Schackrutig flaggrand */
     .checkered-border {
       background-image: 
         linear-gradient(45deg, #121110 25%, transparent 25%), 
@@ -74,7 +74,7 @@
       background-color: #f4ecd8;
     }
 
-    /* Nitar-effekt för vintage verkstadsskyltar */
+    /* Nit-effekt */
     .rivet {
       width: 8px;
       height: 8px;
@@ -91,38 +91,38 @@
     .animate-marquee {
       display: inline-block;
       white-space: nowrap;
-      animation: marquee 32s linear infinite;
+      animation: marquee 35s linear infinite;
     }
   </style>
 </head>
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
 
   <!-- ========================================================== -->
-  <!-- 1. HEADER (FÖRSTORAD, LUFTIG & MAJESTÄTISK FÖR 42" TV)    -->
+  <!-- 1. HEADER (STORT FORMAT MED ER PNG-LOGGA, KLOCKA OCH STATUS)-->
   <!-- ========================================================== -->
-  <header class="w-full h-[115px] flex-shrink-0 bg-bcs-charcoal border-2 border-bcs-border rounded-xl shadow-2xl px-5 py-2.5 relative overflow-hidden flex items-center justify-between">
-    <!-- Topp-kant: Schackrutig flaggrand -->
-    <div class="checkered-border h-2 w-full absolute top-0 left-0 opacity-85"></div>
-    <div class="rivet absolute top-3 left-3"></div>
-    <div class="rivet absolute top-3 right-3"></div>
+  <header class="w-full h-[135px] flex-shrink-0 bg-bcs-charcoal border-2 border-bcs-border rounded-xl shadow-2xl px-6 py-2 relative overflow-hidden flex items-center justify-between">
+    <!-- Toppkant: Schackmönster -->
+    <div class="checkered-border h-2.5 w-full absolute top-0 left-0 opacity-85"></div>
+    <div class="rivet absolute top-3.5 left-3.5"></div>
+    <div class="rivet absolute top-3.5 right-3.5"></div>
 
-    <!-- LOGO & TITEL (STÖRRE FORMAT) -->
-    <div class="flex items-center gap-4">
-      <div class="relative w-20 h-20 flex-shrink-0 rounded-full border-2 border-bcs-copper p-0.5 bg-bcs-black shadow-2xl overflow-hidden flex items-center justify-center">
-        <!-- Er uppladdade bildfil från GitHub (.png) -->
+    <!-- LOGO & BRAND -->
+    <div class="flex items-center gap-5">
+      <div class="relative w-28 h-28 flex-shrink-0 rounded-full border-2 border-bcs-copper/80 p-1 bg-bcs-black shadow-2xl overflow-hidden flex items-center justify-center">
+        <!-- Er PNG-fil från GitHub -->
         <img 
           id="shopLogoImg" 
           src="Burn_Creek_Speedshop_rund_est.png" 
           alt="Burn Creek Speedshop Logo"
-          class="w-full h-full object-cover rounded-full"
+          class="w-full h-full object-contain rounded-full"
         />
       </div>
 
       <div>
-        <h1 class="font-brand text-3xl xl:text-4xl text-bcs-cream tracking-wide uppercase drop-shadow-md leading-none">
+        <h1 class="font-brand text-4xl xl:text-5xl text-bcs-cream tracking-wide uppercase drop-shadow-md leading-none">
           Burn Creek <span class="text-bcs-copper">Speedshop</span>
         </h1>
-        <div class="flex items-center gap-2.5 text-xs xl:text-sm font-oswald uppercase tracking-widest text-bcs-creamMuted mt-1">
+        <div class="flex items-center gap-3 text-sm xl:text-base font-oswald uppercase tracking-widest text-bcs-creamMuted mt-1.5">
           <span class="text-bcs-gold">★</span>
           <span class="text-bcs-cream font-bold">Brännehylte HQ</span>
           <span class="text-bcs-copper">•</span>
@@ -134,20 +134,20 @@
       </div>
     </div>
 
-    <!-- KLOCKA & DATUM I MITTEN (ÖKAD SKALA) -->
-    <div class="bg-bcs-black/95 border-2 border-bcs-copper/70 px-6 py-1.5 rounded-xl shadow-inner text-center">
-      <div id="liveClock" class="font-mono text-3xl xl:text-4xl font-extrabold text-bcs-cream tracking-widest leading-none">
+    <!-- KLOCKA & DATUM I MITTEN -->
+    <div class="bg-bcs-black/95 border-2 border-bcs-copper/70 px-7 py-2 rounded-xl shadow-inner text-center">
+      <div id="liveClock" class="font-mono text-4xl xl:text-5xl font-extrabold text-bcs-cream tracking-widest leading-none">
         00:00:00
       </div>
-      <div id="liveDate" class="text-xs uppercase font-oswald tracking-wider text-bcs-gold font-bold mt-1">
+      <div id="liveDate" class="text-xs xl:text-sm uppercase font-oswald tracking-wider text-bcs-gold font-bold mt-1">
         Laddar datum...
       </div>
     </div>
 
-    <!-- PRIVAT STATUS & TV-KONTROLLER -->
+    <!-- PRIVAT STATUS & KONTROLLER -->
     <div class="flex items-center gap-3">
-      <div class="px-3.5 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70">
-        <span class="h-3 w-3 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
+      <div class="px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70">
+        <span class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
         <span>PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
 
@@ -162,69 +162,67 @@
   </header>
 
   <!-- ========================================================== -->
-  <!-- 2. HUVUDINNEHÅLL (100% FYLLNAD UTAN SCROLL I 1080p)        -->
+  <!-- 2. HUVUDYTA: 3 KOLUMNER (100% LÅST UTAN SCROLL I 1080p)     -->
   <!-- ========================================================== -->
   <main class="grid grid-cols-12 gap-2.5 my-2 flex-1 min-h-0">
     
     <!-- ======================================================== -->
-    <!-- KOLUMN 1: VÄDER & TRAFIKMEDDELANDEN JÖNKÖPING (3 cols)   -->
+    <!-- KOLUMN 1: VÄDER + TRAFIK + MOTORSPORT NYHETER (4 cols)   -->
     <!-- ======================================================== -->
-    <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden">
-      <div>
-        <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border">
-          <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
-            <i class="ph-bold ph-cloud-sun text-bcs-copper text-lg"></i>
+    <section class="col-span-4 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0">
+      
+      <!-- Överst: Väder & Bestyckning -->
+      <div class="flex-shrink-0">
+        <div class="flex items-center justify-between pb-1 border-b border-bcs-border">
+          <h2 class="font-oswald text-xs xl:text-sm uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+            <i class="ph-bold ph-cloud-sun text-bcs-copper text-base"></i>
             Väder Brännehylte
           </h2>
-          <span class="font-mono text-[10px] bg-bcs-black px-1.5 py-0.5 rounded text-bcs-gold border border-bcs-border">
+          <span class="font-mono text-[9px] bg-bcs-black px-1.5 py-0.5 rounded text-bcs-gold border border-bcs-border">
             57.3°N, 13.8°E
           </span>
         </div>
 
-        <!-- Nuvarande temp -->
-        <div class="my-1.5 flex items-center justify-between px-1">
+        <div class="my-1 flex items-center justify-between px-1">
           <div>
             <div class="flex items-baseline gap-1">
-              <span id="weatherTemp" class="font-oswald text-3xl xl:text-4xl font-black text-bcs-cream">--</span>
-              <span class="text-lg xl:text-xl font-oswald text-bcs-copper font-bold">°C</span>
+              <span id="weatherTemp" class="font-oswald text-2xl xl:text-3xl font-black text-bcs-cream">--</span>
+              <span class="text-base font-oswald text-bcs-copper font-bold">°C</span>
             </div>
-            <p id="weatherDesc" class="text-xs font-oswald text-bcs-creamMuted">Hämtar data...</p>
+            <p id="weatherDesc" class="text-[10px] font-oswald text-bcs-creamMuted leading-tight">Hämtar data...</p>
           </div>
-          <div id="weatherIcon" class="w-10 h-10 rounded-xl bg-bcs-black border border-bcs-border flex items-center justify-center text-2xl text-bcs-gold">
+          <div id="weatherIcon" class="w-8 h-8 rounded-lg bg-bcs-black border border-bcs-border flex items-center justify-center text-xl text-bcs-gold">
             <i class="ph-fill ph-sun"></i>
           </div>
         </div>
 
-        <!-- Barometriska mätvärden -->
-        <div class="grid grid-cols-3 gap-1 bg-bcs-black/80 p-1.5 rounded-lg border border-bcs-border text-center font-mono">
+        <!-- Mätvärden -->
+        <div class="grid grid-cols-3 gap-1 bg-bcs-black/80 p-1 rounded border border-bcs-border text-center font-mono">
           <div>
-            <span class="text-zinc-500 block text-[9px] uppercase font-bold">Tryck</span>
-            <span id="weatherPressure" class="font-bold text-bcs-gold text-xs">-- hPa</span>
+            <span class="text-zinc-500 block text-[8px] uppercase font-bold">Tryck</span>
+            <span id="weatherPressure" class="font-bold text-bcs-gold text-[11px]">-- hPa</span>
           </div>
           <div class="border-x border-bcs-border">
-            <span class="text-zinc-500 block text-[9px] uppercase font-bold">Fukt</span>
-            <span id="weatherHumidity" class="font-bold text-bcs-cream text-xs">-- %</span>
+            <span class="text-zinc-500 block text-[8px] uppercase font-bold">Fukt</span>
+            <span id="weatherHumidity" class="font-bold text-bcs-cream text-[11px]">-- %</span>
           </div>
           <div>
-            <span class="text-zinc-500 block text-[9px] uppercase font-bold">Vind</span>
-            <span id="weatherWind" class="font-bold text-bcs-cream text-xs">-- m/s</span>
+            <span class="text-zinc-500 block text-[8px] uppercase font-bold">Vind</span>
+            <span id="weatherWind" class="font-bold text-bcs-cream text-[11px]">-- m/s</span>
           </div>
         </div>
 
-        <!-- DA (Density Altitude) & Bestyckning -->
-        <div class="mt-1.5 bg-bcs-copper/15 border border-bcs-copper/40 p-1.5 rounded-lg flex items-start gap-1.5">
-          <i class="ph-bold ph-gauge text-bcs-copper text-base flex-shrink-0 mt-0.5"></i>
-          <div class="text-[10px] font-oswald leading-tight">
-            <span class="font-bold text-bcs-copper block uppercase tracking-wide">Densitet & Tune:</span>
-            <span id="carbAdvice" class="text-bcs-creamMuted">Läser av barometertryck...</span>
-          </div>
+        <!-- Bestyckningsråd -->
+        <div class="mt-1 bg-bcs-copper/15 border border-bcs-copper/40 px-1.5 py-1 rounded flex items-center gap-1.5">
+          <i class="ph-bold ph-gauge text-bcs-copper text-sm flex-shrink-0"></i>
+          <span id="carbAdvice" class="text-[9px] font-oswald text-bcs-cream leading-tight">Läser av barometertryck...</span>
         </div>
       </div>
 
-      <!-- TRAFIKMEDDELANDEN JÖNKÖPINGS LÄN (P4 Trafik) -->
-      <div class="mt-2 pt-2 border-t border-bcs-border flex-1 flex flex-col justify-between min-h-0">
+      <!-- Mitten: Trafikmeddelanden Jönköping -->
+      <div class="my-1.5 pt-1.5 border-t border-bcs-border flex-shrink-0">
         <div class="flex items-center justify-between pb-1 mb-1 border-b border-bcs-border/60">
-          <h3 class="font-oswald text-xs xl:text-sm uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+          <h3 class="font-oswald text-xs uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
             <i class="ph-bold ph-traffic-cone text-bcs-copper"></i>
             Trafik Jönköpings Län
           </h3>
@@ -232,138 +230,173 @@
             P4 Trafik
           </span>
         </div>
-
-        <!-- Trafiklista -->
-        <div id="trafficContainer" class="flex-1 space-y-1.5 overflow-hidden text-xs">
-          <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border text-center">
-            <span class="text-zinc-400 font-mono text-[10px]">Hämtar trafikläge...</span>
+        <div id="trafficContainer" class="space-y-1 text-xs">
+          <div class="p-1 rounded bg-bcs-black/80 border border-bcs-border text-center text-zinc-400 font-mono text-[9px]">
+            Hämtar trafikläge...
           </div>
         </div>
-
-        <div class="pt-1 mt-1 border-t border-bcs-border/40 flex items-center justify-between text-[9px] font-mono text-zinc-500">
-          <span>E4 • RV 27 • RV 40 • LV 151</span>
-          <span id="trafficUpdated">Uppdateras live</span>
-        </div>
       </div>
-    </section>
 
-    <!-- ======================================================== -->
-    <!-- KOLUMN 2: MOTORSPORT & DRAG LIVE FEED (5 cols)           -->
-    <!-- Visar 3 artiklar med automatisk rotation för TV          -->
-    <!-- ======================================================== -->
-    <section class="col-span-5 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden">
-      <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border flex-shrink-0">
-        <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
-          <i class="ph-bold ph-newspaper text-bcs-copper text-lg"></i>
-          Motorsport & Dragstrip Live
-        </h2>
-        <div class="flex items-center gap-2">
-          <span class="inline-flex items-center gap-1 font-mono text-[9px] bg-bcs-black px-1.5 py-0.5 rounded text-bcs-copper border border-bcs-border">
+      <!-- Nederst: Motorsport & Dragstrip Live Nyhetsflöde (Fyller ut resterande höjd jämnt) -->
+      <div class="flex-1 flex flex-col justify-between border-t border-bcs-border pt-1.5 min-h-0">
+        <div class="flex items-center justify-between pb-1 flex-shrink-0">
+          <h3 class="font-oswald text-xs uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+            <i class="ph-bold ph-newspaper text-bcs-copper"></i>
+            Motorsport & Dragstrip Live
+          </h3>
+          <span class="inline-flex items-center gap-1 font-mono text-[8px] bg-bcs-black px-1 py-0.5 rounded text-bcs-copper border border-bcs-border">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="rssLastUpdated">Hämtar flöde...</span>
+            <span id="rssLastUpdated">Live</span>
           </span>
         </div>
-      </div>
 
-      <!-- Feed Container med 3 roterande artiklar -->
-      <div id="rssFeedContainer" class="flex-1 flex flex-col justify-around gap-2 my-2 min-h-0">
-        <div class="p-3 rounded-lg bg-bcs-black/80 border border-bcs-border text-center text-zinc-400 font-mono text-xs">
-          Ansluter till Drag Illustrated & Motorsport.com...
+        <!-- Nyhetskort: 3 st som fyller ytan helt utan tomma glapp -->
+        <div id="rssFeedContainer" class="flex-1 flex flex-col justify-between gap-1.5 min-h-0 my-0.5">
+          <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border text-center text-zinc-400 font-mono text-[10px]">
+            Hämtar nyheter från Drag Illustrated & Motorsport.com...
+          </div>
+        </div>
+
+        <div class="pt-1 border-t border-bcs-border/60 flex items-center justify-between text-[9px] font-mono text-zinc-400 flex-shrink-0">
+          <span class="text-bcs-copper font-bold">[Drag Illustrated & Motorsport]</span>
+          <span class="text-zinc-500">Roterar var 12:e sek</span>
         </div>
       </div>
 
-      <!-- Fotnot för nyhetsflödet -->
-      <div class="pt-1 border-t border-bcs-border flex items-center justify-between text-[10px] font-mono text-zinc-400 flex-shrink-0">
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- KOLUMN 2: DRAGSTRIP LIVE TV (YOUTUBE I MITTEN - 5 cols)  -->
+    <!-- ======================================================== -->
+    <section class="col-span-5 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0">
+      
+      <!-- TV Header & Kontroller -->
+      <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border flex-shrink-0">
         <div class="flex items-center gap-2">
-          <span class="text-bcs-copper font-bold">[Drag Illustrated]</span>
-          <span class="text-zinc-600">•</span>
-          <span class="text-bcs-gold font-bold">[Motorsport.com]</span>
+          <div class="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></div>
+          <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+            <i class="ph-bold ph-television text-bcs-copper text-lg"></i>
+            Dragstrip Live TV
+          </h2>
         </div>
-        <span class="text-zinc-500 text-[9px]">Roterar var 12:e sekund</span>
+        
+        <!-- Snabbval för kanaler & anpassad stream -->
+        <div class="flex items-center gap-1.5">
+          <button onclick="switchStream('1gqYw81lUjE')" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
+            Ch 1
+          </button>
+          <button onclick="switchStream('live_stream')" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
+            Ch 2
+          </button>
+          <button id="customStreamBtn" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-copper text-white font-bold hover:bg-bcs-copperLight transition-colors">
+            Byt Stream
+          </button>
+        </div>
+      </div>
+
+      <!-- Själva videorutan (Autoplay, muted, loop) -->
+      <div class="flex-1 my-2 bg-bcs-black rounded-lg border border-bcs-border overflow-hidden relative shadow-inner flex items-center justify-center min-h-0">
+        <iframe 
+          id="dragTvFrame"
+          class="w-full h-full object-cover"
+          src="https://www.youtube.com/embed/1gqYw81lUjE?autoplay=1&mute=1&controls=0&loop=1&playlist=1gqYw81lUjE&modestbranding=1&rel=0" 
+          title="Dragstrip Live TV" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <!-- TV Footer Info -->
+      <div class="pt-1.5 border-t border-bcs-border flex items-center justify-between text-[10px] font-mono text-zinc-400 flex-shrink-0">
+        <span class="flex items-center gap-1 text-emerald-400">
+          <i class="ph-bold ph-broadcast"></i> Sänder 24/7 Heads-Up & Strip Action
+        </span>
+        <span class="text-zinc-500">Muted Autoplay för verkstadsskärm</span>
       </div>
     </section>
 
     <!-- ======================================================== -->
-    <!-- KOLUMN 3: V8 TÄNDFÖLJD & SPEEDSHOP TECH REF (4 cols)     -->
+    <!-- KOLUMN 3: V8 TÄNDFÖLJD & SPEEDSHOP TECH (3 cols)         -->
+    <!-- Full höjd med renodlade tändföljder för V8-motorer       -->
     <!-- ======================================================== -->
-    <section class="col-span-4 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden">
-      <div class="flex-1 flex flex-col justify-between">
-        <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border flex-shrink-0">
-          <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
-            <i class="ph-bold ph-engine text-bcs-copper text-lg"></i>
-            V8 Tändföljd & Speedshop Tech
-          </h2>
-          <span class="font-mono text-[10px] text-bcs-gold uppercase font-bold">Firing Orders</span>
-        </div>
-
-        <!-- V8 TÄNDFÖLJD PANEL (UTÖKAD & RENODLAD) -->
-        <div class="mt-2 bg-bcs-black/95 p-2.5 rounded-lg border border-bcs-border flex flex-col gap-2 flex-1 justify-around">
-          <div class="flex justify-between items-center pb-1 border-b border-bcs-border/60">
-            <span class="text-xs font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
-              <i class="ph-bold ph-lightning text-bcs-copper"></i>
-              V8 Tändföljder (Amerikanska V8)
-            </span>
-            <span class="text-[9px] font-mono text-bcs-gold font-bold">Snabbguide</span>
-          </div>
-
-          <!-- Tabell över motorer -->
-          <div class="space-y-1.5 font-mono text-xs leading-tight">
-            <!-- Chevy SBC/BBC -->
-            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
-              <span class="text-zinc-200 font-bold">Chevy SBC / BBC <span class="text-zinc-500 text-[9px] font-normal">(Medsols)</span></span>
-              <span class="text-bcs-copper font-extrabold text-sm tracking-wider">1-8-4-3-6-5-7-2</span>
-            </div>
-
-            <!-- Chevy LS / Gen 3+ -->
-            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
-              <span class="text-zinc-200 font-bold">Chevy LS / Gen 3+ <span class="text-zinc-500 text-[9px] font-normal">(4.8/5.3/6.0/LS1)</span></span>
-              <span class="text-bcs-gold font-extrabold text-sm tracking-wider">1-8-7-2-6-5-4-3</span>
-            </div>
-
-            <!-- Ford 289 / 302 / FE -->
-            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
-              <span class="text-zinc-200 font-bold">Ford 289/302/FE <span class="text-zinc-500 text-[9px] font-normal">(Motsols)</span></span>
-              <span class="text-bcs-cream font-extrabold text-sm tracking-wider">1-5-4-2-6-3-7-8</span>
-            </div>
-
-            <!-- Ford 351W / 302 HO -->
-            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
-              <span class="text-zinc-200 font-bold">Ford 351W / 302 HO <span class="text-zinc-500 text-[9px] font-normal">(5.0 Roller)</span></span>
-              <span class="text-bcs-copper font-extrabold text-sm tracking-wider">1-3-7-2-6-5-4-8</span>
-            </div>
-
-            <!-- Mopar & Pontiac -->
-            <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1 rounded border border-bcs-border">
-              <span class="text-zinc-200 font-bold">Mopar / Pontiac <span class="text-zinc-500 text-[9px] font-normal">(LA, B/RB, 400, 455)</span></span>
-              <span class="text-bcs-gold font-extrabold text-sm tracking-wider">1-8-4-3-6-5-7-2</span>
-            </div>
-          </div>
-
-          <!-- Cylinder- och banknumrering -->
-          <div class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-bcs-border/60 font-mono text-[10px]">
-            <div class="bg-bcs-charcoal/90 p-1.5 rounded border border-bcs-border">
-              <span class="text-bcs-gold block font-bold uppercase text-[9px]">GM & Mopar Cylindrar</span>
-              <span class="text-zinc-300 block">Vänst (Förare): <strong class="text-bcs-cream">1-3-5-7</strong></span>
-              <span class="text-zinc-300 block">Hög (Passag): <strong class="text-bcs-cream">2-4-6-8</strong></span>
-            </div>
-            <div class="bg-bcs-charcoal/90 p-1.5 rounded border border-bcs-border">
-              <span class="text-bcs-copper block font-bold uppercase text-[9px]">Ford Cylindrar</span>
-              <span class="text-zinc-300 block">Hög (Passag): <strong class="text-bcs-cream">1-2-3-4</strong></span>
-              <span class="text-zinc-300 block">Vänst (Förare): <strong class="text-bcs-cream">5-6-7-8</strong></span>
-            </div>
-          </div>
-        </div>
+    <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0">
+      
+      <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border flex-shrink-0">
+        <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
+          <i class="ph-bold ph-engine text-bcs-copper text-lg"></i>
+          V8 Tändföljd & Speedshop Tech
+        </h2>
+        <span class="font-mono text-[10px] text-bcs-gold uppercase font-bold">Firing Orders</span>
       </div>
 
-      <!-- Radiokanal: Go Country 105 -->
-      <div class="mt-2 bg-bcs-black/90 border border-bcs-border p-1.5 rounded-lg flex items-center justify-between gap-2 flex-shrink-0">
-        <audio id="radioAudio" preload="none" src="https://stream.revma.ihrhls.com/zc7452"></audio>
-        <button id="radioPlayBtn" class="flex-1 py-1.5 px-2 rounded bg-bcs-charcoal hover:bg-bcs-border text-bcs-cream font-oswald text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 border border-bcs-copper/40 transition-colors">
-          <i id="radioPlayIcon" class="ph-bold ph-broadcast text-bcs-copper text-base"></i>
-          <span id="radioBtnText">Starta Go Country</span>
-        </button>
-        <span id="radioStatus" class="font-mono text-[10px] text-zinc-500 whitespace-nowrap">Go Country 105</span>
+      <!-- V8 Tändföljdspanel (Fyller hela höjden utan radion och utan cylinderboxar) -->
+      <div class="mt-2 bg-bcs-black/95 p-3 rounded-lg border border-bcs-border flex-1 flex flex-col justify-between min-h-0">
+        
+        <div class="flex justify-between items-center pb-1.5 border-b border-bcs-border/60 flex-shrink-0">
+          <span class="text-xs font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
+            <i class="ph-bold ph-lightning text-bcs-copper"></i>
+            V8 Tändföljder (Amerikanska V8)
+          </span>
+          <span class="text-[9px] font-mono text-bcs-gold font-bold">Snabbguide</span>
+        </div>
+
+        <!-- Tändföljderna fördelade jämnt över kolumnen -->
+        <div class="flex-1 flex flex-col justify-around py-1 font-mono text-xs">
+          
+          <!-- Chevy SBC / BBC -->
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+            <div>
+              <span class="text-zinc-200 font-bold block leading-tight">Chevy SBC / BBC</span>
+              <span class="text-zinc-500 text-[9px] block">Medsols fördelarrotation</span>
+            </div>
+            <span class="text-bcs-copper font-extrabold text-sm xl:text-base tracking-wider">1-8-4-3-6-5-7-2</span>
+          </div>
+
+          <!-- Chevy LS -->
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+            <div>
+              <span class="text-zinc-200 font-bold block leading-tight">Chevy LS / Gen 3+</span>
+              <span class="text-zinc-500 text-[9px] block">4.8 / 5.3 / 6.0 / LS1 / LS3</span>
+            </div>
+            <span class="text-bcs-gold font-extrabold text-sm xl:text-base tracking-wider">1-8-7-2-6-5-4-3</span>
+          </div>
+
+          <!-- Ford 289 / 302 / FE -->
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+            <div>
+              <span class="text-zinc-200 font-bold block leading-tight">Ford 289 / 302 / FE</span>
+              <span class="text-zinc-500 text-[9px] block">390 / 427 / 428 / Motsols</span>
+            </div>
+            <span class="text-bcs-cream font-extrabold text-sm xl:text-base tracking-wider">1-5-4-2-6-3-7-8</span>
+          </div>
+
+          <!-- Ford 351W / 302 HO -->
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+            <div>
+              <span class="text-zinc-200 font-bold block leading-tight">Ford 351W / 302 HO</span>
+              <span class="text-zinc-500 text-[9px] block">5.0 Roller / 351 Cleveland</span>
+            </div>
+            <span class="text-bcs-copper font-extrabold text-sm xl:text-base tracking-wider">1-3-7-2-6-5-4-8</span>
+          </div>
+
+          <!-- Mopar & Pontiac -->
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+            <div>
+              <span class="text-zinc-200 font-bold block leading-tight">Mopar / Pontiac</span>
+              <span class="text-zinc-500 text-[9px] block">LA, B/RB, 383, 440, 400</span>
+            </div>
+            <span class="text-bcs-gold font-extrabold text-sm xl:text-base tracking-wider">1-8-4-3-6-5-7-2</span>
+          </div>
+
+        </div>
+
+        <div class="pt-1.5 border-t border-bcs-border/60 text-center text-[10px] font-mono text-zinc-500 flex-shrink-0">
+          Cyl 1 alltid främre cylinder på vevaxeln
+        </div>
+
       </div>
+
     </section>
 
   </main>
@@ -447,11 +480,11 @@
         const press = cur.surface_pressure;
         const advice = document.getElementById('carbAdvice');
         if (press >= 1020) {
-          advice.textContent = `Högtryck (${Math.round(press)} hPa). Hög syredensitet – bestycka 1-2 jet sizes fetare för toppeffekt.`;
+          advice.textContent = `Högtryck (${Math.round(press)} hPa). Hög syredensitet – bestycka 1-2 jet sizes fetare för max effekt.`;
         } else if (press <= 995) {
-          advice.textContent = `Lågtryck (${Math.round(press)} hPa). Lägre syredensitet – går något fett om den är på gränsen.`;
+          advice.textContent = `Lågtryck (${Math.round(press)} hPa). Lägre syredensitet – går något fett vid WOT.`;
         } else {
-          advice.textContent = `Optimalt tryck (${Math.round(press)} hPa). Idealiska grundförhållanden för förgasare och tändning.`;
+          advice.textContent = `Optimalt tryck (${Math.round(press)} hPa). Idealiska grundförhållanden för förgasare & tändning.`;
         }
       } catch (e) {
         console.warn("Weather error:", e);
@@ -460,20 +493,15 @@
     fetchWeather();
     setInterval(fetchWeather, 15 * 60 * 1000);
 
-    /* 3. TRAFIKMEDDELANDEN JÖNKÖPINGS LÄN (Sveriges Radio P4 Jönköping Trafik) */
+    /* 3. TRAFIKMEDDELANDEN JÖNKÖPINGS LÄN (P4 Trafik) */
     async function fetchTrafficAlerts() {
       const container = document.getElementById('trafficContainer');
-      const updatedEl = document.getElementById('trafficUpdated');
       const badge = document.getElementById('trafficBadge');
 
       try {
-        // P4 Jönköping Trafik RSS
         const trafficRssUrl = "https://api.sr.se/api/rss/traffic/2065";
         const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(trafficRssUrl)}`;
         const res = await fetch(proxyUrl);
-        const now = new Date();
-        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        updatedEl.textContent = `Kollat kl ${timeStr}`;
 
         if (res.ok) {
           const data = await res.json();
@@ -482,22 +510,21 @@
             badge.textContent = `${data.items.length} händelser`;
             container.innerHTML = '';
 
-            // Visa max 2-3 akuta händelser så det passar i rutan
-            data.items.slice(0, 2).forEach(item => {
+            data.items.slice(0, 1).forEach(item => {
               const temp = document.createElement('div');
               temp.innerHTML = item.description || '';
-              const text = (temp.textContent || temp.innerText || '').slice(0, 80);
+              const text = (temp.textContent || temp.innerText || '').slice(0, 75);
 
               const card = document.createElement('div');
-              card.className = "p-1.5 rounded bg-bcs-black/90 border border-bcs-border flex flex-col gap-0.5";
+              card.className = "p-1 rounded bg-bcs-black/90 border border-bcs-border flex flex-col gap-0.5";
               card.innerHTML = `
                 <div class="flex items-center justify-between font-mono text-[9px]">
-                  <span class="text-bcs-copper font-bold uppercase truncate max-w-[150px] flex items-center gap-1">
+                  <span class="text-bcs-copper font-bold uppercase truncate max-w-[180px] flex items-center gap-1">
                     <i class="ph-bold ph-warning text-amber-400"></i> ${item.title}
                   </span>
                   <span class="text-zinc-500">${item.pubDate ? item.pubDate.split(' ')[1]?.slice(0,5) || '' : ''}</span>
                 </div>
-                <p class="font-mono text-[10px] text-zinc-300 line-clamp-2 leading-tight">${text}...</p>
+                <p class="font-mono text-[9px] text-zinc-300 line-clamp-1 leading-tight">${text}...</p>
               `;
               container.appendChild(card);
             });
@@ -505,28 +532,27 @@
           }
         }
       } catch (e) {
-        console.warn("Trafik-hämtning misslyckades:", e);
+        console.warn("Trafikhämtning misslyckades:", e);
       }
 
-      // Normalt läge / inga akuta hinder rapporterade
       badge.className = "text-[9px] font-mono px-1 rounded bg-emerald-950/60 border border-emerald-600 text-emerald-400 font-bold";
       badge.textContent = "Lugnt läge";
       container.innerHTML = `
-        <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full bg-emerald-950/80 border border-emerald-500/50 flex items-center justify-center flex-shrink-0 text-emerald-400 text-sm">
+        <div class="p-1 rounded bg-bcs-black/80 border border-bcs-border flex items-center gap-1.5">
+          <div class="w-5 h-5 rounded-full bg-emerald-950/80 border border-emerald-500/50 flex items-center justify-center flex-shrink-0 text-emerald-400 text-xs">
             <i class="ph-bold ph-check"></i>
           </div>
-          <div>
-            <span class="text-[11px] font-oswald uppercase font-bold text-bcs-cream block leading-tight">Flytande trafikläge</span>
-            <span class="text-[9px] font-mono text-zinc-400 block leading-tight">Inga akuta hinder rapporterade på E4, RV 27 eller RV 40</span>
+          <div class="leading-tight">
+            <span class="text-[10px] font-oswald uppercase font-bold text-bcs-cream block">Flytande trafikläge</span>
+            <span class="text-[8px] font-mono text-zinc-400 block truncate">Inga akuta hinder på E4, RV 27 eller RV 40</span>
           </div>
         </div>
       `;
     }
     fetchTrafficAlerts();
-    setInterval(fetchTrafficAlerts, 4 * 60 * 1000); // Koll var 4:e minut
+    setInterval(fetchTrafficAlerts, 4 * 60 * 1000);
 
-    /* 4. MOTORSPORT & DRAG ILLUSTRATED RSS MED SAMMANSLAGNING OCH CYKLING */
+    /* 4. MOTORSPORT & DRAG ILLUSTRATED RSS */
     let allNewsArticles = [];
     let newsPage = 0;
 
@@ -554,17 +580,15 @@
       const lastUpdateEl = document.getElementById('rssLastUpdated');
       
       try {
-        // Hämta parallellt från Drag Illustrated och Motorsport.com
-        const [dragIllustratedItems, motorsportItems] = await Promise.all([
-          fetchSingleRSS("https://dragillustrated.com/feed/", "Drag Illustrated", "Drag Racing"),
-          fetchSingleRSS("https://www.motorsport.com/rss/all/news/", "Motorsport.com", "Motorsport")
+        const [dragItems, motorsportItems] = await Promise.all([
+          fetchSingleRSS("https://dragillustrated.com/feed/", "Drag Illustrated", "Drag"),
+          fetchSingleRSS("https://www.motorsport.com/rss/all/news/", "Motorsport.com", "Racing")
         ]);
 
-        // Förena och varva artiklarna (prioritera dragracing)
         const combined = [];
-        const maxLen = Math.max(dragIllustratedItems.length, motorsportItems.length);
+        const maxLen = Math.max(dragItems.length, motorsportItems.length);
         for (let i = 0; i < maxLen; i++) {
-          if (dragIllustratedItems[i]) combined.push(dragIllustratedItems[i]);
+          if (dragItems[i]) combined.push(dragItems[i]);
           if (motorsportItems[i]) combined.push(motorsportItems[i]);
         }
 
@@ -572,22 +596,20 @@
           allNewsArticles = combined;
           const timeNow = new Date();
           if (lastUpdateEl) {
-            lastUpdateEl.textContent = `Live: ${String(timeNow.getHours()).padStart(2,'0')}:${String(timeNow.getMinutes()).padStart(2,'0')}`;
+            lastUpdateEl.textContent = `Live ${String(timeNow.getHours()).padStart(2,'0')}:${String(timeNow.getMinutes()).padStart(2,'0')}`;
           }
           renderNewsBatch();
           return;
         }
       } catch (err) {
-        console.warn("RSS samlingsfel:", err);
+        console.warn("RSS fel:", err);
       }
 
-      // Fallback-artiklar om nätverk eller proxy är nere
       if (allNewsArticles.length === 0) {
         allNewsArticles = [
-          { title: "Drag Illustrated: Pro Mod & Radial vs the World laddar för Lights Out", source: "Drag Illustrated", categoryBadge: "Pro Mod", author: "Drag Illustrated", pubDate: new Date().toISOString(), description: "Extrema dörrbilar med dubbelturbo och kompressor gör upp om titeln." },
-          { title: "Street Week Sweden: Förberedelserna igång för sommarens snabbaste gatbilar", source: "Dragstrip", categoryBadge: "Street & Strip", author: "Burn Creek", pubDate: new Date().toISOString(), description: "Besiktningar och motorbyggen pågår för fullt i garagen runt om i landet." },
-          { title: "NHRA Top Fuel: Rekordtider väntas under säsongsöppningen i Gainesville", source: "Motorsport.com", categoryBadge: "NHRA", author: "Motorsport", pubDate: new Date().toISOString(), description: "Nitrometan och över 11 000 hästkrafter gör sig redo för premiären." },
-          { title: "Drag Illustrated: Ny chassiteknologi sänker 60-fotstiderna ytterligare", source: "Drag Illustrated", categoryBadge: "Tech", author: "Drag Illustrated", pubDate: new Date().toISOString(), description: "Fyrlinkinställningar och stötdämparjustering för maximalt bett i plattan." }
+          { title: "Drag Illustrated: Pro Mod & Radial vs the World laddar för säsongens största event", source: "Drag Illustrated", categoryBadge: "Pro Mod", author: "Drag Illustrated", pubDate: new Date().toISOString(), description: "Extrema dörrbilar gör upp om titeln med dubbelturbo och skruvkompressor." },
+          { title: "Street Week Sweden: Byggena pågår för fullt runt om i landet", source: "Street & Strip", categoryBadge: "Street", author: "Burn Creek", pubDate: new Date().toISOString(), description: "Besiktningar och motorjusteringar görs inför sommarens tuffaste utmaning." },
+          { title: "NHRA Top Fuel: Nya rekordtider väntas under kommande tävlingshelg", source: "Motorsport.com", categoryBadge: "Top Fuel", author: "Motorsport", pubDate: new Date().toISOString(), description: "Över 11 000 hästkrafter och nitrometan gör sig redo för eliminering." }
         ];
         renderNewsBatch();
       }
@@ -601,7 +623,6 @@
       const startIndex = (newsPage * pageSize) % allNewsArticles.length;
       const items = allNewsArticles.slice(startIndex, startIndex + pageSize);
 
-      // Om det inte räcker till 3, fyll på från början
       while (items.length < 3 && allNewsArticles.length > items.length) {
         items.push(allNewsArticles[items.length]);
       }
@@ -612,32 +633,32 @@
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = item.description || '';
         const cleanDesc = tempDiv.textContent || tempDiv.innerText || '';
-        const snippet = cleanDesc.length > 85 ? cleanDesc.slice(0, 85) + '...' : cleanDesc;
-        const isDragIllustrated = item.source === 'Drag Illustrated';
+        const snippet = cleanDesc.length > 70 ? cleanDesc.slice(0, 70) + '...' : cleanDesc;
+        const isDrag = item.source === 'Drag Illustrated';
 
         const card = document.createElement('div');
-        card.className = "p-2 rounded-lg bg-bcs-black/80 border border-bcs-border flex gap-2.5 items-center overflow-hidden transition-all duration-300";
+        card.className = "flex-1 min-h-0 p-1.5 rounded bg-bcs-black/85 border border-bcs-border flex gap-2 items-center overflow-hidden transition-all duration-300";
         card.innerHTML = `
           ${imageUrl ? `
-            <div class="w-16 h-14 flex-shrink-0 rounded bg-bcs-charcoal overflow-hidden border border-bcs-border">
+            <div class="w-12 h-11 flex-shrink-0 rounded bg-bcs-charcoal overflow-hidden border border-bcs-border">
               <img src="${imageUrl}" alt="" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
             </div>
           ` : `
-            <div class="w-10 h-10 flex-shrink-0 rounded bg-bcs-charcoal border border-bcs-border flex items-center justify-center ${isDragIllustrated ? 'text-bcs-copper' : 'text-bcs-gold'}">
-              <i class="ph-bold ${isDragIllustrated ? 'ph-flame' : 'ph-flag-checkered'} text-lg"></i>
+            <div class="w-8 h-8 flex-shrink-0 rounded bg-bcs-charcoal border border-bcs-border flex items-center justify-center ${isDrag ? 'text-bcs-copper' : 'text-bcs-gold'}">
+              <i class="ph-bold ${isDrag ? 'ph-flame' : 'ph-flag-checkered'} text-base"></i>
             </div>
           `}
           <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between text-[9px] font-mono mb-0.5">
-              <span class="font-bold uppercase truncate max-w-[170px] ${isDragIllustrated ? 'text-bcs-copper' : 'text-bcs-gold'}">
-                [${item.source || 'Drag Illustrated'}] ${item.categoryBadge ? '• ' + item.categoryBadge : ''}
+            <div class="flex items-center justify-between text-[8px] font-mono leading-none mb-0.5">
+              <span class="font-bold uppercase truncate max-w-[140px] ${isDrag ? 'text-bcs-copper' : 'text-bcs-gold'}">
+                [${item.source}] ${item.categoryBadge ? '• ' + item.categoryBadge : ''}
               </span>
-              <span class="text-zinc-500 font-bold">Live</span>
+              <span class="text-zinc-500">Live</span>
             </div>
-            <h3 class="font-oswald text-xs font-bold text-bcs-cream truncate leading-tight">
+            <h4 class="font-oswald text-[11px] font-bold text-bcs-cream truncate leading-tight">
               ${item.title}
-            </h3>
-            <p class="font-mono text-[10px] text-zinc-400 truncate mt-0.5">
+            </h4>
+            <p class="font-mono text-[9px] text-zinc-400 line-clamp-1 leading-tight">
               ${snippet}
             </p>
           </div>
@@ -649,52 +670,30 @@
     }
 
     fetchMotorsportRSS();
-    setInterval(renderNewsBatch, 12000); // Roterar batch var 12:e sekund för TV:n
+    setInterval(renderNewsBatch, 12000); // Roterar batch var 12:e sekund
     setInterval(fetchMotorsportRSS, 5 * 60 * 1000); // Ny data var 5:e minut
 
-    /* 5. RADIO: GO COUNTRY */
-    const radioAudio = document.getElementById('radioAudio');
-    const radioBtn = document.getElementById('radioPlayBtn');
-    const radioBtnText = document.getElementById('radioBtnText');
-    const radioPlayIcon = document.getElementById('radioPlayIcon');
-    const radioStatus = document.getElementById('radioStatus');
-    let isRadioPlaying = false;
-
-    radioBtn.addEventListener('click', () => {
-      if (!isRadioPlaying) {
-        radioAudio.play().then(() => {
-          isRadioPlaying = true;
-          radioBtn.classList.add('bg-bcs-copper', 'text-white');
-          radioPlayIcon.className = "ph-bold ph-speaker-high text-white animate-pulse";
-          radioBtnText.textContent = "Pausa Radio";
-          radioStatus.textContent = "Sänder Live";
-          radioStatus.className = "font-mono text-[10px] text-emerald-400 font-bold";
-        }).catch(err => {
-          console.warn("Kunde inte starta Go Country:", err);
-          radioStatus.textContent = "Anslutningsfel";
-          radioStatus.className = "font-mono text-[10px] text-amber-400";
-        });
+    /* 5. DRAGSTRIP LIVE TV STREAM CONTROLLER */
+    function switchStream(videoId) {
+      const frame = document.getElementById('dragTvFrame');
+      if (videoId.includes('youtube.com') || videoId.includes('youtu.be')) {
+        let id = videoId.split('v=')[1] || videoId.split('/').pop();
+        if (id.includes('&')) id = id.split('&')[0];
+        frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}&modestbranding=1&rel=0`;
       } else {
-        radioAudio.pause();
-        isRadioPlaying = false;
-        radioBtn.classList.remove('bg-bcs-copper', 'text-white');
-        radioPlayIcon.className = "ph-bold ph-broadcast text-bcs-copper";
-        radioBtnText.textContent = "Starta Go Country";
-        radioStatus.textContent = "Go Country 105";
-        radioStatus.className = "font-mono text-[10px] text-zinc-500";
+        frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0`;
+      }
+    }
+
+    document.getElementById('customStreamBtn').addEventListener('click', () => {
+      // Skonsam inmatning utan standard alert/prompt dialog
+      const customUrl = window.prompt("Klistra in YouTube-länk eller Video-ID till helgens Live Drag Event:");
+      if (customUrl && customUrl.trim()) {
+        switchStream(customUrl.trim());
       }
     });
 
-    radioAudio.addEventListener('error', () => {
-      // Reservstream för Go Country om huvudströmmen blockeras
-      if (!radioAudio.dataset.fallbackTried) {
-        radioAudio.dataset.fallbackTried = "true";
-        radioAudio.src = "https://ice6.securenetsystems.net/KKGO";
-        if (isRadioPlaying) radioAudio.play().catch(() => {});
-      }
-    });
-
-    /* 6. FULLSKÄRM & UPPDATERINGSKNAPP */
+    /* 6. FULLSKÄRM & UPPDATERING */
     document.getElementById('fullscreenBtn').addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => {});
