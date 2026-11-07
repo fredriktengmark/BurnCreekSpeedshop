@@ -93,6 +93,72 @@
       white-space: nowrap;
       animation: marquee 35s linear infinite;
     }
+
+    /* Närvaro-kort styling */
+    .presence-card {
+      background: #161413;
+      border: 1px solid #38322b;
+      border-top: 3px solid #b25329;
+      border-radius: 0.5rem;
+      padding: 10px;
+      color: #f4ecd8;
+    }
+    .presence-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #38322b;
+      padding-bottom: 6px;
+    }
+    .dash-led {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #3f3933;
+      border: 1px solid #25211d;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .dash-led.active {
+      background: #2ecc71;
+      box-shadow: 0 0 10px #2ecc71, 0 0 4px #2ecc71;
+    }
+    .presence-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #f4ecd8;
+    }
+    .presence-list {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #d3c5a6;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 28px;
+      align-items: center;
+    }
+    .presence-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #121110;
+      border: 1px solid #b25329;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      color: #f4ecd8;
+      font-size: 0.75rem;
+    }
+    .presence-time {
+      font-size: 0.65rem;
+      color: #df9837;
+      font-weight: normal;
+    }
   </style>
 </head>
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
@@ -237,7 +303,7 @@
         </div>
       </div>
 
-      <!-- Nederst: Motorsport & Dragstrip Live Nyhetsflöde (Fyller ut resterande höjd jämnt) -->
+      <!-- Nederst: Motorsport & Dragstrip Live Nyhetsflöde -->
       <div class="flex-1 flex flex-col justify-between border-t border-bcs-border pt-1.5 min-h-0">
         <div class="flex items-center justify-between pb-1 flex-shrink-0">
           <h3 class="font-oswald text-xs uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
@@ -250,7 +316,7 @@
           </span>
         </div>
 
-        <!-- Nyhetskort: 3 st som fyller ytan helt utan tomma glapp -->
+        <!-- Nyhetskort -->
         <div id="rssFeedContainer" class="flex-1 flex flex-col justify-between gap-1.5 min-h-0 my-0.5">
           <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border text-center text-zinc-400 font-mono text-[10px]">
             Hämtar nyheter från Drag Illustrated & Motorsport.com...
@@ -320,81 +386,86 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- KOLUMN 3: V8 TÄNDFÖLJD & SPEEDSHOP TECH (3 cols)         -->
-    <!-- Full höjd med renodlade tändföljder för V8-motorer       -->
+    <!-- KOLUMN 3: NÄRVARO & V8 TÄNDFÖLJD (3 cols)                -->
     <!-- ======================================================== -->
-    <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0">
+    <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0 gap-2">
       
-      <div class="flex items-center justify-between pb-1.5 border-b border-bcs-border flex-shrink-0">
-        <h2 class="font-oswald text-sm xl:text-base uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
-          <i class="ph-bold ph-engine text-bcs-copper text-lg"></i>
-          V8 Tändföljd & Speedshop Tech
-        </h2>
-        <span class="font-mono text-[10px] text-bcs-gold uppercase font-bold">Firing Orders</span>
+      <!-- ÖVERST I KOLUMN 3: NÄRVARO-KORTET -->
+      <div class="dashboard-widget presence-card flex-shrink-0 shadow-lg">
+        <div class="presence-header">
+          <div id="dash-led" class="dash-led"></div>
+          <span class="presence-title flex items-center gap-1.5">
+            <i class="ph-bold ph-users-three text-bcs-copper"></i>
+            Närvaro i Verkstan
+          </span>
+        </div>
+        <div id="dash-presence-list" class="presence-list">
+          Laddar närvaro...
+        </div>
       </div>
 
-      <!-- V8 Tändföljdspanel (Fyller hela höjden utan radion och utan cylinderboxar) -->
-      <div class="mt-2 bg-bcs-black/95 p-3 rounded-lg border border-bcs-border flex-1 flex flex-col justify-between min-h-0">
+      <!-- NEDERST I KOLUMN 3: V8 TÄNDFÖLJD & SPEEDSHOP TECH -->
+      <div class="bg-bcs-black/95 p-2.5 rounded-lg border border-bcs-border flex-1 flex flex-col justify-between min-h-0">
         
         <div class="flex justify-between items-center pb-1.5 border-b border-bcs-border/60 flex-shrink-0">
           <span class="text-xs font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
             <i class="ph-bold ph-lightning text-bcs-copper"></i>
-            V8 Tändföljder (Amerikanska V8)
+            V8 Tändföljder
           </span>
           <span class="text-[9px] font-mono text-bcs-gold font-bold">Snabbguide</span>
         </div>
 
-        <!-- Tändföljderna fördelade jämnt över kolumnen -->
-        <div class="flex-1 flex flex-col justify-around py-1 font-mono text-xs">
+        <!-- Tändföljderna jämnt fördelade -->
+        <div class="flex-1 flex flex-col justify-around py-1 font-mono text-xs gap-1">
           
           <!-- Chevy SBC / BBC -->
-          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1.5 rounded border border-bcs-border">
             <div>
-              <span class="text-zinc-200 font-bold block leading-tight">Chevy SBC / BBC</span>
-              <span class="text-zinc-500 text-[9px] block">Medsols fördelarrotation</span>
+              <span class="text-zinc-200 font-bold block leading-tight text-[11px]">Chevy SBC / BBC</span>
+              <span class="text-zinc-500 text-[8px] block">Medsols fördelarrot.</span>
             </div>
-            <span class="text-bcs-copper font-extrabold text-sm xl:text-base tracking-wider">1-8-4-3-6-5-7-2</span>
+            <span class="text-bcs-copper font-extrabold text-xs xl:text-sm tracking-wider">1-8-4-3-6-5-7-2</span>
           </div>
 
           <!-- Chevy LS -->
-          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1.5 rounded border border-bcs-border">
             <div>
-              <span class="text-zinc-200 font-bold block leading-tight">Chevy LS / Gen 3+</span>
-              <span class="text-zinc-500 text-[9px] block">4.8 / 5.3 / 6.0 / LS1 / LS3</span>
+              <span class="text-zinc-200 font-bold block leading-tight text-[11px]">Chevy LS / Gen 3+</span>
+              <span class="text-zinc-500 text-[8px] block">4.8 / 5.3 / 6.0 / LS1</span>
             </div>
-            <span class="text-bcs-gold font-extrabold text-sm xl:text-base tracking-wider">1-8-7-2-6-5-4-3</span>
+            <span class="text-bcs-gold font-extrabold text-xs xl:text-sm tracking-wider">1-8-7-2-6-5-4-3</span>
           </div>
 
           <!-- Ford 289 / 302 / FE -->
-          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1.5 rounded border border-bcs-border">
             <div>
-              <span class="text-zinc-200 font-bold block leading-tight">Ford 289 / 302 / FE</span>
-              <span class="text-zinc-500 text-[9px] block">390 / 427 / 428 / Motsols</span>
+              <span class="text-zinc-200 font-bold block leading-tight text-[11px]">Ford 289 / 302 / FE</span>
+              <span class="text-zinc-500 text-[8px] block">390 / 428 / Motsols</span>
             </div>
-            <span class="text-bcs-cream font-extrabold text-sm xl:text-base tracking-wider">1-5-4-2-6-3-7-8</span>
+            <span class="text-bcs-cream font-extrabold text-xs xl:text-sm tracking-wider">1-5-4-2-6-3-7-8</span>
           </div>
 
           <!-- Ford 351W / 302 HO -->
-          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1.5 rounded border border-bcs-border">
             <div>
-              <span class="text-zinc-200 font-bold block leading-tight">Ford 351W / 302 HO</span>
-              <span class="text-zinc-500 text-[9px] block">5.0 Roller / 351 Cleveland</span>
+              <span class="text-zinc-200 font-bold block leading-tight text-[11px]">Ford 351W / 302 HO</span>
+              <span class="text-zinc-500 text-[8px] block">5.0 Roller / 351C</span>
             </div>
-            <span class="text-bcs-copper font-extrabold text-sm xl:text-base tracking-wider">1-3-7-2-6-5-4-8</span>
+            <span class="text-bcs-copper font-extrabold text-xs xl:text-sm tracking-wider">1-3-7-2-6-5-4-8</span>
           </div>
 
           <!-- Mopar & Pontiac -->
-          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2.5 py-2 rounded border border-bcs-border">
+          <div class="flex justify-between items-center bg-bcs-charcoal/90 px-2 py-1.5 rounded border border-bcs-border">
             <div>
-              <span class="text-zinc-200 font-bold block leading-tight">Mopar / Pontiac</span>
-              <span class="text-zinc-500 text-[9px] block">LA, B/RB, 383, 440, 400</span>
+              <span class="text-zinc-200 font-bold block leading-tight text-[11px]">Mopar / Pontiac</span>
+              <span class="text-zinc-500 text-[8px] block">LA, B/RB, 383, 440</span>
             </div>
-            <span class="text-bcs-gold font-extrabold text-sm xl:text-base tracking-wider">1-8-4-3-6-5-7-2</span>
+            <span class="text-bcs-gold font-extrabold text-xs xl:text-sm tracking-wider">1-8-4-3-6-5-7-2</span>
           </div>
 
         </div>
 
-        <div class="pt-1.5 border-t border-bcs-border/60 text-center text-[10px] font-mono text-zinc-500 flex-shrink-0">
+        <div class="pt-1 border-t border-bcs-border/60 text-center text-[9px] font-mono text-zinc-500 flex-shrink-0">
           Cyl 1 alltid främre cylinder på vevaxeln
         </div>
 
@@ -684,13 +755,10 @@
       let embedUrl = "";
       source = (source || '').trim();
 
-      // Om det är en spellista
       if (source.startsWith('playlist:')) {
         const listId = source.replace('playlist:', '');
         embedUrl = `https://www.youtube.com/embed?listType=playlist&list=${listId}&autoplay=1&mute=1&loop=1`;
-      } 
-      // Om det är en full YouTube-URL
-      else if (source.includes('youtube.com') || source.includes('youtu.be')) {
+      } else if (source.includes('youtube.com') || source.includes('youtu.be')) {
         try {
           const urlObj = new URL(source);
           let videoId = "";
@@ -711,9 +779,7 @@
         } catch (e) {
           embedUrl = source;
         }
-      } 
-      // Om det är ett rent video-ID
-      else {
+      } else {
         embedUrl = `https://www.youtube.com/embed/${source}?autoplay=1&mute=1&controls=1&loop=1&playlist=${source}&modestbranding=1&rel=0`;
       }
 
