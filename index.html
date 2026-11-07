@@ -16,6 +16,10 @@
   <!-- Phosphor Icons CDN -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+  <!-- Firebase SDKs (Compat v9) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -258,7 +262,6 @@
           </div>
         </div>
 
-        <!-- Mätvärden -->
         <div class="grid grid-cols-3 gap-1 bg-bcs-black/80 p-1 rounded border border-bcs-border text-center font-mono">
           <div>
             <span class="text-zinc-500 block text-[8px] uppercase font-bold">Tryck</span>
@@ -274,7 +277,6 @@
           </div>
         </div>
 
-        <!-- Bestyckningsråd -->
         <div class="mt-1 bg-bcs-copper/15 border border-bcs-copper/40 px-1.5 py-1 rounded flex items-center gap-1.5">
           <i class="ph-bold ph-gauge text-bcs-copper text-sm flex-shrink-0"></i>
           <span id="carbAdvice" class="text-[9px] font-oswald text-bcs-cream leading-tight">Läser av barometertryck...</span>
@@ -387,7 +389,7 @@
           </span>
         </div>
         <div id="dash-presence-list" class="presence-list">
-          Laddar närvaro...
+          Laddar närvaro från Firebase...
         </div>
       </div>
 
@@ -456,9 +458,7 @@
 
   </main>
 
-  <!-- ========================================================== -->
-  <!-- 3. FOOTER (KOMPAKT STATUSLIST & TICKER)                    -->
-  <!-- ========================================================== -->
+  <!-- 3. FOOTER -->
   <footer class="w-full h-8 flex-shrink-0 bg-bcs-black border border-bcs-border rounded-lg px-3 flex items-center justify-between overflow-hidden shadow-inner font-mono text-xs text-bcs-creamMuted">
     <div class="flex items-center gap-2 flex-shrink-0 pr-3 border-r border-bcs-border font-oswald uppercase tracking-wider text-bcs-gold font-bold">
       <i class="ph-bold ph-wrench text-bcs-copper"></i>
@@ -474,72 +474,67 @@
     </div>
   </footer>
 
-  <!-- ========================================================== -->
-  <!-- JAVASCRIPT-LOGIK                                           -->
-  <!-- ========================================================== -->
+  <!-- JAVASCRIPT-LOGIK -->
   <script>
     /* ==========================================================
-       0. NÄRVAROLOGIK (FETCH PRESENCE)
-       Om du har en egen JSON-fil / backend URL, klistra in den här.
-       Lämna tom ("") för automatisk fallback till lokalt läge.
+       0. FIREBASE REALTIME PRESENCE (AKTIVA MEDLEMMAR I VERKSTAN)
        ========================================================== */
-    const PRESENCE_API_URL = ""; 
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyn6xM-pkDVK7ojbQXCjfHO07P8rwevMQ",
+      authDomain: "burncreekspeedshop.firebaseapp.com",
+      projectId: "burncreekspeedshop",
+      storageBucket: "burncreekspeedshop.firebasestorage.app",
+      messagingSenderId: "611870239128",
+      appId: "1:611870239128:web:5e8973ec49556be0f823ed"
+    };
 
-    async function fetchPresence() {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    function initPresenceListener() {
       const listEl = document.getElementById('dash-presence-list');
       const ledEl = document.getElementById('dash-led');
-      if (!listEl) return;
 
-      let presentMembers = [];
+      db.collection('active_members').onSnapshot(snapshot => {
+        if (!listEl) return;
 
-      if (PRESENCE_API_URL) {
-        try {
-          const res = await fetch(PRESENCE_API_URL, { cache: 'no-store' });
-          if (res.ok) {
-            const data = await res.json();
-            // Stöder antingen en ren array ["Fredrik", "Tony"] eller objekt [{name: "Fredrik", time: "18:30"}]
-            if (Array.isArray(data)) {
-              presentMembers = data;
-            } else if (Array.isArray(data.members)) {
-              presentMembers = data.members;
-            }
-          }
-        } catch (err) {
-          console.warn("Kunde inte hämta närvaro från API:", err);
+        if (snapshot.empty) {
+          if (ledEl) ledEl.classList.remove('active');
+          listEl.innerHTML = '<span class="text-zinc-500 font-mono text-[10px]">Ingen i verkstan just nu</span>';
+          return;
         }
-      }
 
-      // Om ingen URL är angiven eller API-svaret är tomt, visa fallback för crewet
-      if (!PRESENCE_API_URL) {
-        presentMembers = [
-          { name: "Fredrik", time: "18:15" },
-          { name: "Tony", time: "18:40" }
-        ];
-      }
-
-      // Rendera resultat i kortet
-      if (presentMembers.length > 0) {
         if (ledEl) ledEl.classList.add('active');
         listEl.innerHTML = '';
-        presentMembers.forEach(person => {
-          const name = typeof person === 'string' ? person : person.name;
-          const time = (typeof person === 'object' && person.time) ? person.time : '';
-          
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const name = data.name || 'Medlem';
+          let timeStr = '';
+
+          if (data.checkedInAt && data.checkedInAt.toDate) {
+            const d = data.checkedInAt.toDate();
+            timeStr = d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+          }
+
           const badge = document.createElement('div');
           badge.className = 'presence-badge';
           badge.innerHTML = `
             <span>${name}</span>
-            ${time ? `<span class="presence-time">${time}</span>` : ''}
+            ${timeStr ? `<span class="presence-time">${timeStr}</span>` : ''}
           `;
           listEl.appendChild(badge);
         });
-      } else {
-        if (ledEl) ledEl.classList.remove('active');
-        listEl.innerHTML = '<span class="text-zinc-500 font-mono text-[10px]">Ingen incheckad just nu</span>';
-      }
+      }, err => {
+        console.warn("Firestore presence error:", err);
+        if (listEl) listEl.innerHTML = '<span class="text-zinc-500 font-mono text-[10px]">Kunde inte ansluta till servern</span>';
+      });
     }
-    fetchPresence();
-    setInterval(fetchPresence, 10000); // Kollar av var 10:e sekund
+
+    // Starta realtidslyssnaren direkt
+    initPresenceListener();
 
     /* 1. KLOCKA & DATUM */
     function updateClock() {
@@ -611,7 +606,7 @@
     fetchWeather();
     setInterval(fetchWeather, 15 * 60 * 1000);
 
-    /* 3. TRAFIKMEDDELANDEN JÖNKÖPINGS LÄN (P4 Trafik) */
+    /* 3. TRAFIKMEDDELANDEN JÖNKÖPINGS LÄN */
     async function fetchTrafficAlerts() {
       const container = document.getElementById('trafficContainer');
       const badge = document.getElementById('trafficBadge');
@@ -670,7 +665,7 @@
     fetchTrafficAlerts();
     setInterval(fetchTrafficAlerts, 4 * 60 * 1000);
 
-    /* 4. MOTORSPORT & DRAG ILLUSTRATED RSS */
+    /* 4. MOTORSPORT RSS */
     let allNewsArticles = [];
     let newsPage = 0;
 
@@ -788,8 +783,8 @@
     }
 
     fetchMotorsportRSS();
-    setInterval(renderNewsBatch, 12000); // Roterar batch var 12:e sekund
-    setInterval(fetchMotorsportRSS, 5 * 60 * 1000); // Ny data var 5:e minut
+    setInterval(renderNewsBatch, 12000);
+    setInterval(fetchMotorsportRSS, 5 * 60 * 1000);
 
     /* 5. DRAGSTRIP LIVE TV STREAM CONTROLLER */
     function switchStream(source) {
@@ -850,7 +845,6 @@
       fetchWeather();
       fetchTrafficAlerts();
       fetchMotorsportRSS();
-      fetchPresence();
       updateClock();
     });
   </script>
