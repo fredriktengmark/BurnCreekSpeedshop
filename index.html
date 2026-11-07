@@ -163,6 +163,68 @@
       color: #df9837;
       font-weight: normal;
     }
+
+    /* Anslag / Banner styling */
+    .dash-announcement-card {
+      background: linear-gradient(180deg, #24140d 0%, #150d08 100%);
+      border: 2px solid #d9622b;
+      border-radius: 8px;
+      padding: 12px 18px;
+      box-shadow: 0 0 25px rgba(217, 98, 43, 0.45);
+      font-family: 'Oswald', sans-serif;
+      flex-shrink: 0;
+    }
+    .announcement-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+      border-bottom: 1px dashed rgba(217, 98, 43, 0.4);
+      padding-bottom: 4px;
+    }
+    .announcement-pulse {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e74c3c;
+      box-shadow: 0 0 10px #e74c3c;
+      animation: blink 1.2s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+    .announcement-title {
+      font-family: 'Rye', 'Oswald', serif;
+      color: #f4ecd8;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      flex: 1;
+      text-transform: uppercase;
+    }
+    .announcement-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #df9837;
+    }
+    .announcement-body {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #eedcc0;
+      line-height: 1.25;
+      margin: 4px 0 6px 0;
+      text-shadow: 2px 2px 0px #000;
+      letter-spacing: 0.5px;
+    }
+    .announcement-footer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #d9622b;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
@@ -230,10 +292,21 @@
   </header>
 
   <!-- ========================================================== -->
-  <!-- 2. HUVUDYTA: 3 KOLUMNER                                    -->
+  <!-- 2. HUVUDYTA: 3 KOLUMNER + DEDIKERAT ANSLAG                 -->
   <!-- ========================================================== -->
   <main class="grid grid-cols-12 gap-2.5 my-2 flex-1 min-h-0">
     
+    <!-- DEDIKERAT ANSLAG PÅ DASHBOARDEN (Döljs automatiskt om inget finns) -->
+    <div id="dash-announcement-card" class="col-span-12 dash-announcement-card" style="display: none;">
+      <div class="announcement-header">
+        <div class="announcement-pulse"></div>
+        <span class="announcement-title">MEDDELANDE FRÅN DEPÅN</span>
+        <span id="dash-announcement-time" class="announcement-time"></span>
+      </div>
+      <div id="dash-announcement-text" class="announcement-body"></div>
+      <div id="dash-announcement-author" class="announcement-footer"></div>
+    </div>
+
     <!-- KOLUMN 1: VÄDER + TRAFIK + MOTORSPORT NYHETER (4 cols) -->
     <section class="col-span-4 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0">
       
@@ -477,7 +550,7 @@
   <!-- JAVASCRIPT-LOGIK -->
   <script>
     /* ==========================================================
-       0. FIREBASE REALTIME PRESENCE (AKTIVA MEDLEMMAR I VERKSTAN)
+       0. FIREBASE SETUP & REALTIDSLYSSNARE
        ========================================================== */
     const firebaseConfig = {
       apiKey: "AIzaSyAyn6xM-pkDVK7ojbQXCjfHO07P8rwevMQ",
@@ -493,6 +566,7 @@
     }
     const db = firebase.firestore();
 
+    /* NÄRVAROLYSSNARE */
     function initPresenceListener() {
       const listEl = document.getElementById('dash-presence-list');
       const ledEl = document.getElementById('dash-led');
@@ -533,8 +607,34 @@
       });
     }
 
-    // Starta realtidslyssnaren direkt
+    /* ANSLAGSLYSSNARE (MEDDELANDE FRÅN DEPÅN) */
+    function initAnnouncementListener() {
+      db.collection('announcements').doc('current').onSnapshot(doc => {
+        const card = document.getElementById('dash-announcement-card');
+        const textEl = document.getElementById('dash-announcement-text');
+        const authorEl = document.getElementById('dash-announcement-author');
+        const timeEl = document.getElementById('dash-announcement-time');
+
+        if (doc.exists && doc.data().text) {
+          const data = doc.data();
+          const timeStr = data.updatedAt 
+            ? new Date(data.updatedAt.toDate()).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' }) 
+            : '';
+
+          textEl.innerText = data.text;
+          authorEl.innerText = `Skickat av: ${data.author || 'Depå'}`;
+          timeEl.innerText = timeStr ? `kl ${timeStr}` : '';
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      }, err => {
+        console.error('Fel vid hämtning av anslag:', err);
+      });
+    }
+
     initPresenceListener();
+    initAnnouncementListener();
 
     /* 1. KLOCKA & DATUM */
     function updateClock() {
