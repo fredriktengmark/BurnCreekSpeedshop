@@ -379,7 +379,7 @@
         </div>
       </div>
 
-      <!-- Nederst: Motorsport Live Nyhetsflöde (Bilsport + Drag Illustrated + Motorsport.com) -->
+      <!-- Nederst: Motorsport Live Nyhetsflöde (Bilsport/SVT + Drag Illustrated + Motorsport.com) -->
       <div class="flex-1 flex flex-col justify-between border-t border-bcs-border pt-1.5 min-h-0">
         <div class="flex items-center justify-between pb-1 flex-shrink-0">
           <h3 class="font-oswald text-xs uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
@@ -400,7 +400,7 @@
         </div>
 
         <div class="pt-1 border-t border-bcs-border/60 flex items-center justify-between text-[9px] font-mono text-zinc-400 flex-shrink-0">
-          <span class="text-bcs-copper font-bold">[Bilsport • Drag Ill. • Motorsport]</span>
+          <span class="text-bcs-copper font-bold">[Bilsport/SVT • Drag Ill. • Motorsport]</span>
           <span class="text-zinc-500">Roterar var 12:e sek</span>
         </div>
       </div>
@@ -737,7 +737,7 @@
     fetchWeather();
     setInterval(fetchWeather, 15 * 60 * 1000);
 
-    /* 3. MOTORSPORT RSS (BILSPORT.SE + DRAG ILLUSTRATED + MOTORSPORT.COM) */
+    /* 3. MOTORSPORT RSS (BILSPORT.SE + SVT MOTORSPORT + DRAG ILLUSTRATED + MOTORSPORT.COM) */
     let allNewsArticles = [];
     let newsPage = 0;
 
@@ -748,7 +748,7 @@
         const res = await fetch(proxyUrl);
         if (!res.ok) return [];
         const data = await res.json();
-        if (data.status === 'ok' && Array.isArray(data.items)) {
+        if (data.status === 'ok' && Array.isArray(data.items) && data.items.length > 0) {
           return data.items.map(item => ({
             ...item,
             source: sourceName,
@@ -765,16 +765,21 @@
       const lastUpdateEl = document.getElementById('rssLastUpdated');
       
       try {
-        const [bilsportItems, dragItems, motorsportItems] = await Promise.all([
-          fetchSingleRSS("https://www.bilsport.se/rss/nyheter", "Bilsport", "Sverige"),
+        // Hämtar Bilsport med SVT Motorsport som svensk back-up, plus Drag Illustrated & Motorsport.com
+        const [bilsportItems, svtItems, dragItems, motorsportItems] = await Promise.all([
+          fetchSingleRSS("https://www.bilsport.se/feed/", "Bilsport", "Sverige"),
+          fetchSingleRSS("https://www.svt.se/sport/motorsport/rss.xml", "SVT Motorsport", "Sverige"),
           fetchSingleRSS("https://dragillustrated.com/feed/", "Drag Illustrated", "Drag"),
           fetchSingleRSS("https://www.motorsport.com/rss/all/news/", "Motorsport.com", "Racing")
         ]);
 
+        // Prioritera svenska nyheter från Bilsport, fyll på med SVT om Bilsport har få eller blockas
+        const swedishItems = bilsportItems.length > 0 ? bilsportItems : svtItems;
+
         const combined = [];
-        const maxLen = Math.max(bilsportItems.length, dragItems.length, motorsportItems.length);
+        const maxLen = Math.max(swedishItems.length, dragItems.length, motorsportItems.length);
         for (let i = 0; i < maxLen; i++) {
-          if (bilsportItems[i]) combined.push(bilsportItems[i]);
+          if (swedishItems[i]) combined.push(swedishItems[i]);
           if (dragItems[i]) combined.push(dragItems[i]);
           if (motorsportItems[i]) combined.push(motorsportItems[i]);
         }
@@ -825,7 +830,7 @@
         let colorClass = 'text-bcs-gold';
         let iconClass = 'ph-flag-checkered';
 
-        if (item.source === 'Bilsport') {
+        if (item.source === 'Bilsport' || item.source === 'SVT Motorsport') {
           colorClass = 'text-amber-400';
           iconClass = 'ph-wrench';
         } else if (item.source === 'Drag Illustrated') {
