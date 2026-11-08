@@ -392,6 +392,7 @@
           </span>
         </div>
 
+        <!-- Nyhetskort -->
         <div id="rssFeedContainer" class="flex-1 flex flex-col justify-between gap-1.5 min-h-0 my-0.5">
           <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border text-center text-zinc-400 font-mono text-[10px]">
             Hämtar nyheter från Bilsport, Drag Illustrated & Motorsport...
@@ -482,7 +483,7 @@
             <i class="ph-bold ph-warehouse text-bcs-copper"></i>
             Verkstadens Platser / Crew
           </span>
-          <span class="text-[9px] font-mono text-bcs-gold font-bold">4 Platser</span>
+          <span class="text-[9px] font-mono text-bcs-gold font-bold">5 Medlemmar</span>
         </div>
 
         <div id="crewMembersList" class="grid grid-cols-2 gap-1 mt-1.5 font-mono text-[10px]">
@@ -553,12 +554,13 @@
     }
     const db = firebase.firestore();
 
-    /* CREW-MEDLEMMAR SOM HAR PLATS I VERKSTADEN */
+    /* CREW-MEDLEMMAR SOM HAR PLATS I VERKSTADEN (ENDAST FÖRNAMN & UPPDELADE) */
     const workshopSpots = [
-      { id: "p1", name: "Fredrik T", full: "Fredrik Tengmark", spot: "Plats 1" },
-      { id: "p2", name: "Tony O", full: "Tony Olsson", spot: "Plats 2" },
-      { id: "p3", name: "Pierre D", full: "Pierre Danhall", spot: "Plats 3" },
-      { id: "p4", name: "Kenneth & Håkan", full: "Kenneth E & Håkan G", spot: "Plats 4 (Delad)" }
+      { id: "p1", name: "Fredrik", spot: "Plats 1" },
+      { id: "p2", name: "Tony", spot: "Plats 2" },
+      { id: "p3", name: "Pierre", spot: "Plats 3" },
+      { id: "p4_k", name: "Kenneth", spot: "Plats 4" },
+      { id: "p4_h", name: "Håkan", spot: "Plats 4" }
     ];
 
     function renderCrewList(activeNames = []) {
@@ -567,13 +569,14 @@
       container.innerHTML = '';
 
       workshopSpots.forEach(m => {
-        // Kontrollera om någon på denna plats är aktiv i verkstan
+        // Kontrollera om personen är aktiv i verkstan
         const isOnline = activeNames.some(name => {
           const n = name.toLowerCase();
           if (m.id === 'p1' && n.includes('fredrik')) return true;
           if (m.id === 'p2' && n.includes('tony')) return true;
           if (m.id === 'p3' && n.includes('pierre')) return true;
-          if (m.id === 'p4' && (n.includes('kenneth') || n.includes('håkan') || n.includes('hakan'))) return true;
+          if (m.id === 'p4_k' && n.includes('kenneth')) return true;
+          if (m.id === 'p4_h' && (n.includes('håkan') || n.includes('hakan'))) return true;
           return false;
         });
 
