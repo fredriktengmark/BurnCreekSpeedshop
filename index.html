@@ -104,16 +104,16 @@
       border: 1px solid #38322b;
       border-top: 3px solid #b25329;
       border-radius: 0.5rem;
-      padding: 10px;
+      padding: 9px;
       color: #f4ecd8;
     }
     .presence-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       border-bottom: 1px dashed #38322b;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
     }
     .dash-led {
       width: 11px;
@@ -142,21 +142,21 @@
       color: #d3c5a6;
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      min-height: 28px;
+      gap: 5px;
+      min-height: 24px;
       align-items: center;
     }
     .presence-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: #121110;
       border: 1px solid #b25329;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
       font-weight: 700;
       color: #f4ecd8;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
     }
     .presence-time {
       font-size: 0.65rem;
@@ -379,7 +379,7 @@
         </div>
       </div>
 
-      <!-- Nederst: Motorsport Live Nyhetsflöde (Bilsport/SVT + Drag Illustrated + Motorsport.com) -->
+      <!-- Nederst: Motorsport Live Nyhetsflöde -->
       <div class="flex-1 flex flex-col justify-between border-t border-bcs-border pt-1.5 min-h-0">
         <div class="flex items-center justify-between pb-1 flex-shrink-0">
           <h3 class="font-oswald text-xs uppercase tracking-wide text-bcs-cream flex items-center gap-1.5">
@@ -392,7 +392,6 @@
           </span>
         </div>
 
-        <!-- Nyhetskort -->
         <div id="rssFeedContainer" class="flex-1 flex flex-col justify-between gap-1.5 min-h-0 my-0.5">
           <div class="p-2 rounded bg-bcs-black/80 border border-bcs-border text-center text-zinc-400 font-mono text-[10px]">
             Hämtar nyheter från Bilsport, Drag Illustrated & Motorsport...
@@ -458,16 +457,16 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- KOLUMN 3: NÄRVARO & ATT FIXA / KÖPA (3 cols)             -->
+    <!-- KOLUMN 3: NÄRVARO + PLATSER/CREW + ATT FIXA (3 cols)     -->
     <!-- ======================================================== -->
     <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0 gap-2">
       
-      <!-- NÄRVARO-KORTET (ÖVERST) -->
+      <!-- 1. NÄRVARO-KORTET (LIVE STATUS) -->
       <div class="dashboard-widget presence-card flex-shrink-0 shadow-lg">
         <div class="presence-header">
           <div id="dash-led" class="dash-led"></div>
           <span class="presence-title flex items-center gap-1.5">
-            <i class="ph-bold ph-users-three text-bcs-copper"></i>
+            <i class="ph-bold ph-lightning text-bcs-copper"></i>
             Närvaro i Verkstan
           </span>
         </div>
@@ -476,9 +475,23 @@
         </div>
       </div>
 
-      <!-- ATT FIXA / KÖPA (NEDERST) -->
+      <!-- 2. REGISTRERADE MEDLEMMAR MED PLATS I VERKSTADEN -->
+      <div class="bg-bcs-black/95 p-2 rounded-lg border border-bcs-border flex-shrink-0 shadow">
+        <div class="flex justify-between items-center pb-1 border-b border-bcs-border/60">
+          <span class="text-[11px] font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
+            <i class="ph-bold ph-warehouse text-bcs-copper"></i>
+            Verkstadens Platser / Crew
+          </span>
+          <span class="text-[9px] font-mono text-bcs-gold font-bold">4 Platser</span>
+        </div>
+
+        <div id="crewMembersList" class="grid grid-cols-2 gap-1 mt-1.5 font-mono text-[10px]">
+          <!-- Fylls dynamiskt med status via JS -->
+        </div>
+      </div>
+
+      <!-- 3. ATT FIXA / KÖPA -->
       <div class="bg-bcs-black/95 p-2.5 rounded-lg border border-bcs-border flex-1 flex flex-col justify-between min-h-0">
-        
         <div class="flex justify-between items-center pb-1.5 border-b border-bcs-border/60 flex-shrink-0">
           <span class="text-xs font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
             <i class="ph-bold ph-clipboard-text text-bcs-copper"></i>
@@ -488,14 +501,13 @@
         </div>
 
         <div id="dash-todos-container" class="flex-1 flex flex-col gap-1.5 py-1.5 overflow-y-auto pr-0.5 min-h-0 font-mono text-xs">
-          <div class="text-center text-zinc-500 font-mono text-[10px] py-4">Laddar lista...</div>
+          <div class="text-center text-zinc-500 font-mono text-[10px] py-2">Laddar lista...</div>
         </div>
 
         <div class="pt-1 border-t border-bcs-border/60 flex items-center justify-between text-[9px] font-mono text-zinc-500 flex-shrink-0">
           <span>Synkat med appen</span>
           <span class="text-bcs-copper">Burn Creek Depå</span>
         </div>
-
       </div>
 
     </section>
@@ -541,6 +553,47 @@
     }
     const db = firebase.firestore();
 
+    /* CREW-MEDLEMMAR SOM HAR PLATS I VERKSTADEN */
+    const workshopSpots = [
+      { id: "p1", name: "Fredrik T", full: "Fredrik Tengmark", spot: "Plats 1" },
+      { id: "p2", name: "Tony O", full: "Tony Olsson", spot: "Plats 2" },
+      { id: "p3", name: "Pierre D", full: "Pierre Danhall", spot: "Plats 3" },
+      { id: "p4", name: "Kenneth & Håkan", full: "Kenneth E & Håkan G", spot: "Plats 4 (Delad)" }
+    ];
+
+    function renderCrewList(activeNames = []) {
+      const container = document.getElementById('crewMembersList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      workshopSpots.forEach(m => {
+        // Kontrollera om någon på denna plats är aktiv i verkstan
+        const isOnline = activeNames.some(name => {
+          const n = name.toLowerCase();
+          if (m.id === 'p1' && n.includes('fredrik')) return true;
+          if (m.id === 'p2' && n.includes('tony')) return true;
+          if (m.id === 'p3' && n.includes('pierre')) return true;
+          if (m.id === 'p4' && (n.includes('kenneth') || n.includes('håkan') || n.includes('hakan'))) return true;
+          return false;
+        });
+
+        const card = document.createElement('div');
+        card.className = `p-1 rounded border flex items-center justify-between ${
+          isOnline 
+            ? 'bg-bcs-copper/20 border-bcs-copper text-bcs-cream' 
+            : 'bg-bcs-charcoal/80 border-bcs-border text-zinc-400'
+        }`;
+        card.innerHTML = `
+          <div class="truncate">
+            <span class="font-bold block leading-tight ${isOnline ? 'text-bcs-gold' : 'text-zinc-200'}">${m.name}</span>
+            <span class="text-[8px] text-zinc-500 block">${m.spot}</span>
+          </div>
+          <span class="w-2 h-2 rounded-full flex-shrink-0 ${isOnline ? 'bg-emerald-400 shadow-[0_0_6px_#2ecc71]' : 'bg-zinc-700'}"></span>
+        `;
+        container.appendChild(card);
+      });
+    }
+
     /* NÄRVAROLYSSNARE */
     function initPresenceListener() {
       const listEl = document.getElementById('dash-presence-list');
@@ -549,9 +602,12 @@
       db.collection('active_members').onSnapshot(snapshot => {
         if (!listEl) return;
 
+        const activeNames = [];
+
         if (snapshot.empty) {
           if (ledEl) ledEl.classList.remove('active');
           listEl.innerHTML = '<span class="text-zinc-500 font-mono text-[10px]">Ingen i verkstan just nu</span>';
+          renderCrewList([]);
           return;
         }
 
@@ -561,6 +617,7 @@
         snapshot.forEach(doc => {
           const data = doc.data();
           const name = data.name || 'Medlem';
+          activeNames.push(name);
           let timeStr = '';
 
           if (data.checkedInAt && data.checkedInAt.toDate) {
@@ -576,9 +633,12 @@
           `;
           listEl.appendChild(badge);
         });
+
+        renderCrewList(activeNames);
       }, err => {
         console.warn("Firestore presence error:", err);
         if (listEl) listEl.innerHTML = '<span class="text-zinc-500 font-mono text-[10px]">Kunde inte ansluta till servern</span>';
+        renderCrewList([]);
       });
     }
 
@@ -663,6 +723,7 @@
       });
     }
 
+    renderCrewList([]);
     initPresenceListener();
     initAnnouncementListener();
     initTodosListener();
@@ -737,7 +798,7 @@
     fetchWeather();
     setInterval(fetchWeather, 15 * 60 * 1000);
 
-    /* 3. MOTORSPORT RSS (BILSPORT.SE + SVT MOTORSPORT + DRAG ILLUSTRATED + MOTORSPORT.COM) */
+    /* 3. MOTORSPORT RSS (BILSPORT/SVT + DRAG ILLUSTRATED + MOTORSPORT.COM) */
     let allNewsArticles = [];
     let newsPage = 0;
 
@@ -765,7 +826,6 @@
       const lastUpdateEl = document.getElementById('rssLastUpdated');
       
       try {
-        // Hämtar Bilsport med SVT Motorsport som svensk back-up, plus Drag Illustrated & Motorsport.com
         const [bilsportItems, svtItems, dragItems, motorsportItems] = await Promise.all([
           fetchSingleRSS("https://www.bilsport.se/feed/", "Bilsport", "Sverige"),
           fetchSingleRSS("https://www.svt.se/sport/motorsport/rss.xml", "SVT Motorsport", "Sverige"),
@@ -773,7 +833,6 @@
           fetchSingleRSS("https://www.motorsport.com/rss/all/news/", "Motorsport.com", "Racing")
         ]);
 
-        // Prioritera svenska nyheter från Bilsport, fyll på med SVT om Bilsport har få eller blockas
         const swedishItems = bilsportItems.length > 0 ? bilsportItems : svtItems;
 
         const combined = [];
