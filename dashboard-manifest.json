@@ -2,7 +2,7 @@
   "name": "Burn Creek Speedshop TV",
   "short_name": "Burn Creek TV",
   "description": "Garage-dashboard för Burn Creek Speedshop",
-  "start_url": "./dashboard.html",
+  "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#0a0a0a",
