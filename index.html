@@ -1,5 +1,18 @@
 <!DOCTYPE html>
 <html lang="sv">
+  <!-- PWA Manifest & ikoner för Burn Creek TV -->
+<link rel="manifest" href="./dashboard-manifest.json">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="./logo.png">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./dashboard-sw.js');
+    });
+  }
+</script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
