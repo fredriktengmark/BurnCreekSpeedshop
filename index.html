@@ -292,10 +292,15 @@
       <div class="relative w-28 h-28 flex-shrink-0 rounded-full border-2 border-bcs-copper/80 p-1 bg-bcs-black shadow-2xl overflow-hidden flex items-center justify-center">
         <img 
           id="shopLogoImg" 
-          src="Burn_Creek_Speedshop_rund_est.png" 
+          src="burn_creek_speedshop_rund_est.png" 
           alt="Burn Creek Speedshop Logo"
           class="w-full h-full object-contain rounded-full"
+          onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='./burn_creek_speedshop_rund_est.png';}else{this.style.display='none';document.getElementById('logoFallback').style.display='flex';}"
         />
+        <div id="logoFallback" style="display: none;" class="w-full h-full rounded-full flex-col items-center justify-center text-bcs-copper">
+          <i class="ph-bold ph-engine text-4xl"></i>
+          <span class="font-brand text-[10px] text-bcs-gold mt-0.5">BCS HQ</span>
+        </div>
       </div>
 
       <div>
@@ -791,7 +796,6 @@
 
       const takeover = getSeasonalTakeover(new Date());
 
-      // Uppdatera statusbrickan i headern
       if (pill && dot && statusText) {
         if (takeover) {
           pill.className = takeover.pillClass;
@@ -806,10 +810,8 @@
 
       if (!card) return;
 
-      // Rensa tidigare takeover-klasser
       card.classList.remove('takeover-birthday', 'takeover-holiday', 'takeover-weekend');
 
-      // Om det finns ett manuellt meddelande från depån i Firebase: visa det (med ev. födelsedags-badge i titeln)
       if (liveFirestoreAnnouncement && liveFirestoreAnnouncement.text) {
         const data = liveFirestoreAnnouncement;
         const timeStr = data.updatedAt && data.updatedAt.toDate
@@ -830,7 +832,6 @@
         return;
       }
 
-      // Annars: visa automatisk Födelsedags- eller Högtids-takeover om en sådan är aktiv
       if (takeover) {
         card.classList.add(takeover.type);
         titleEl.innerText = takeover.title;
@@ -1077,7 +1078,6 @@
       str = str.charAt(0).toUpperCase() + str.slice(1);
       document.getElementById('liveDate').textContent = str;
 
-      // Kontrollera takeover en gång per minut (t.ex. vid midnatt eller fredag 15:00)
       if (now.getMinutes() !== lastCheckedMinute) {
         lastCheckedMinute = now.getMinutes();
         refreshAnnouncementAndTakeover();
