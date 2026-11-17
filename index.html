@@ -1,18 +1,5 @@
 <!DOCTYPE html>
 <html lang="sv">
-  <!-- PWA Manifest & ikoner för Burn Creek TV -->
-<link rel="manifest" href="./dashboard-manifest.json">
-<meta name="theme-color" content="#0a0a0a">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="./logo.png">
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./dashboard-sw.js');
-    });
-  }
-</script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -186,7 +173,27 @@
       box-shadow: 0 0 25px rgba(217, 98, 43, 0.45);
       font-family: 'Oswald', sans-serif;
       flex-shrink: 0;
+      transition: all 0.35s ease;
     }
+    /* Födelsedags- & Guld-Takeover styling */
+    .dash-announcement-card.takeover-birthday {
+      background: linear-gradient(135deg, #2a1d0b 0%, #1a1207 50%, #2b180b 100%);
+      border: 2px solid #df9837;
+      box-shadow: 0 0 32px rgba(223, 152, 55, 0.55), inset 0 0 18px rgba(223, 152, 55, 0.15);
+    }
+    /* Julkalender / Högtids-Takeover styling */
+    .dash-announcement-card.takeover-holiday {
+      background: linear-gradient(135deg, #241010 0%, #141913 55%, #24140d 100%);
+      border: 2px solid #c86332;
+      box-shadow: 0 0 28px rgba(200, 99, 50, 0.5);
+    }
+    /* Fredag / Helg-Takeover styling */
+    .dash-announcement-card.takeover-weekend {
+      background: linear-gradient(135deg, #162118 0%, #141210 60%, #24170d 100%);
+      border: 2px solid #df9837;
+      box-shadow: 0 0 24px rgba(223, 152, 55, 0.35);
+    }
+
     .announcement-header {
       display: flex;
       align-items: center;
@@ -203,6 +210,14 @@
       box-shadow: 0 0 10px #e74c3c;
       animation: blink 1.2s infinite;
       flex-shrink: 0;
+    }
+    .takeover-birthday .announcement-pulse {
+      background: #df9837;
+      box-shadow: 0 0 12px #df9837;
+    }
+    .takeover-weekend .announcement-pulse {
+      background: #2ecc71;
+      box-shadow: 0 0 10px #2ecc71;
     }
     @keyframes blink {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -237,6 +252,9 @@
       color: #d9622b;
       font-weight: 700;
       text-transform: uppercase;
+    }
+    .takeover-birthday .announcement-footer {
+      color: #df9837;
     }
 
     /* Scrollbars */
@@ -274,8 +292,8 @@
       <div class="relative w-28 h-28 flex-shrink-0 rounded-full border-2 border-bcs-copper/80 p-1 bg-bcs-black shadow-2xl overflow-hidden flex items-center justify-center">
         <img 
           id="shopLogoImg" 
-          src="burn_creek_speedshop_rund_est.png" 
-          alt="burn creek speedshop Logo"
+          src="Burn_Creek_Speedshop_rund_est.png" 
+          alt="Burn Creek Speedshop Logo"
           class="w-full h-full object-contain rounded-full"
         />
       </div>
@@ -308,9 +326,9 @@
 
     <!-- PRIVAT STATUS & KONTROLLER -->
     <div class="flex items-center gap-3">
-      <div class="px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70">
-        <span class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
-        <span>PRIVAT VERKSTAD • CREW ONLY</span>
+      <div id="workshopStatusPill" class="px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70 transition-all duration-300">
+        <span id="workshopStatusDot" class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
+        <span id="workshopStatusText">PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
 
       <button id="fullscreenBtn" title="Fullskärm på TV" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow">
@@ -324,15 +342,15 @@
   </header>
 
   <!-- ========================================================== -->
-  <!-- 2. HUVUDYTA: 3 KOLUMNER + ANSLAG                           -->
+  <!-- 2. HUVUDYTA: 3 KOLUMNER + ANSLAG / TAKEOVER                -->
   <!-- ========================================================== -->
   <main class="grid grid-cols-12 gap-2.5 my-2 flex-1 min-h-0">
     
-    <!-- DEDIKERAT ANSLAG PÅ DASHBOARDEN (Döljs automatiskt om inget finns) -->
+    <!-- DEDIKERAT ANSLAG & TAKEOVER PÅ DASHBOARDEN -->
     <div id="dash-announcement-card" class="col-span-12 dash-announcement-card" style="display: none;">
       <div class="announcement-header">
         <div class="announcement-pulse"></div>
-        <span class="announcement-title">MEDDELANDE FRÅN DEPÅN</span>
+        <span id="dash-announcement-title" class="announcement-title">MEDDELANDE FRÅN DEPÅN</span>
         <span id="dash-announcement-time" class="announcement-time"></span>
       </div>
       <div id="dash-announcement-text" class="announcement-body"></div>
@@ -551,7 +569,7 @@
       <span>GARAGE FEED</span>
     </div>
     <div class="overflow-hidden whitespace-nowrap flex-1 px-3">
-      <div class="animate-marquee font-mono text-zinc-300">
+      <div id="garageMarqueeText" class="animate-marquee font-mono text-zinc-300">
         BURN CREEK SPEEDSHOP • BRÄNNEHYLTE • HÄNG TILLBAKA VERKTYGEN PÅ PLATS • KOLLA OLJETRYCK OCH STIFT • STÄNG AV GASTUBER & SVETS EFTER ARBETSPASSET • TÖM KOMPRESSORN PÅ KONDENSVATTEN • ALLTID NYBRYGGT KAFFE I HÖRNET • KEEP RACING ALIVE •
       </div>
     </div>
@@ -581,44 +599,67 @@
     }
     const db = firebase.firestore();
 
-    /* CREW-MEDLEMMAR MED LOGOTYPER/EMBLEM OCH PLATS */
+    /* CREW-MEDLEMMAR MED LOGOTYPER/EMBLEM, PLATS OCH FÖDELSEDAG */
     const workshopSpots = [
       { 
         id: "p1", 
         name: "Fredrik", 
-        spot: "Plats 1", 
+        spot: "Plats 1",
+        bMonth: 12,
+        bDay: 28,
+        bYear: 1986,
         badgeHtml: `<span class="px-1 py-0.2 rounded font-sans font-black text-[9px] tracking-tight bg-red-700 text-white border border-red-500 shadow-sm leading-tight">GMC</span>`
       },
       { 
         id: "p2", 
         name: "Tony", 
-        spot: "Plats 2", 
+        spot: "Plats 2",
+        bMonth: 2,
+        bDay: 16,
         badgeHtml: `<span class="inline-flex items-center gap-0.5 px-1 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-[8px] font-bold text-zinc-200" title="Buick Tri-Shield"><span class="w-1.5 h-2.5 rounded-sm bg-red-600 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-zinc-100 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-blue-600 inline-block rotate-[-12deg]"></span></span>`
       },
       { 
         id: "p3", 
         name: "Pierre", 
-        spot: "Plats 3", 
+        spot: "Plats 3",
+        bMonth: 12,
+        bDay: 24,
         badgeHtml: `<span class="px-1 py-0.5 rounded bg-zinc-900 border border-amber-600 text-amber-400 flex items-center justify-center text-xs" title="Motorcykel"><i class="ph-bold ph-motorcycle"></i></span>`
       },
       { 
         id: "p4_k", 
         name: "Kenneth", 
-        spot: "Plats 4", 
+        spot: "Plats 4",
+        bMonth: 12,
+        bDay: 31,
         badgeHtml: `<span class="px-1.5 py-0.2 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-tight" title="Ford">Ford</span>`
       },
       { 
         id: "p4_h", 
         name: "Håkan", 
-        spot: "Plats 4", 
+        spot: "Plats 4",
+        bMonth: 3,
+        bDay: 9,
         badgeHtml: `<span class="px-1.5 py-0.2 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-tight" title="Ford">Ford</span>`
       }
     ];
 
-    function renderCrewList(activeNames = []) {
+    let lastActiveNames = [];
+    let liveFirestoreAnnouncement = null;
+
+    function getBirthdayMemberToday(now = new Date()) {
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      return workshopSpots.find(member => member.bMonth === m && member.bDay === d) || null;
+    }
+
+    function renderCrewList(activeNames = lastActiveNames) {
+      lastActiveNames = activeNames;
       const container = document.getElementById('crewMembersList');
       if (!container) return;
       container.innerHTML = '';
+
+      const bdayPerson = getBirthdayMemberToday();
 
       workshopSpots.forEach(m => {
         const isOnline = activeNames.some(name => {
@@ -631,11 +672,15 @@
           return false;
         });
 
+        const isBirthday = bdayPerson && bdayPerson.id === m.id;
+
         const card = document.createElement('div');
         card.className = `p-1 rounded border flex items-center justify-between gap-1 ${
-          isOnline 
-            ? 'bg-bcs-copper/20 border-bcs-copper text-bcs-cream' 
-            : 'bg-bcs-charcoal/80 border-bcs-border text-zinc-400'
+          isBirthday
+            ? 'bg-amber-950/60 border-bcs-gold text-bcs-cream shadow-[0_0_10px_rgba(223,152,55,0.35)]'
+            : isOnline 
+              ? 'bg-bcs-copper/20 border-bcs-copper text-bcs-cream' 
+              : 'bg-bcs-charcoal/80 border-bcs-border text-zinc-400'
         }`;
         card.innerHTML = `
           <div class="flex items-center gap-1.5 min-w-0 truncate">
@@ -643,14 +688,159 @@
               ${m.badgeHtml}
             </div>
             <div class="truncate">
-              <span class="font-bold block leading-tight ${isOnline ? 'text-bcs-gold' : 'text-zinc-200'}">${m.name}</span>
-              <span class="text-[8px] text-zinc-500 block leading-none">${m.spot}</span>
+              <span class="font-bold block leading-tight ${(isOnline || isBirthday) ? 'text-bcs-gold' : 'text-zinc-200'}">
+                ${m.name} ${isBirthday ? '🎂' : ''}
+              </span>
+              <span class="text-[8px] text-zinc-500 block leading-none">${isBirthday ? 'FÖDELSEDAG!' : m.spot}</span>
             </div>
           </div>
-          <span class="w-2 h-2 rounded-full flex-shrink-0 ${isOnline ? 'bg-emerald-400 shadow-[0_0_6px_#2ecc71]' : 'bg-zinc-700'}"></span>
+          <span class="w-2 h-2 rounded-full flex-shrink-0 ${isOnline ? 'bg-emerald-400 shadow-[0_0_6px_#2ecc71]' : (isBirthday ? 'bg-bcs-gold animate-ping' : 'bg-zinc-700')}"></span>
         `;
         container.appendChild(card);
       });
+    }
+
+    /* ==========================================================
+       FÖDELSEDAGS- & HÖGTIDS-TAKEOVER CONTROLLER
+       ========================================================== */
+    function getSeasonalTakeover(now = new Date()) {
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      const dayOfWeek = now.getDay(); // 0 = sön, 5 = fre, 6 = lör
+      const hour = now.getHours();
+      const year = now.getFullYear();
+
+      // 1. FÖDELSEDAGAR I CREWET (Högsta prioritet)
+      const bday = getBirthdayMemberToday(now);
+      if (bday) {
+        const ageText = bday.bYear ? ` • GRATTIS PÅ ${year - bday.bYear}-ÅRSDAGEN!` : ' • STORT GRATTIS!';
+        const extraHoliday = (m === 12 && d === 24)
+          ? 'GOD JUL OCH STORT GRATTIS PÅ FÖDELSEDAGEN PIERRE!'
+          : (m === 12 && d === 31)
+            ? 'GOTT NYTT ÅR OCH STORT GRATTIS PÅ FÖDELSEDAGEN KENNETH!'
+            : `IDAG FIRAR VI ${bday.name.toUpperCase()} (${bday.spot.toUpperCase()})${ageText} KAFFET ÄR PÅ HUSET!`;
+
+        return {
+          type: 'takeover-birthday',
+          title: `🎂 FÖDELSEDAGS-TAKEOVER • ${bday.name.toUpperCase()} 🎂`,
+          text: extraHoliday,
+          footer: `BURN CREEK CREW • HÖJ EN KALL FÖR ${bday.name.toUpperCase()} IDAG!`,
+          timeLabel: `${d}/${m}`,
+          pillText: `FÖDELSEDAG • ${bday.name.toUpperCase()} 🎂`,
+          pillClass: 'px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-amber-950/90 text-bcs-gold border-bcs-gold',
+          dotClass: 'h-3.5 w-3.5 rounded-full bg-bcs-gold animate-ping shadow-sm shadow-bcs-gold'
+        };
+      }
+
+      // 2. DECEMBER & ROSTIG JULKALENDER (1 - 24 dec)
+      if (m === 12 && d >= 1 && d <= 24) {
+        return {
+          type: 'takeover-holiday',
+          title: `🎄 ROSTIG JULKALENDER • LUCKA ${d} ÖPPEN 🎄`,
+          text: d === 24
+            ? 'GOD JUL FRÅN BURN CREEK SPEEDSHOP! SLÄPP SKIFTNYCKELN OCH NJUT AV JULBORDET.'
+            : `LUCKA ${d} FINNS ATT ÖPPNA I BURN CREEK-APPEN! GLÖM INTE ATT KOLLA DAGENS MEK-HOROSKOP.`,
+          footer: 'BRÄNNEHYLTE JULDEPÅ • KEEPING V8 SPIRIT ALIVE',
+          timeLabel: `Dec ${d}`,
+          pillText: `JULDEPÅ • LUCKA ${d} 🎄`,
+          pillClass: 'px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-red-950/90 text-bcs-cream border-bcs-copper',
+          dotClass: 'h-3.5 w-3.5 rounded-full bg-red-500 animate-pulse shadow-sm shadow-red-500'
+        };
+      }
+
+      // 3. MIDSOMMARAFTON (Fredag 19-25 juni)
+      if (m === 6 && dayOfWeek === 5 && d >= 19 && d <= 25) {
+        return {
+          type: 'takeover-weekend',
+          title: '🇸🇪 GLAD MIDSOMMAR ÖNSKAR BURN CREEK SPEEDSHOP 🇸🇪',
+          text: 'STÄNG AV SVETSEN, TÄND GRILLEN OCH TA EN KALL – GLAD MIDSOMMAR CREW!',
+          footer: 'BRÄNNEHYLTE HQ • SOMMAR & V8',
+          timeLabel: 'Midsommar',
+          pillText: 'GLAD MIDSOMMAR • CREW 🇸🇪',
+          pillClass: 'px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-emerald-950/90 text-bcs-gold border-bcs-gold',
+          dotClass: 'h-3.5 w-3.5 rounded-full bg-bcs-gold animate-pulse'
+        };
+      }
+
+      // 4. FREDAG EFTER KL 15:00 & LÖRDAG (HELG-LÄGE)
+      if ((dayOfWeek === 5 && hour >= 15) || dayOfWeek === 6) {
+        return {
+          type: 'takeover-weekend',
+          title: '🏁 VECKAN ÄR SLUT • HELG-LÄGE I VERKSTAN 🏁',
+          text: 'ARBETSVECKAN ÄR ÖVER – KALL DRYCK TILLÅTEN VID ARBETSBÄNKEN! SKRUVA LUGNT OCH HA EN GRYM HELG.',
+          footer: 'BURN CREEK SPEEDSHOP • WEEKEND SHIFT',
+          timeLabel: dayOfWeek === 5 ? 'Fredag 15:00+' : 'Lördag',
+          pillText: 'HELG-LÄGE • KALL DRYCK TILLÅTEN 🍻',
+          pillClass: 'px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-emerald-950/90 text-emerald-300 border-emerald-500/70',
+          dotClass: 'h-3.5 w-3.5 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400'
+        };
+      }
+
+      return null;
+    }
+
+    function refreshAnnouncementAndTakeover() {
+      const card = document.getElementById('dash-announcement-card');
+      const titleEl = document.getElementById('dash-announcement-title');
+      const textEl = document.getElementById('dash-announcement-text');
+      const authorEl = document.getElementById('dash-announcement-author');
+      const timeEl = document.getElementById('dash-announcement-time');
+      const pill = document.getElementById('workshopStatusPill');
+      const dot = document.getElementById('workshopStatusDot');
+      const statusText = document.getElementById('workshopStatusText');
+
+      const takeover = getSeasonalTakeover(new Date());
+
+      // Uppdatera statusbrickan i headern
+      if (pill && dot && statusText) {
+        if (takeover) {
+          pill.className = takeover.pillClass;
+          dot.className = takeover.dotClass;
+          statusText.textContent = takeover.pillText;
+        } else {
+          pill.className = 'px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70 transition-all duration-300';
+          dot.className = 'h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper';
+          statusText.textContent = 'PRIVAT VERKSTAD • CREW ONLY';
+        }
+      }
+
+      if (!card) return;
+
+      // Rensa tidigare takeover-klasser
+      card.classList.remove('takeover-birthday', 'takeover-holiday', 'takeover-weekend');
+
+      // Om det finns ett manuellt meddelande från depån i Firebase: visa det (med ev. födelsedags-badge i titeln)
+      if (liveFirestoreAnnouncement && liveFirestoreAnnouncement.text) {
+        const data = liveFirestoreAnnouncement;
+        const timeStr = data.updatedAt && data.updatedAt.toDate
+          ? new Date(data.updatedAt.toDate()).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
+          : '';
+
+        if (takeover && takeover.type === 'takeover-birthday') {
+          card.classList.add('takeover-birthday');
+          titleEl.innerText = `MEDDELANDE FRÅN DEPÅN • ${takeover.pillText}`;
+        } else {
+          titleEl.innerText = 'MEDDELANDE FRÅN DEPÅN';
+        }
+
+        textEl.innerText = data.text;
+        authorEl.innerText = `Skickat av: ${data.author || 'Depå'}`;
+        timeEl.innerText = timeStr ? `kl ${timeStr}` : '';
+        card.style.display = 'block';
+        return;
+      }
+
+      // Annars: visa automatisk Födelsedags- eller Högtids-takeover om en sådan är aktiv
+      if (takeover) {
+        card.classList.add(takeover.type);
+        titleEl.innerText = takeover.title;
+        textEl.innerText = takeover.text;
+        authorEl.innerText = takeover.footer;
+        timeEl.innerText = takeover.timeLabel;
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
     }
 
     /* NÄRVAROLYSSNARE */
@@ -704,24 +894,12 @@
     /* ANSLAGSLYSSNARE (MEDDELANDE FRÅN DEPÅN) */
     function initAnnouncementListener() {
       db.collection('announcements').doc('current').onSnapshot(doc => {
-        const card = document.getElementById('dash-announcement-card');
-        const textEl = document.getElementById('dash-announcement-text');
-        const authorEl = document.getElementById('dash-announcement-author');
-        const timeEl = document.getElementById('dash-announcement-time');
-
         if (doc.exists && doc.data().text) {
-          const data = doc.data();
-          const timeStr = data.updatedAt 
-            ? new Date(data.updatedAt.toDate()).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' }) 
-            : '';
-
-          textEl.innerText = data.text;
-          authorEl.innerText = `Skickat av: ${data.author || 'Depå'}`;
-          timeEl.innerText = timeStr ? `kl ${timeStr}` : '';
-          card.style.display = 'block';
+          liveFirestoreAnnouncement = doc.data();
         } else {
-          card.style.display = 'none';
+          liveFirestoreAnnouncement = null;
         }
+        refreshAnnouncementAndTakeover();
       }, err => {
         console.error('Fel vid hämtning av anslag:', err);
       });
@@ -858,7 +1036,6 @@
         });
       };
 
-      // Lyssnar på 'events' (standard) med automatisk fallback till 'calendar' om 'events' är tom
       let fallbackUnsub = null;
       db.collection('events').onSnapshot(snapshot => {
         if (!snapshot.empty) {
@@ -880,12 +1057,14 @@
     }
 
     renderCrewList([]);
+    refreshAnnouncementAndTakeover();
     initPresenceListener();
     initAnnouncementListener();
     initTodosListener();
     initCalendarListener();
 
-    /* 1. KLOCKA & DATUM */
+    /* 1. KLOCKA, DATUM & TAKEOVER-KONTROLL */
+    let lastCheckedMinute = -1;
     function updateClock() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
@@ -897,6 +1076,13 @@
       let str = now.toLocaleDateString('sv-SE', options);
       str = str.charAt(0).toUpperCase() + str.slice(1);
       document.getElementById('liveDate').textContent = str;
+
+      // Kontrollera takeover en gång per minut (t.ex. vid midnatt eller fredag 15:00)
+      if (now.getMinutes() !== lastCheckedMinute) {
+        lastCheckedMinute = now.getMinutes();
+        refreshAnnouncementAndTakeover();
+        renderCrewList();
+      }
     }
     setInterval(updateClock, 1000);
     updateClock();
@@ -1150,6 +1336,7 @@
       fetchWeather();
       fetchMotorsportRSS();
       updateClock();
+      refreshAnnouncementAndTakeover();
     });
   </script>
 </body>
