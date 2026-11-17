@@ -787,7 +787,7 @@
         </div>
       </div>
 
-      <!-- 2. REGISTRERADE MEDLEMMAR I VERKSTADEN (ALLA RUTOR EXAKT LIKA STORA) -->
+      <!-- 2. REGISTRERADE MEDLEMMAR I VERKSTADEN -->
       <div class="bg-bcs-black/95 p-2 rounded-lg border border-bcs-border flex-shrink-0 shadow">
         <div class="flex justify-between items-center pb-1 border-b border-bcs-border/60">
           <span class="text-[11px] font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
@@ -1170,7 +1170,6 @@
       box.classList.remove('coffee-theme');
 
       if (item.type === 'coffee') {
-        // KAFFE-LOTTERI POPUP
         box.classList.add('coffee-theme');
         badgePill.className = 'inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-950/90 border border-amber-500/80 text-amber-300 font-mono text-xs uppercase tracking-widest mb-3 shadow';
         badgeDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping';
@@ -1192,7 +1191,6 @@
         quoteEl.textContent = `"${randomCoffeeQuote}"`;
         timeEl.textContent = item.timeStr ? `Snurrad kl ${item.timeStr}` : 'Snurrad just nu';
       } else {
-        // DEPÅ-INSLÄPP / CHECK-IN POPUP
         const bdayToday = getBirthdayMemberToday();
         const isBdayPerson = member && bdayToday && member.id === bdayToday.id;
 
@@ -1498,10 +1496,10 @@
 
     /* KAFFE-LOTTERI REALTIDSLYSSNARE (FRÅN APPEN) */
     let isInitialCoffeeLoad = true;
-    let lastCoffeeSignature = null;
+    let lastCoffeeTriggeredAt = 0;
 
     function initCoffeeLotteryListener() {
-      db.collection('coffee_lottery').doc('latest').onSnapshot(doc => {
+      db.collection('coffee_lottery').doc('latest').onSnapshot({ includeMetadataChanges: true }, doc => {
         if (!doc.exists) {
           isInitialCoffeeLoad = false;
           return;
@@ -1514,31 +1512,33 @@
           return;
         }
 
-        const tsMs = data.spunAt && data.spunAt.toMillis
-          ? data.spunAt.toMillis()
-          : (data.updatedAt && data.updatedAt.toMillis ? data.updatedAt.toMillis() : 0);
+        const tsMs = data.clientTime
+          ? Number(data.clientTime)
+          : (data.spunAt && data.spunAt.toMillis
+              ? data.spunAt.toMillis()
+              : (data.updatedAt && data.updatedAt.toMillis ? data.updatedAt.toMillis() : 0));
 
-        const signature = `${winnerName}_${tsMs}`;
-
+        // Ignorera gammal vinnare som redan låg i databasen innan TV:n laddades
         if (isInitialCoffeeLoad) {
-          lastCoffeeSignature = signature;
+          lastCoffeeTriggeredAt = tsMs || Date.now();
           isInitialCoffeeLoad = false;
           return;
         }
 
-        if (signature !== lastCoffeeSignature) {
-          lastCoffeeSignature = signature;
-          const timeStr = tsMs
-            ? new Date(tsMs).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
-            : new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+        // Förhindra dubbeltrigging från serverTimestamp-uppdatering inom 4 sekunder
+        const now = Date.now();
+        if (tsMs && tsMs === lastCoffeeTriggeredAt) return;
+        if (!tsMs && (now - lastCoffeeTriggeredAt) < 4000) return;
 
-          queuePopupSign({
-            type: 'coffee',
-            name: winnerName,
-            spunBy: data.spunBy || data.author || '',
-            timeStr
-          });
-        }
+        lastCoffeeTriggeredAt = tsMs || now;
+
+        const timeStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+        queuePopupSign({
+          type: 'coffee',
+          name: winnerName,
+          spunBy: data.spunBy || data.author || '',
+          timeStr
+        });
       }, err => {
         console.warn("Firestore coffee_lottery error:", err);
       });
