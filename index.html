@@ -27,16 +27,16 @@
         extend: {
           colors: {
             bcs: {
-              copper: '#b25329',      // Logotypens brända terrakotta/koppar
-              copperDark: '#853716',  // Mörkare kopparskugga
-              copperLight: '#c86332', // Ljusare kopparaccent
-              cream: '#f4ecd8',       // Vintage ivory / krämvit
-              creamMuted: '#d3c5a6',  // Dämpad cream
-              black: '#121110',       // Matt kolsvart
-              charcoal: '#1c1a18',    // Paneler
-              charcoalDark: '#161413',// Bakgrunder
-              border: '#38322b',      // Kantlinjer
-              gold: '#df9837'         // Stjärnor & accenter
+              copper: '#b25329',
+              copperDark: '#853716',
+              copperLight: '#c86332',
+              cream: '#f4ecd8',
+              creamMuted: '#d3c5a6',
+              black: '#121110',
+              charcoal: '#1c1a18',
+              charcoalDark: '#161413',
+              border: '#38322b',
+              gold: '#df9837'
             }
           },
           fontFamily: {
@@ -175,19 +175,16 @@
       flex-shrink: 0;
       transition: all 0.35s ease;
     }
-    /* Födelsedags- & Guld-Takeover styling */
     .dash-announcement-card.takeover-birthday {
       background: linear-gradient(135deg, #2a1d0b 0%, #1a1207 50%, #2b180b 100%);
       border: 2px solid #df9837;
       box-shadow: 0 0 32px rgba(223, 152, 55, 0.55), inset 0 0 18px rgba(223, 152, 55, 0.15);
     }
-    /* Julkalender / Högtids-Takeover styling */
     .dash-announcement-card.takeover-holiday {
       background: linear-gradient(135deg, #241010 0%, #141913 55%, #24140d 100%);
       border: 2px solid #c86332;
       box-shadow: 0 0 28px rgba(200, 99, 50, 0.5);
     }
-    /* Fredag / Helg-Takeover styling */
     .dash-announcement-card.takeover-weekend {
       background: linear-gradient(135deg, #162118 0%, #141210 60%, #24170d 100%);
       border: 2px solid #df9837;
@@ -295,7 +292,7 @@
           src="burn_creek_speedshop_rund_est.png" 
           alt="Burn Creek Speedshop Logo"
           class="w-full h-full object-contain rounded-full"
-          onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='./burn_creek_speedshop_rund_est.png';}else{this.style.display='none';document.getElementById('logoFallback').style.display='flex';}"
+          onerror="handleLogoError(this)"
         />
         <div id="logoFallback" style="display: none;" class="w-full h-full rounded-full flex-col items-center justify-center text-bcs-copper">
           <i class="ph-bold ph-engine text-4xl"></i>
@@ -587,6 +584,24 @@
   <!-- JAVASCRIPT-LOGIK                                           -->
   <!-- ========================================================== -->
   <script>
+    /* LOGGA-FALLBACK (Testar olika stavningar om GitHub Pages är skiftlägeskänsligt) */
+    function handleLogoError(img) {
+      const candidates = [
+        'Burn_Creek_Speedshop_rund_est.png',
+        'burn-creek-speedshop-rund-est.png',
+        'logo.png'
+      ];
+      const step = parseInt(img.dataset.step || '0', 10);
+      if (step < candidates.length) {
+        img.dataset.step = String(step + 1);
+        img.src = candidates[step];
+      } else {
+        img.style.display = 'none';
+        const fb = document.getElementById('logoFallback');
+        if (fb) fb.style.display = 'flex';
+      }
+    }
+
     /* ==========================================================
        0. FIREBASE SETUP & REALTIDSLYSSNARE
        ========================================================== */
@@ -604,7 +619,7 @@
     }
     const db = firebase.firestore();
 
-    /* CREW-MEDLEMMAR MED LOGOTYPER/EMBLEM, PLATS OCH FÖDELSEDAG */
+    /* CREW-MEDLEMMAR MED BILMÄRKEN FRAMFÖR NAMNEN, PLATS OCH FÖDELSEDAG */
     const workshopSpots = [
       { 
         id: "p1", 
@@ -613,7 +628,15 @@
         bMonth: 12,
         bDay: 28,
         bYear: 1986,
-        badgeHtml: `<span class="px-1 py-0.2 rounded font-sans font-black text-[9px] tracking-tight bg-red-700 text-white border border-red-500 shadow-sm leading-tight">GMC</span>`
+        badgeHtml: `<span class="inline-flex items-center gap-0.5 flex-shrink-0" title="GMC Vandura & 1934 Ford Hot Rod med Cheva V8">
+          <span class="px-1 py-0.2 rounded font-sans font-black text-[7px] tracking-tight bg-red-700 text-white border border-red-500 leading-tight">GMC</span>
+          <span class="px-1 py-0.2 rounded-full font-serif italic font-bold text-[7px] bg-blue-800 text-white border border-blue-400 leading-tight">Ford</span>
+          <span class="inline-flex items-center justify-center px-0.5 py-0.2 rounded bg-zinc-900 border border-amber-500/80">
+            <svg class="w-3 h-2" viewBox="0 0 28 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 1H19V3.8H27L24.5 8.2H19V11H9V8.2H1L3.5 3.8H9V1Z" fill="#df9837" stroke="#fef08a" stroke-width="1"/>
+            </svg>
+          </span>
+        </span>`
       },
       { 
         id: "p2", 
@@ -621,7 +644,7 @@
         spot: "Plats 2",
         bMonth: 2,
         bDay: 16,
-        badgeHtml: `<span class="inline-flex items-center gap-0.5 px-1 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-[8px] font-bold text-zinc-200" title="Buick Tri-Shield"><span class="w-1.5 h-2.5 rounded-sm bg-red-600 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-zinc-100 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-blue-600 inline-block rotate-[-12deg]"></span></span>`
+        badgeHtml: `<span class="inline-flex items-center gap-0.5 px-1 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-[8px] font-bold text-zinc-200 flex-shrink-0" title="Buick LeSabre"><span class="w-1.5 h-2.5 rounded-sm bg-red-600 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-zinc-100 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-blue-600 inline-block rotate-[-12deg]"></span></span>`
       },
       { 
         id: "p3", 
@@ -629,7 +652,7 @@
         spot: "Plats 3",
         bMonth: 12,
         bDay: 24,
-        badgeHtml: `<span class="px-1 py-0.5 rounded bg-zinc-900 border border-amber-600 text-amber-400 flex items-center justify-center text-xs" title="Motorcykel"><i class="ph-bold ph-motorcycle"></i></span>`
+        badgeHtml: `<span class="px-1 py-0.5 rounded bg-zinc-900 border border-amber-600 text-amber-400 flex items-center justify-center text-xs flex-shrink-0" title="Motorcyklar"><i class="ph-bold ph-motorcycle"></i></span>`
       },
       { 
         id: "p4_k", 
@@ -637,7 +660,7 @@
         spot: "Plats 4",
         bMonth: 12,
         bDay: 31,
-        badgeHtml: `<span class="px-1.5 py-0.2 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-tight" title="Ford">Ford</span>`
+        badgeHtml: `<span class="px-1.5 py-0.2 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-tight flex-shrink-0" title="Ford Ranchero">Ford</span>`
       },
       { 
         id: "p4_h", 
@@ -645,7 +668,18 @@
         spot: "Plats 4",
         bMonth: 3,
         bDay: 9,
-        badgeHtml: `<span class="px-1.5 py-0.2 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-tight" title="Ford">Ford</span>`
+        badgeHtml: `<span class="inline-flex items-center gap-0.5 flex-shrink-0" title="Ford Galaxie & Cadillac">
+          <span class="px-1 py-0.2 rounded-full font-serif italic font-bold text-[7px] bg-blue-800 text-white border border-blue-400 leading-tight">Ford</span>
+          <span class="inline-flex items-center gap-0.5 px-1 py-0.2 rounded bg-zinc-900 border border-amber-400/80 text-[7px] font-serif italic font-bold text-amber-300 leading-tight">
+            <span class="inline-grid grid-cols-2 w-2 h-2 border border-amber-400 overflow-hidden rounded-[1px]">
+              <span class="bg-amber-400"></span>
+              <span class="bg-red-700"></span>
+              <span class="bg-blue-700"></span>
+              <span class="bg-zinc-100"></span>
+            </span>
+            <span>Cad</span>
+          </span>
+        </span>`
       }
     ];
 
@@ -678,9 +712,10 @@
         });
 
         const isBirthday = bdayPerson && bdayPerson.id === m.id;
+        const isWideBadge = m.id === 'p1' || m.id === 'p4_h';
 
         const card = document.createElement('div');
-        card.className = `p-1 rounded border flex items-center justify-between gap-1 ${
+        card.className = `${isWideBadge ? 'col-span-2' : ''} p-1 rounded border flex items-center justify-between gap-1.5 ${
           isBirthday
             ? 'bg-amber-950/60 border-bcs-gold text-bcs-cream shadow-[0_0_10px_rgba(223,152,55,0.35)]'
             : isOnline 
@@ -689,9 +724,7 @@
         }`;
         card.innerHTML = `
           <div class="flex items-center gap-1.5 min-w-0 truncate">
-            <div class="flex-shrink-0 flex items-center justify-center">
-              ${m.badgeHtml}
-            </div>
+            ${m.badgeHtml}
             <div class="truncate">
               <span class="font-bold block leading-tight ${(isOnline || isBirthday) ? 'text-bcs-gold' : 'text-zinc-200'}">
                 ${m.name} ${isBirthday ? '🎂' : ''}
@@ -711,11 +744,10 @@
     function getSeasonalTakeover(now = new Date()) {
       const m = now.getMonth() + 1;
       const d = now.getDate();
-      const dayOfWeek = now.getDay(); // 0 = sön, 5 = fre, 6 = lör
+      const dayOfWeek = now.getDay();
       const hour = now.getHours();
       const year = now.getFullYear();
 
-      // 1. FÖDELSEDAGAR I CREWET (Högsta prioritet)
       const bday = getBirthdayMemberToday(now);
       if (bday) {
         const ageText = bday.bYear ? ` • GRATTIS PÅ ${year - bday.bYear}-ÅRSDAGEN!` : ' • STORT GRATTIS!';
@@ -737,7 +769,6 @@
         };
       }
 
-      // 2. DECEMBER & ROSTIG JULKALENDER (1 - 24 dec)
       if (m === 12 && d >= 1 && d <= 24) {
         return {
           type: 'takeover-holiday',
@@ -753,7 +784,6 @@
         };
       }
 
-      // 3. MIDSOMMARAFTON (Fredag 19-25 juni)
       if (m === 6 && dayOfWeek === 5 && d >= 19 && d <= 25) {
         return {
           type: 'takeover-weekend',
@@ -767,7 +797,6 @@
         };
       }
 
-      // 4. FREDAG EFTER KL 15:00 & LÖRDAG (HELG-LÄGE)
       if ((dayOfWeek === 5 && hour >= 15) || dayOfWeek === 6) {
         return {
           type: 'takeover-weekend',
