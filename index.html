@@ -304,27 +304,184 @@
       width: 100%;
     }
 
+    /* ==========================================================
+       BUSIG KOLV-GUBBE ("KOLV-KALLE" POP-UP MASKOT)
+       ========================================================== */
+    @keyframes pistonJumpIn {
+      0% { transform: translateY(130%) rotate(18deg) scale(0.8); opacity: 0; }
+      60% { transform: translateY(-10px) rotate(-5deg) scale(1.04); opacity: 1; }
+      80% { transform: translateY(4px) rotate(2deg) scale(0.99); opacity: 1; }
+      100% { transform: translateY(0) rotate(-2deg) scale(1); opacity: 1; }
+    }
+    @keyframes pistonJumpOut {
+      0% { transform: translateY(0) rotate(-2deg) scale(1); opacity: 1; }
+      30% { transform: translateY(-12px) rotate(-6deg) scale(1.02); opacity: 1; }
+      100% { transform: translateY(135%) rotate(22deg) scale(0.85); opacity: 0; }
+    }
+    @keyframes pistonIdleBounce {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+    .piston-mascot-wrap {
+      position: fixed;
+      bottom: 34px;
+      right: 26px;
+      z-index: 9500;
+      display: none;
+      align-items: flex-end;
+      gap: 12px;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .piston-mascot-wrap.active {
+      display: flex;
+      animation: pistonJumpIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .piston-mascot-wrap.hiding {
+      animation: pistonJumpOut 0.45s ease-in forwards;
+    }
+    .piston-character {
+      animation: pistonIdleBounce 0.9s ease-in-out infinite;
+      filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.95));
+      flex-shrink: 0;
+    }
+    .piston-bubble {
+      background: linear-gradient(180deg, #f4ecd8 0%, #e5d6b5 100%);
+      color: #121110;
+      border: 3px solid #b25329;
+      border-radius: 16px;
+      padding: 12px 16px;
+      max-width: 310px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.85), 0 0 0 2px #121110;
+      position: relative;
+      margin-bottom: 58px;
+    }
+    .piston-bubble::after {
+      content: '';
+      position: absolute;
+      right: -14px;
+      bottom: 18px;
+      border-width: 10px 0 10px 14px;
+      border-style: solid;
+      border-color: transparent transparent transparent #b25329;
+    }
+
     /* Scrollbars */
-    #dash-todos-container::-webkit-scrollbar,
     #rssFeedContainer::-webkit-scrollbar {
       width: 4px;
     }
-    #dash-todos-container::-webkit-scrollbar-track,
     #rssFeedContainer::-webkit-scrollbar-track {
       background: #121110;
     }
-    #dash-todos-container::-webkit-scrollbar-thumb,
     #rssFeedContainer::-webkit-scrollbar-thumb {
       background: #38322b;
       border-radius: 2px;
     }
-    #dash-todos-container::-webkit-scrollbar-thumb:hover,
     #rssFeedContainer::-webkit-scrollbar-thumb:hover {
       background: #b25329;
     }
   </style>
 </head>
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
+
+  <!-- ========================================================== -->
+  <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") SOM HOPPAR UPP IBLAND      -->
+  <!-- ========================================================== -->
+  <div id="pistonMascot" class="piston-mascot-wrap" onclick="hidePistonMascot()" title="Klicka för att skicka ner Kolv-Kalle i cylindern igen">
+    <!-- Pratbubbla -->
+    <div class="piston-bubble">
+      <div class="flex items-center justify-between gap-2 border-b border-bcs-copper/30 pb-1 mb-1">
+        <span class="font-brand text-xs text-bcs-copper uppercase tracking-wider">Kolv-Kalle • 350 SB</span>
+        <span class="font-mono text-[9px] font-bold bg-bcs-black text-bcs-gold px-1.5 py-0.5 rounded">VARVTAL: 7200</span>
+      </div>
+      <p id="pistonSpeechText" class="font-oswald text-base font-bold leading-snug text-bcs-black">
+        Hallå där! Har ni sett min 10 mm hylsa eller har ni supit bort den igen?!
+      </p>
+    </div>
+
+    <!-- Custom Hot-Rod Kolv-Gubbe SVG -->
+    <div class="piston-character w-32 h-40">
+      <svg viewBox="0 0 160 200" class="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pistonMetal" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#6b7280"/>
+            <stop offset="28%" stop-color="#e5e7eb"/>
+            <stop offset="55%" stop-color="#9ca3af"/>
+            <stop offset="85%" stop-color="#4b5563"/>
+            <stop offset="100%" stop-color="#9ca3af"/>
+          </linearGradient>
+          <linearGradient id="rodMetal" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#374151"/>
+            <stop offset="50%" stop-color="#9ca3af"/>
+            <stop offset="100%" stop-color="#1f2937"/>
+          </linearGradient>
+          <radialGradient id="fireGlow" cx="50%" cy="10%" r="70%">
+            <stop offset="0%" stop-color="#fef08a"/>
+            <stop offset="45%" stop-color="#f97316"/>
+            <stop offset="100%" stop-color="#b91c1c" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Eldflammor på toppen av kolven -->
+        <path d="M36 28 C30 10, 48 4, 52 20 C56 2, 74 0, 76 18 C84 -2, 102 2, 100 20 C110 6, 126 12, 120 28 Z" fill="url(#fireGlow)"/>
+
+        <!-- Vevstake (Connecting Rod) -->
+        <path d="M68 115 L92 115 L98 185 L62 185 Z" fill="url(#rodMetal)" stroke="#111827" stroke-width="3"/>
+        <rect x="74" y="122" width="12" height="52" rx="4" fill="#1f2937"/>
+        <circle cx="80" cy="186" r="18" fill="url(#rodMetal)" stroke="#111827" stroke-width="3"/>
+        <circle cx="80" cy="186" r="9" fill="#121110"/>
+
+        <!-- Vänster arm med skiftnyckel -->
+        <path d="M36 78 Q12 72 14 52" fill="none" stroke="#1f2937" stroke-width="7" stroke-linecap="round"/>
+        <!-- Vit tecknad handske + skiftnyckel -->
+        <g transform="translate(4, 24) rotate(-22)">
+          <rect x="7" y="14" width="6" height="24" rx="2" fill="#d1d5db" stroke="#111827" stroke-width="2"/>
+          <path d="M3 6 A8 8 0 1 1 17 6 L14 14 L6 14 Z" fill="#d1d5db" stroke="#111827" stroke-width="2"/>
+          <rect x="8" y="2" width="4" height="7" fill="#121110"/>
+        </g>
+        <circle cx="15" cy="52" r="8" fill="#f4ecd8" stroke="#111827" stroke-width="2.5"/>
+
+        <!-- Höger arm (vinkar / tummen upp) -->
+        <path d="M124 78 Q148 68 144 48" fill="none" stroke="#1f2937" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="144" cy="46" r="8" fill="#f4ecd8" stroke="#111827" stroke-width="2.5"/>
+        <rect x="140" y="34" width="5" height="9" rx="2.5" fill="#f4ecd8" stroke="#111827" stroke-width="2"/>
+
+        <!-- Kolvhuvud (Kropp) -->
+        <rect x="34" y="24" width="92" height="94" rx="10" fill="url(#pistonMetal)" stroke="#111827" stroke-width="3.5"/>
+        
+        <!-- Kolvringar (3 spår upptill) -->
+        <rect x="34" y="34" width="92" height="3.5" fill="#111827"/>
+        <rect x="34" y="41" width="92" height="3.5" fill="#df9837"/>
+        <rect x="34" y="48" width="92" height="3.5" fill="#111827"/>
+
+        <!-- Kolvbult (Wrist pin) -->
+        <circle cx="80" cy="105" r="11" fill="#374151" stroke="#111827" stroke-width="2.5"/>
+        <circle cx="80" cy="105" r="5" fill="#121110"/>
+
+        <!-- Galna Rat-Fink ögon -->
+        <ellipse cx="64" cy="65" rx="13" ry="15" fill="#fffbeb" stroke="#111827" stroke-width="3"/>
+        <ellipse cx="96" cy="63" rx="15" ry="17" fill="#fffbeb" stroke="#111827" stroke-width="3"/>
+        <!-- Röda blodådror i ögonen -->
+        <path d="M54 60 L59 63 M106 56 L101 60" stroke="#dc2626" stroke-width="1.5"/>
+        <!-- Pupiller -->
+        <circle cx="67" cy="66" r="4.5" fill="#111827"/>
+        <circle cx="93" cy="64" r="5.5" fill="#111827"/>
+        <circle cx="68.5" cy="64.5" r="1.5" fill="#ffffff"/>
+        <circle cx="94.5" cy="62.5" r="1.8" fill="#ffffff"/>
+
+        <!-- Busiga ögonbryn -->
+        <path d="M49 52 L75 57" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+        <path d="M112 49 L85 56" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- Stort kaxigt flin med tänder -->
+        <path d="M48 82 Q80 102 112 80 Q105 98 80 98 Q55 98 48 82 Z" fill="#7f1d1d" stroke="#111827" stroke-width="2.5"/>
+        <path d="M54 84 L106 83 L102 89 L58 89 Z" fill="#ffffff"/>
+        <line x1="68" y1="84" x2="68" y2="89" stroke="#111827" stroke-width="1.5"/>
+        <line x1="80" y1="84" x2="80" y2="89" stroke="#111827" stroke-width="1.5"/>
+        <line x1="92" y1="84" x2="92" y2="89" stroke="#111827" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
 
   <!-- ========================================================== -->
   <!-- CHECK-IN DEPÅSKYLT (VISAS NÄR NÅGON LOGGAR IN I VERKSTAN)  -->
@@ -421,11 +578,15 @@
     </div>
 
     <!-- PRIVAT STATUS & KONTROLLER -->
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-2">
       <div id="workshopStatusPill" class="px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70 transition-all duration-300">
         <span id="workshopStatusDot" class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
         <span id="workshopStatusText">PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
+
+      <button id="summonPistonBtn" title="Släpp lös Kolv-Kalle!" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-copper shadow">
+        <i class="ph-bold ph-engine text-xl"></i>
+      </button>
 
       <button id="testCheckinBtn" title="Testa inchecknings-skylt" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-gold text-bcs-gold shadow">
         <i class="ph-bold ph-megaphone text-xl"></i>
@@ -603,7 +764,7 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- KOLUMN 3: NÄRVARO + CREW + ATT FIXA (3 cols)             -->
+    <!-- KOLUMN 3: NÄRVARO + CREW + BUS & MEK-VISDOM (3 cols)     -->
     <!-- ======================================================== -->
     <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0 gap-2">
       
@@ -636,23 +797,46 @@
         </div>
       </div>
 
-      <!-- 3. ATT FIXA / KÖPA -->
-      <div class="bg-bcs-black/95 p-2.5 rounded-lg border border-bcs-border flex-1 flex flex-col justify-between min-h-0">
+      <!-- 3. GARAGETS BUS, MEK-HOROSKOP & 10MM-RÄKNARE (Ersätter Att Fixa/Köpa) -->
+      <div class="bg-bcs-black/95 p-2.5 rounded-lg border border-bcs-border border-t-2 border-t-bcs-gold flex-1 flex flex-col justify-between min-h-0">
         <div class="flex justify-between items-center pb-1.5 border-b border-bcs-border/60 flex-shrink-0">
-          <span class="text-xs font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
-            <i class="ph-bold ph-clipboard-text text-bcs-copper"></i>
-            Att Fixa / Köpa
+          <span class="text-xs font-oswald uppercase text-bcs-cream font-bold flex items-center gap-1.5 tracking-wide">
+            <i class="ph-bold ph-smiley-wink text-bcs-gold text-sm"></i>
+            Garagets Bus & Visdom
           </span>
-          <span id="dash-todos-badge" class="text-[9px] font-mono text-bcs-gold font-bold">Live</span>
+          <button onclick="rotateGarageWisdom()" title="Slumpa ny visdom" class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-bcs-charcoal hover:bg-bcs-copper text-bcs-gold hover:text-white border border-bcs-border transition-colors">
+            Nästa ↻
+          </button>
         </div>
 
-        <div id="dash-todos-container" class="flex-1 flex flex-col gap-1.5 py-1.5 overflow-y-auto pr-0.5 min-h-0 font-mono text-xs">
-          <div class="text-center text-zinc-500 font-mono text-[10px] py-2">Laddar lista...</div>
+        <!-- Roterande Mek-Horoskop / Buskort -->
+        <div class="flex-1 flex flex-col justify-center py-1.5 min-h-0">
+          <div class="bg-bcs-charcoal/90 border border-bcs-border rounded-lg p-2.5 shadow-inner flex flex-col justify-between h-full">
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span id="wisdomTag" class="font-mono text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-bcs-copper/20 text-bcs-copper border border-bcs-copper/40">
+                DAGENS MEK-HOROSKOP
+              </span>
+              <span id="wisdomTarget" class="font-oswald text-[11px] font-bold text-bcs-gold uppercase">
+                ★ CREW ★
+              </span>
+            </div>
+            <p id="wisdomBody" class="font-oswald text-xs xl:text-sm text-bcs-cream leading-snug my-auto">
+              Laddar garagets visdom...
+            </p>
+          </div>
         </div>
 
-        <div class="pt-1 border-t border-bcs-border/60 flex items-center justify-between text-[9px] font-mono text-zinc-500 flex-shrink-0">
-          <span>Synkat med appen</span>
-          <span class="text-bcs-copper">Burn Creek Depå</span>
+        <!-- 10mm Hyls-incident Räknare -->
+        <div class="pt-1.5 border-t border-bcs-border/60 flex items-center justify-between gap-1.5 flex-shrink-0">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/50 font-mono text-[10px] font-extrabold text-bcs-gold">
+              <span id="socketSafeDays">0</span> DGR
+            </span>
+            <span class="font-mono text-[9px] text-zinc-400 truncate">utan tappad 10mm</span>
+          </div>
+          <button onclick="resetSocketCounter()" title="Nollställ när någon tappar bort en 10mm hylsa!" class="px-1.5 py-0.5 rounded bg-red-950/90 hover:bg-red-800 border border-red-700/70 font-mono text-[9px] font-bold text-red-300 hover:text-white transition-colors flex-shrink-0">
+            Tappade en! 💥
+          </button>
         </div>
       </div>
 
@@ -717,7 +901,7 @@
     }
     const db = firebase.firestore();
 
-    /* CREW-MEDLEMMAR MED BILMÄRKEN, FÖDELSEDAG & INCHECKNINGSHÄLSNING (UTAN PLATSNUMMER & ÅRTAL) */
+    /* CREW-MEDLEMMAR MED BILMÄRKEN, FÖDELSEDAG & INCHECKNINGSHÄLSNING */
     const workshopSpots = [
       { 
         id: "p1", 
@@ -806,6 +990,134 @@
       const d = now.getDate();
       return workshopSpots.find(member => member.bMonth === m && member.bDay === d) || null;
     }
+
+    /* ==========================================================
+       BUSIG KOLV-GUBBE ("KOLV-KALLE") CONTROLLER
+       ========================================================== */
+    const pistonQuotes = [
+      "Hallå där! Har ni sett min 10 mm hylsa eller har ni supit bort den igen?!",
+      "Kom ihåg: Det som inte går med våld, går med mer våld och en större slägga!",
+      "Snälla säg att någon bryggt färskt kaffe – det luktar gammal växellådsolja i bryggaren!",
+      "CSB 350 tändföljd: 1-8-4-3-6-5-7-2. Dubbelkolla innan ni smäller igång skiten!",
+      "Vem var det som drog åt oljepluggen med mutterdragaren sist?! Erkänn nu!",
+      "Inget luktar så gott på morgonen som lite oförbränd högoktanig soppa och däckrök!",
+      "Om ni bara står och snackar skit vid bänken blir ju rodden aldrig klar till sommaren!",
+      "Varning! Jag hörde en misständning på treans cylinder – ge den mer soppa och tändning!",
+      "Fredrik, Tony, Pierre, Kenneth, Håkan – vem av er bjuder på bullar till kaffet idag?!",
+      "Tips från kolvtoppen: 'Bara ett litet varv till' är exakt då bulten går rakt av!"
+    ];
+    let pistonTimer = null;
+    let pistonHideTimer = null;
+    let lastPistonQuoteIdx = -1;
+
+    function showPistonMascot(customMessage = null) {
+      const wrap = document.getElementById('pistonMascot');
+      const speech = document.getElementById('pistonSpeechText');
+      if (!wrap || !speech) return;
+
+      if (customMessage) {
+        speech.textContent = customMessage;
+      } else {
+        let idx = Math.floor(Math.random() * pistonQuotes.length);
+        if (idx === lastPistonQuoteIdx) idx = (idx + 1) % pistonQuotes.length;
+        lastPistonQuoteIdx = idx;
+        speech.textContent = pistonQuotes[idx];
+      }
+
+      wrap.classList.remove('hiding');
+      wrap.classList.remove('active');
+      void wrap.offsetWidth;
+      wrap.classList.add('active');
+
+      clearTimeout(pistonHideTimer);
+      pistonHideTimer = setTimeout(() => {
+        hidePistonMascot();
+      }, 8500);
+    }
+
+    function hidePistonMascot() {
+      clearTimeout(pistonHideTimer);
+      const wrap = document.getElementById('pistonMascot');
+      if (!wrap || !wrap.classList.contains('active')) return;
+      wrap.classList.add('hiding');
+      setTimeout(() => {
+        wrap.classList.remove('active', 'hiding');
+      }, 440);
+    }
+
+    function scheduleRandomPistonMascot() {
+      clearTimeout(pistonTimer);
+      // Hoppar fram slumpmässigt mellan var 3:e och 6:e minut
+      const delayMs = (180 + Math.floor(Math.random() * 180)) * 1000;
+      pistonTimer = setTimeout(() => {
+        // Visa bara om inte incheckningsskylten täcker skärmen
+        const overlay = document.getElementById('checkinOverlay');
+        if (!overlay || !overlay.classList.contains('visible')) {
+          showPistonMascot();
+        }
+        scheduleRandomPistonMascot();
+      }, delayMs);
+    }
+
+    // Låt Kolv-Kalle göra en snabb premiär-entré 8 sekunder efter att dashboarden laddats!
+    setTimeout(() => {
+      showPistonMascot("Tjena gubbar! Kolv-Kalle har koll på er i Brännehylte – kör hårt!");
+      scheduleRandomPistonMascot();
+    }, 8000);
+
+    /* ==========================================================
+       GARAGETS BUS, MEK-HOROSKOP & 10MM-RÄKNARE
+       ========================================================== */
+    const garageWisdomList = [
+      { tag: "MEK-HOROSKOP", target: "★ FREDRIK ★", body: "Stjärnorna säger att Cheva-trehundrafemtion i rodden vill ha mer förtändning – men håll dig borta från vinkelslipen efter kl 21!" },
+      { tag: "MEK-HOROSKOP", target: "★ TONY ★", body: "Buick-gudarna ler mot dig idag. Undvik dock att låna ut din bästa spärrnyckel utan kvitto i tre exemplar." },
+      { tag: "MEK-HOROSKOP", target: "★ PIERRE ★", body: "Två hjul ger dubbel fart! En mystisk bricka kommer bli över efter montering – spara den i fickan och låtsas som ingenting." },
+      { tag: "MEK-HOROSKOP", target: "★ KENNETH ★", body: "Rancheron trivs bäst med full tank och varmt kaffe i mugghållaren. Idag hittar du en borttappad skruv med bara strumpan." },
+      { tag: "MEK-HOROSKOP", target: "★ HÅKAN ★", body: "Dubbla V8:or kräver dubbelt så många kaffekoppar. En kromlist kommer blänka extra fint i lysrörsljuset ikväll." },
+      { tag: "GARAGETS LAG #1", target: "ALLMÄN REGEL", body: "Den minsta fjädern du tappar på betonggolvet studsar alltid rakt in under det tyngsta arbetsbordet i lokalen." },
+      { tag: "BÄSTA URSÄKTEN", target: "NÖDLÖGNS-BANK", body: "'Jag skruvar inte långsamt – jag låter metallen acklimatisera sig till småländsk luftfuktighet.'" },
+      { tag: "GARAGETS LAG #4", target: "FYSIKENS LAG", body: "Sannolikheten att du glömmer sätta dit krympslangen INNAN du löder ihop kabeln är exakt 99,4 %." },
+      { tag: "BÄSTA URSÄKTEN", target: "FÖR HEMMAFRONTEN", body: "'Den här kartongen med bildelar har legat i garaget i flera år, jag bara dammade av den idag!'" },
+      { tag: "V8-VISDOM", target: "STRIP-FAKTA", body: "Det finns inga problem i världen som inte kan lösas med lite högre tändning, större munstycken och en kall pilsner." }
+    ];
+    let wisdomIdx = Math.floor(Math.random() * garageWisdomList.length);
+
+    function rotateGarageWisdom() {
+      const tagEl = document.getElementById('wisdomTag');
+      const targetEl = document.getElementById('wisdomTarget');
+      const bodyEl = document.getElementById('wisdomBody');
+      if (!tagEl || !targetEl || !bodyEl) return;
+
+      const item = garageWisdomList[wisdomIdx % garageWisdomList.length];
+      wisdomIdx++;
+
+      tagEl.textContent = item.tag;
+      targetEl.textContent = item.target;
+      bodyEl.textContent = item.body;
+    }
+
+    function updateSocketCounterDisplay() {
+      const el = document.getElementById('socketSafeDays');
+      if (!el) return;
+      let savedTimestamp = localStorage.getItem('bcs_10mm_last_lost');
+      if (!savedTimestamp) {
+        // Default: 12 dagar sedan senaste 10mm-incidenten
+        savedTimestamp = String(Date.now() - 12 * 24 * 60 * 60 * 1000);
+        localStorage.setItem('bcs_10mm_last_lost', savedTimestamp);
+      }
+      const diffDays = Math.max(0, Math.floor((Date.now() - Number(savedTimestamp)) / (1000 * 60 * 60 * 24)));
+      el.textContent = diffDays;
+    }
+
+    function resetSocketCounter() {
+      localStorage.setItem('bcs_10mm_last_lost', String(Date.now()));
+      updateSocketCounterDisplay();
+      showPistonMascot("NÄMEN!! NÅGON TAPPADE PRECIS EN 10 MM HYLSA! RÄKNAREN ÄR NOLLSTÄLLD TILL 0 DAGAR!");
+    }
+
+    rotateGarageWisdom();
+    setInterval(rotateGarageWisdom, 22000);
+    updateSocketCounterDisplay();
 
     /* ==========================================================
        DEPÅ-INSLÄPP / CHECK-IN SKYLT (KÖ & VISNING I 7 SEK)
@@ -1155,61 +1467,6 @@
       });
     }
 
-    /* ATT FIXA / KÖPA - REALTIDSLYSSNARE */
-    function initTodosListener() {
-      const container = document.getElementById('dash-todos-container');
-      const badge = document.getElementById('dash-todos-badge');
-
-      db.collection('todos').onSnapshot(snapshot => {
-        if (!container) return;
-
-        if (snapshot.empty) {
-          container.innerHTML = '<p class="text-zinc-500 font-mono text-[10px] text-center py-4">Inga punkter på listan.</p>';
-          if (badge) badge.textContent = '0 st';
-          return;
-        }
-
-        const list = [];
-        snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
-        list.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
-
-        const pendingCount = list.filter(t => !t.done).length;
-        if (badge) badge.textContent = `${pendingCount} kvar`;
-
-        container.innerHTML = '';
-        list.forEach(t => {
-          const card = document.createElement('div');
-          card.className = `p-1.5 rounded border transition-colors flex items-center justify-between gap-1.5 ${
-            t.done 
-              ? 'bg-bcs-black/60 border-bcs-border/40 opacity-50' 
-              : 'bg-bcs-charcoal/90 border-bcs-border shadow-sm'
-          }`;
-
-          card.innerHTML = `
-            <div class="flex items-center gap-2 min-w-0 flex-1">
-              <span class="text-xs ${t.done ? 'text-zinc-600' : 'text-bcs-copper'} flex-shrink-0">
-                <i class="ph-bold ${t.done ? 'ph-check-circle' : 'ph-circle'}"></i>
-              </span>
-              <span class="font-mono text-[11px] truncate leading-tight ${t.done ? 'line-through text-zinc-500' : 'text-zinc-200 font-bold'}">
-                ${t.text}
-              </span>
-            </div>
-            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded flex-shrink-0 ${
-              t.done 
-                ? 'bg-zinc-900 text-zinc-600 border border-zinc-800' 
-                : 'bg-bcs-black text-bcs-gold border border-bcs-border'
-            }">
-              ${t.addedBy || 'Depå'}
-            </span>
-          `;
-          container.appendChild(card);
-        });
-      }, err => {
-        console.warn("Firestore todos error:", err);
-        if (container) container.innerHTML = '<p class="text-zinc-500 font-mono text-[10px] text-center py-4">Kunde inte hämta listan.</p>';
-      });
-    }
-
     /* KALENDER - REALTIDSLYSSNARE */
     function initCalendarListener() {
       const container = document.getElementById('dash-calendar-container');
@@ -1310,7 +1567,6 @@
     refreshAnnouncementAndTakeover();
     initPresenceListener();
     initAnnouncementListener();
-    initTodosListener();
     initCalendarListener();
 
     /* 1. KLOCKA, DATUM & TAKEOVER-KONTROLL */
@@ -1331,6 +1587,7 @@
         lastCheckedMinute = now.getMinutes();
         refreshAnnouncementAndTakeover();
         renderCrewList();
+        updateSocketCounterDisplay();
       }
     }
     setInterval(updateClock, 1000);
@@ -1572,7 +1829,11 @@
       }
     });
 
-    /* 5. TESTKNAPP FÖR DEPÅSKYLT, FULLSKÄRM & UPPDATERING */
+    /* 5. KNAPPAR I HEADER (KOLV-KALLE, DEPÅSKYLT, FULLSKÄRM, UPPDATERA) */
+    document.getElementById('summonPistonBtn').addEventListener('click', () => {
+      showPistonMascot();
+    });
+
     let testMemberIdx = 0;
     document.getElementById('testCheckinBtn').addEventListener('click', () => {
       const sample = workshopSpots[testMemberIdx % workshopSpots.length];
@@ -1594,6 +1855,7 @@
       fetchMotorsportRSS();
       updateClock();
       refreshAnnouncementAndTakeover();
+      rotateGarageWisdom();
     });
   </script>
 </body>
