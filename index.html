@@ -255,7 +255,7 @@
     }
 
     /* ==========================================================
-       CHECK-IN DEPÅSKYLT (POPUP OVERLAY VID INLOGGNING)
+       POPUP OVERLAY (CHECK-IN & KAFFE-LOTTERI)
        ========================================================== */
     @keyframes signSlamIn {
       0% { opacity: 0; transform: scale(0.72) translateY(-30px) rotate(-1.5deg); }
@@ -270,11 +270,19 @@
       from { width: 100%; }
       to { width: 0%; }
     }
+    @keyframes steamRise {
+      0% { transform: translateY(4px) scale(0.95); opacity: 0.3; }
+      50% { transform: translateY(-4px) scale(1.05); opacity: 1; }
+      100% { transform: translateY(-10px) scale(0.95); opacity: 0.2; }
+    }
+    .coffee-steam {
+      animation: steamRise 1.6s ease-in-out infinite;
+    }
     .checkin-overlay {
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: rgba(7, 6, 6, 0.78);
+      background: rgba(7, 6, 6, 0.80);
       backdrop-filter: blur(4px);
       display: none;
       align-items: center;
@@ -295,6 +303,11 @@
       position: relative;
       animation: signSlamIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
+    .checkin-sign.coffee-theme {
+      background: linear-gradient(165deg, #2c1b10 0%, #140d09 55%, #26160c 100%);
+      border: 3px solid #df9837;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.94), 0 0 65px rgba(223, 152, 55, 0.65);
+    }
     .checkin-sign.closing {
       animation: signSlamOut 0.35s ease-in forwards;
     }
@@ -302,6 +315,9 @@
       height: 6px;
       background: linear-gradient(90deg, #b25329, #df9837, #2ecc71);
       width: 100%;
+    }
+    .coffee-theme .checkin-progress-bar {
+      background: linear-gradient(90deg, #78350f, #d97706, #fef08a);
     }
 
     /* ==========================================================
@@ -388,7 +404,6 @@
   <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") SOM HOPPAR UPP IBLAND      -->
   <!-- ========================================================== -->
   <div id="pistonMascot" class="piston-mascot-wrap" onclick="hidePistonMascot()" title="Klicka för att skicka ner Kolv-Kalle i cylindern igen">
-    <!-- Pratbubbla -->
     <div class="piston-bubble">
       <div class="flex items-center justify-between gap-2 border-b border-bcs-copper/30 pb-1 mb-1">
         <span class="font-brand text-xs text-bcs-copper uppercase tracking-wider">Kolv-Kalle • 350 SB</span>
@@ -399,7 +414,6 @@
       </p>
     </div>
 
-    <!-- Custom Hot-Rod Kolv-Gubbe SVG -->
     <div class="piston-character w-32 h-40">
       <svg viewBox="0 0 160 200" class="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -422,18 +436,14 @@
           </radialGradient>
         </defs>
 
-        <!-- Eldflammor på toppen av kolven -->
         <path d="M36 28 C30 10, 48 4, 52 20 C56 2, 74 0, 76 18 C84 -2, 102 2, 100 20 C110 6, 126 12, 120 28 Z" fill="url(#fireGlow)"/>
 
-        <!-- Vevstake (Connecting Rod) -->
         <path d="M68 115 L92 115 L98 185 L62 185 Z" fill="url(#rodMetal)" stroke="#111827" stroke-width="3"/>
         <rect x="74" y="122" width="12" height="52" rx="4" fill="#1f2937"/>
         <circle cx="80" cy="186" r="18" fill="url(#rodMetal)" stroke="#111827" stroke-width="3"/>
         <circle cx="80" cy="186" r="9" fill="#121110"/>
 
-        <!-- Vänster arm med skiftnyckel -->
         <path d="M36 78 Q12 72 14 52" fill="none" stroke="#1f2937" stroke-width="7" stroke-linecap="round"/>
-        <!-- Vit tecknad handske + skiftnyckel -->
         <g transform="translate(4, 24) rotate(-22)">
           <rect x="7" y="14" width="6" height="24" rx="2" fill="#d1d5db" stroke="#111827" stroke-width="2"/>
           <path d="M3 6 A8 8 0 1 1 17 6 L14 14 L6 14 Z" fill="#d1d5db" stroke="#111827" stroke-width="2"/>
@@ -441,39 +451,30 @@
         </g>
         <circle cx="15" cy="52" r="8" fill="#f4ecd8" stroke="#111827" stroke-width="2.5"/>
 
-        <!-- Höger arm (vinkar / tummen upp) -->
         <path d="M124 78 Q148 68 144 48" fill="none" stroke="#1f2937" stroke-width="7" stroke-linecap="round"/>
         <circle cx="144" cy="46" r="8" fill="#f4ecd8" stroke="#111827" stroke-width="2.5"/>
         <rect x="140" y="34" width="5" height="9" rx="2.5" fill="#f4ecd8" stroke="#111827" stroke-width="2"/>
 
-        <!-- Kolvhuvud (Kropp) -->
         <rect x="34" y="24" width="92" height="94" rx="10" fill="url(#pistonMetal)" stroke="#111827" stroke-width="3.5"/>
         
-        <!-- Kolvringar (3 spår upptill) -->
         <rect x="34" y="34" width="92" height="3.5" fill="#111827"/>
         <rect x="34" y="41" width="92" height="3.5" fill="#df9837"/>
         <rect x="34" y="48" width="92" height="3.5" fill="#111827"/>
 
-        <!-- Kolvbult (Wrist pin) -->
         <circle cx="80" cy="105" r="11" fill="#374151" stroke="#111827" stroke-width="2.5"/>
         <circle cx="80" cy="105" r="5" fill="#121110"/>
 
-        <!-- Galna Rat-Fink ögon -->
         <ellipse cx="64" cy="65" rx="13" ry="15" fill="#fffbeb" stroke="#111827" stroke-width="3"/>
         <ellipse cx="96" cy="63" rx="15" ry="17" fill="#fffbeb" stroke="#111827" stroke-width="3"/>
-        <!-- Röda blodådror i ögonen -->
         <path d="M54 60 L59 63 M106 56 L101 60" stroke="#dc2626" stroke-width="1.5"/>
-        <!-- Pupiller -->
         <circle cx="67" cy="66" r="4.5" fill="#111827"/>
         <circle cx="93" cy="64" r="5.5" fill="#111827"/>
         <circle cx="68.5" cy="64.5" r="1.5" fill="#ffffff"/>
         <circle cx="94.5" cy="62.5" r="1.8" fill="#ffffff"/>
 
-        <!-- Busiga ögonbryn -->
         <path d="M49 52 L75 57" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
         <path d="M112 49 L85 56" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
 
-        <!-- Stort kaxigt flin med tänder -->
         <path d="M48 82 Q80 102 112 80 Q105 98 80 98 Q55 98 48 82 Z" fill="#7f1d1d" stroke="#111827" stroke-width="2.5"/>
         <path d="M54 84 L106 83 L102 89 L58 89 Z" fill="#ffffff"/>
         <line x1="68" y1="84" x2="68" y2="89" stroke="#111827" stroke-width="1.5"/>
@@ -484,7 +485,7 @@
   </div>
 
   <!-- ========================================================== -->
-  <!-- CHECK-IN DEPÅSKYLT (VISAS NÄR NÅGON LOGGAR IN I VERKSTAN)  -->
+  <!-- GEMENSAM DEPÅ- & KAFFELOTTERI-POPUP                        -->
   <!-- ========================================================== -->
   <div id="checkinOverlay" class="checkin-overlay" onclick="dismissCheckinSign()">
     <div id="checkinSignBox" class="checkin-sign" onclick="event.stopPropagation()">
@@ -495,12 +496,12 @@
       <div class="rivet absolute bottom-5 right-5"></div>
 
       <div class="px-8 py-7 text-center relative">
-        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 font-mono text-xs uppercase tracking-widest mb-3 shadow">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <div id="checkinBadgePill" class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 font-mono text-xs uppercase tracking-widest mb-3 shadow">
+          <span id="checkinBadgeDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
           <span id="checkinSignBadge">DEPÅ-INSLÄPP • NY INCHECKNING</span>
         </div>
 
-        <div id="checkinSignIcons" class="flex items-center justify-center gap-2 mb-2 scale-150"></div>
+        <div id="checkinSignIcons" class="flex items-center justify-center gap-3 mb-2 scale-150"></div>
 
         <h2 id="checkinSignTitle" class="font-brand text-4xl md:text-6xl text-bcs-cream uppercase tracking-wider drop-shadow-[0_4px_0_#000] mt-2">
           FREDRIK ÄR PÅ PLATS!
@@ -583,6 +584,10 @@
         <span id="workshopStatusDot" class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
         <span id="workshopStatusText">PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
+
+      <button id="testCoffeeBtn" title="Testa kaffelotteri-popup" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-amber-500 text-amber-400 shadow">
+        <i class="ph-bold ph-coffee text-xl"></i>
+      </button>
 
       <button id="summonPistonBtn" title="Släpp lös Kolv-Kalle!" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-copper shadow">
         <i class="ph-bold ph-engine text-xl"></i>
@@ -1116,33 +1121,39 @@
     updateSocketCounterDisplay();
 
     /* ==========================================================
-       DEPÅ-INSLÄPP / CHECK-IN SKYLT (KÖ & VISNING I 7 SEK)
+       POPUP-KÖ (CHECK-IN SKYLT & KAFFE-LOTTERI FRÅN APPEN)
        ========================================================== */
-    const checkinQueue = [];
-    let isShowingCheckin = false;
-    let checkinDismissTimer = null;
+    const popupQueue = [];
+    let isShowingPopup = false;
+    let popupDismissTimer = null;
 
-    function queueCheckinSign(rawName, timeStr) {
-      checkinQueue.push({ rawName, timeStr });
-      if (!isShowingCheckin) {
-        showNextCheckinSign();
+    const coffeeQuotes = [
+      "Mörkrost, starkt nog att väcka en kallstartad 350 i minusgrader!",
+      "Utan kaffe stannar hela Brännehylte – skopa i en extra sked för säkerhets skull!",
+      "Vinstlott! Du har äran att brygga garagets viktigaste drivmedel idag!",
+      "Kaffebryggaren väntar – och glöm inte skölja ur kannan först!"
+    ];
+
+    function queuePopupSign(payload) {
+      popupQueue.push(payload);
+      if (!isShowingPopup) {
+        showNextPopupSign();
       }
     }
 
-    function showNextCheckinSign() {
-      if (checkinQueue.length === 0) {
-        isShowingCheckin = false;
+    function showNextPopupSign() {
+      if (popupQueue.length === 0) {
+        isShowingPopup = false;
         return;
       }
 
-      isShowingCheckin = true;
-      const { rawName, timeStr } = checkinQueue.shift();
-      const member = matchCrewMember(rawName);
-      const bdayToday = getBirthdayMemberToday();
-      const isBdayPerson = member && bdayToday && member.id === bdayToday.id;
+      isShowingPopup = true;
+      const item = popupQueue.shift();
 
       const overlay = document.getElementById('checkinOverlay');
       const box = document.getElementById('checkinSignBox');
+      const badgePill = document.getElementById('checkinBadgePill');
+      const badgeDot = document.getElementById('checkinBadgeDot');
       const badgeEl = document.getElementById('checkinSignBadge');
       const iconsEl = document.getElementById('checkinSignIcons');
       const titleEl = document.getElementById('checkinSignTitle');
@@ -1153,46 +1164,81 @@
 
       if (!overlay || !box) return;
 
-      const displayName = member ? member.name.toUpperCase() : (rawName || 'CREW').toUpperCase();
+      const member = matchCrewMember(item.name);
+      const displayName = member ? member.name.toUpperCase() : (item.name || 'CREW').toUpperCase();
 
-      badgeEl.textContent = isBdayPerson
-        ? '🎂 VIP FÖDELSEDAGS-INSLÄPP • GRATTIS! 🎂'
-        : 'DEPÅ-INSLÄPP • NY INCHECKNING';
+      box.classList.remove('coffee-theme');
 
-      iconsEl.innerHTML = member
-        ? member.badgeHtml
-        : `<span class="px-2 py-0.5 rounded bg-bcs-copper text-white font-oswald text-xs font-bold">CREW</span>`;
+      if (item.type === 'coffee') {
+        // KAFFE-LOTTERI POPUP
+        box.classList.add('coffee-theme');
+        badgePill.className = 'inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-950/90 border border-amber-500/80 text-amber-300 font-mono text-xs uppercase tracking-widest mb-3 shadow';
+        badgeDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping';
+        badgeEl.textContent = '☕ KAFFE-LOTTERIET HAR AVGJORTS! ☕';
 
-      titleEl.textContent = isBdayPerson
-        ? `🎂 GRATTIS ${displayName}! 🎂`
-        : `${displayName} ÄR PÅ PLATS!`;
+        iconsEl.innerHTML = `
+          <span class="inline-flex items-center justify-center px-2 py-0.5 rounded bg-amber-950 border border-amber-500 text-amber-300 text-sm coffee-steam">
+            <i class="ph-fill ph-coffee"></i>
+          </span>
+          ${member ? member.badgeHtml : ''}
+        `;
 
-      subEl.textContent = member
-        ? `${member.vehicles.toUpperCase()}`
-        : 'VÄLKOMMEN IN I VÄRMEN I BRÄNNEHYLTE';
+        titleEl.textContent = `☕ ${displayName} SÄTTER PÅ KAFFET! ☕`;
+        subEl.textContent = item.spunBy
+          ? `FRAMSNURRAD I APPEN AV ${item.spunBy.toUpperCase()} • ${member ? member.vehicles.toUpperCase() : 'BRÄNNEHYLTE CREW'}`
+          : `${member ? member.vehicles.toUpperCase() : 'DAGENS KAFFEKUNG I BRÄNNEHYLTE'}`;
 
-      quoteEl.textContent = isBdayPerson
-        ? `"Födelsedagsbarnet har klivit in i verkstan – kaffet och kall dryck står redo!"`
-        : `"${member ? member.greeting : 'Skiftnyckeln väntar – kör hårt!'}"`;
+        const randomCoffeeQuote = coffeeQuotes[Math.floor(Math.random() * coffeeQuotes.length)];
+        quoteEl.textContent = `"${randomCoffeeQuote}"`;
+        timeEl.textContent = item.timeStr ? `Snurrad kl ${item.timeStr}` : 'Snurrad just nu';
+      } else {
+        // DEPÅ-INSLÄPP / CHECK-IN POPUP
+        const bdayToday = getBirthdayMemberToday();
+        const isBdayPerson = member && bdayToday && member.id === bdayToday.id;
 
-      timeEl.textContent = timeStr ? `Incheckad kl ${timeStr}` : 'Incheckad just nu';
+        badgePill.className = 'inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 font-mono text-xs uppercase tracking-widest mb-3 shadow';
+        badgeDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping';
+        badgeEl.textContent = isBdayPerson
+          ? '🎂 VIP FÖDELSEDAGS-INSLÄPP • GRATTIS! 🎂'
+          : 'DEPÅ-INSLÄPP • NY INCHECKNING';
+
+        iconsEl.innerHTML = member
+          ? member.badgeHtml
+          : `<span class="px-2 py-0.5 rounded bg-bcs-copper text-white font-oswald text-xs font-bold">CREW</span>`;
+
+        titleEl.textContent = isBdayPerson
+          ? `🎂 GRATTIS ${displayName}! 🎂`
+          : `${displayName} ÄR PÅ PLATS!`;
+
+        subEl.textContent = member
+          ? `${member.vehicles.toUpperCase()}`
+          : 'VÄLKOMMEN IN I VÄRMEN I BRÄNNEHYLTE';
+
+        quoteEl.textContent = isBdayPerson
+          ? `"Födelsedagsbarnet har klivit in i verkstan – kaffet och kall dryck står redo!"`
+          : `"${member ? member.greeting : 'Skiftnyckeln väntar – kör hårt!'}"`;
+
+        timeEl.textContent = item.timeStr ? `Incheckad kl ${item.timeStr}` : 'Incheckad just nu';
+      }
+
+      const durationSec = item.type === 'coffee' ? 9 : 7;
 
       box.classList.remove('closing');
       void box.offsetWidth;
       barEl.style.animation = 'none';
       void barEl.offsetWidth;
-      barEl.style.animation = 'progressShrink 7s linear forwards';
+      barEl.style.animation = `progressShrink ${durationSec}s linear forwards`;
 
       overlay.classList.add('visible');
 
-      clearTimeout(checkinDismissTimer);
-      checkinDismissTimer = setTimeout(() => {
+      clearTimeout(popupDismissTimer);
+      popupDismissTimer = setTimeout(() => {
         dismissCheckinSign();
-      }, 7000);
+      }, durationSec * 1000);
     }
 
     function dismissCheckinSign() {
-      clearTimeout(checkinDismissTimer);
+      clearTimeout(popupDismissTimer);
       const overlay = document.getElementById('checkinOverlay');
       const box = document.getElementById('checkinSignBox');
       if (!overlay || !box || !overlay.classList.contains('visible')) return;
@@ -1201,7 +1247,7 @@
       setTimeout(() => {
         overlay.classList.remove('visible');
         box.classList.remove('closing');
-        showNextCheckinSign();
+        showNextPopupSign();
       }, 340);
     }
 
@@ -1428,7 +1474,7 @@
           }
 
           if (!isInitialPresenceLoad && !knownActiveIds.has(doc.id)) {
-            queueCheckinSign(name, timeStr);
+            queuePopupSign({ type: 'checkin', name, timeStr });
           }
 
           const badge = document.createElement('div');
@@ -1447,6 +1493,54 @@
         console.warn("Firestore presence error:", err);
         if (listEl) listEl.innerHTML = '<span class="text-zinc-500 font-mono text-[10px]">Kunde inte ansluta till servern</span>';
         renderCrewList([]);
+      });
+    }
+
+    /* KAFFE-LOTTERI REALTIDSLYSSNARE (FRÅN APPEN) */
+    let isInitialCoffeeLoad = true;
+    let lastCoffeeSignature = null;
+
+    function initCoffeeLotteryListener() {
+      db.collection('coffee_lottery').doc('latest').onSnapshot(doc => {
+        if (!doc.exists) {
+          isInitialCoffeeLoad = false;
+          return;
+        }
+
+        const data = doc.data();
+        const winnerName = data.winner || data.name || data.member;
+        if (!winnerName) {
+          isInitialCoffeeLoad = false;
+          return;
+        }
+
+        const tsMs = data.spunAt && data.spunAt.toMillis
+          ? data.spunAt.toMillis()
+          : (data.updatedAt && data.updatedAt.toMillis ? data.updatedAt.toMillis() : 0);
+
+        const signature = `${winnerName}_${tsMs}`;
+
+        if (isInitialCoffeeLoad) {
+          lastCoffeeSignature = signature;
+          isInitialCoffeeLoad = false;
+          return;
+        }
+
+        if (signature !== lastCoffeeSignature) {
+          lastCoffeeSignature = signature;
+          const timeStr = tsMs
+            ? new Date(tsMs).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
+            : new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+
+          queuePopupSign({
+            type: 'coffee',
+            name: winnerName,
+            spunBy: data.spunBy || data.author || '',
+            timeStr
+          });
+        }
+      }, err => {
+        console.warn("Firestore coffee_lottery error:", err);
       });
     }
 
@@ -1563,6 +1657,7 @@
     renderCrewList([]);
     refreshAnnouncementAndTakeover();
     initPresenceListener();
+    initCoffeeLotteryListener();
     initAnnouncementListener();
     initCalendarListener();
 
@@ -1826,7 +1921,15 @@
       }
     });
 
-    /* 5. KNAPPAR I HEADER (KOLV-KALLE, DEPÅSKYLT, FULLSKÄRM, UPPDATERA) */
+    /* 5. KNAPPAR I HEADER (KAFFELOTTERI-TEST, KOLV-KALLE, DEPÅSKYLT, FULLSKÄRM, UPPDATERA) */
+    let testCoffeeIdx = 0;
+    document.getElementById('testCoffeeBtn').addEventListener('click', () => {
+      const sample = workshopSpots[testCoffeeIdx % workshopSpots.length];
+      testCoffeeIdx++;
+      const nowStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+      queuePopupSign({ type: 'coffee', name: sample.name, spunBy: 'Appen', timeStr: nowStr });
+    });
+
     document.getElementById('summonPistonBtn').addEventListener('click', () => {
       showPistonMascot();
     });
@@ -1836,7 +1939,7 @@
       const sample = workshopSpots[testMemberIdx % workshopSpots.length];
       testMemberIdx++;
       const nowStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
-      queueCheckinSign(sample.name, nowStr);
+      queuePopupSign({ type: 'checkin', name: sample.name, timeStr: nowStr });
     });
 
     document.getElementById('fullscreenBtn').addEventListener('click', () => {
