@@ -782,7 +782,7 @@
         </div>
       </div>
 
-      <!-- 2. REGISTRERADE MEDLEMMAR I VERKSTADEN -->
+      <!-- 2. REGISTRERADE MEDLEMMAR I VERKSTADEN (ALLA RUTOR EXAKT LIKA STORA) -->
       <div class="bg-bcs-black/95 p-2 rounded-lg border border-bcs-border flex-shrink-0 shadow">
         <div class="flex justify-between items-center pb-1 border-b border-bcs-border/60">
           <span class="text-[11px] font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
@@ -792,12 +792,12 @@
           <span class="text-[9px] font-mono text-bcs-gold font-bold">5 Medlemmar</span>
         </div>
 
-        <div id="crewMembersList" class="grid grid-cols-2 gap-1 mt-1.5 font-mono text-[10px]">
+        <div id="crewMembersList" class="grid grid-cols-1 gap-1 mt-1.5 font-mono text-[10px]">
           <!-- Fylls dynamiskt med loggor & status via JS -->
         </div>
       </div>
 
-      <!-- 3. GARAGETS BUS, MEK-HOROSKOP & 10MM-RÄKNARE (Ersätter Att Fixa/Köpa) -->
+      <!-- 3. GARAGETS BUS, MEK-HOROSKOP & 10MM-RÄKNARE -->
       <div class="bg-bcs-black/95 p-2.5 rounded-lg border border-bcs-border border-t-2 border-t-bcs-gold flex-1 flex flex-col justify-between min-h-0">
         <div class="flex justify-between items-center pb-1.5 border-b border-bcs-border/60 flex-shrink-0">
           <span class="text-xs font-oswald uppercase text-bcs-cream font-bold flex items-center gap-1.5 tracking-wide">
@@ -911,11 +911,11 @@
         bMonth: 12,
         bDay: 28,
         bYear: 1986,
-        badgeHtml: `<span class="inline-flex items-center gap-0.5 flex-shrink-0" title="GMC Vandura & Ford Hot Rod med Cheva V8">
-          <span class="px-1 py-0.2 rounded font-sans font-black text-[7px] tracking-tight bg-red-700 text-white border border-red-500 leading-tight">GMC</span>
-          <span class="px-1 py-0.2 rounded-full font-serif italic font-bold text-[7px] bg-blue-800 text-white border border-blue-400 leading-tight">Ford</span>
-          <span class="inline-flex items-center justify-center px-0.5 py-0.2 rounded bg-zinc-900 border border-amber-500/80">
-            <svg class="w-3 h-2" viewBox="0 0 28 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        badgeHtml: `<span class="inline-flex items-center gap-1 flex-shrink-0" title="GMC Vandura & Ford Hot Rod med Cheva V8">
+          <span class="px-1.5 py-0.5 rounded font-sans font-black text-[8px] tracking-tight bg-red-700 text-white border border-red-500 leading-none">GMC</span>
+          <span class="px-1.5 py-0.5 rounded-full font-serif italic font-bold text-[8px] bg-blue-800 text-white border border-blue-400 leading-none">Ford</span>
+          <span class="inline-flex items-center justify-center px-1 py-0.5 rounded bg-zinc-900 border border-amber-500/80">
+            <svg class="w-3.5 h-2" viewBox="0 0 28 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 1H19V3.8H27L24.5 8.2H19V11H9V8.2H1L3.5 3.8H9V1Z" fill="#df9837" stroke="#fef08a" stroke-width="1"/>
             </svg>
           </span>
@@ -928,7 +928,7 @@
         greeting: "Sätt på kaffet, Buick-skeppet har lagt till i hamn!",
         bMonth: 2,
         bDay: 16,
-        badgeHtml: `<span class="inline-flex items-center gap-0.5 px-1 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-[8px] font-bold text-zinc-200 flex-shrink-0" title="Buick LeSabre"><span class="w-1.5 h-2.5 rounded-sm bg-red-600 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-zinc-100 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-blue-600 inline-block rotate-[-12deg]"></span></span>`
+        badgeHtml: `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-[8px] font-bold text-zinc-200 flex-shrink-0" title="Buick LeSabre"><span class="w-1.5 h-2.5 rounded-sm bg-red-600 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-zinc-100 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-blue-600 inline-block rotate-[-12deg]"></span></span>`
       },
       { 
         id: "p3", 
@@ -937,7 +937,7 @@
         greeting: "Två hjul och full gas – Pierre har rullat in i depån!",
         bMonth: 12,
         bDay: 24,
-        badgeHtml: `<span class="px-1 py-0.5 rounded bg-zinc-900 border border-amber-600 text-amber-400 flex items-center justify-center text-xs flex-shrink-0" title="Motorcyklar"><i class="ph-bold ph-motorcycle"></i></span>`
+        badgeHtml: `<span class="px-1.5 py-0.5 rounded bg-zinc-900 border border-amber-600 text-amber-400 flex items-center justify-center text-xs flex-shrink-0" title="Motorcyklar"><i class="ph-bold ph-motorcycle"></i></span>`
       },
       { 
         id: "p4_k", 
@@ -946,7 +946,7 @@
         greeting: "Ranchero-chefen har klivit över tröskeln – nu åker vi!",
         bMonth: 12,
         bDay: 31,
-        badgeHtml: `<span class="px-1.5 py-0.2 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-tight flex-shrink-0" title="Ford Ranchero">Ford</span>`
+        badgeHtml: `<span class="px-1.5 py-0.5 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-none flex-shrink-0" title="Ford Ranchero">Ford</span>`
       },
       { 
         id: "p4_h", 
@@ -955,9 +955,9 @@
         greeting: "Galaxie & Cadillac-divisionen är på plats i verkstan!",
         bMonth: 3,
         bDay: 9,
-        badgeHtml: `<span class="inline-flex items-center gap-0.5 flex-shrink-0" title="Ford Galaxie & Cadillac">
-          <span class="px-1 py-0.2 rounded-full font-serif italic font-bold text-[7px] bg-blue-800 text-white border border-blue-400 leading-tight">Ford</span>
-          <span class="inline-flex items-center gap-0.5 px-1 py-0.2 rounded bg-zinc-900 border border-amber-400/80 text-[7px] font-serif italic font-bold text-amber-300 leading-tight">
+        badgeHtml: `<span class="inline-flex items-center gap-1 flex-shrink-0" title="Ford Galaxie & Cadillac">
+          <span class="px-1.5 py-0.5 rounded-full font-serif italic font-bold text-[8px] bg-blue-800 text-white border border-blue-400 leading-none">Ford</span>
+          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-zinc-900 border border-amber-400/80 text-[8px] font-serif italic font-bold text-amber-300 leading-none">
             <span class="inline-grid grid-cols-2 w-2 h-2 border border-amber-400 overflow-hidden rounded-[1px]">
               <span class="bg-amber-400"></span>
               <span class="bg-red-700"></span>
@@ -1047,10 +1047,8 @@
 
     function scheduleRandomPistonMascot() {
       clearTimeout(pistonTimer);
-      // Hoppar fram slumpmässigt mellan var 3:e och 6:e minut
       const delayMs = (180 + Math.floor(Math.random() * 180)) * 1000;
       pistonTimer = setTimeout(() => {
-        // Visa bara om inte incheckningsskylten täcker skärmen
         const overlay = document.getElementById('checkinOverlay');
         if (!overlay || !overlay.classList.contains('visible')) {
           showPistonMascot();
@@ -1059,7 +1057,6 @@
       }, delayMs);
     }
 
-    // Låt Kolv-Kalle göra en snabb premiär-entré 8 sekunder efter att dashboarden laddats!
     setTimeout(() => {
       showPistonMascot("Tjena gubbar! Kolv-Kalle har koll på er i Brännehylte – kör hårt!");
       scheduleRandomPistonMascot();
@@ -1101,7 +1098,6 @@
       if (!el) return;
       let savedTimestamp = localStorage.getItem('bcs_10mm_last_lost');
       if (!savedTimestamp) {
-        // Default: 12 dagar sedan senaste 10mm-incidenten
         savedTimestamp = String(Date.now() - 12 * 24 * 60 * 60 * 1000);
         localStorage.setItem('bcs_10mm_last_lost', savedTimestamp);
       }
@@ -1229,10 +1225,9 @@
         });
 
         const isBirthday = bdayPerson && bdayPerson.id === m.id;
-        const isWideBadge = m.id === 'p1' || m.id === 'p4_h';
 
         const card = document.createElement('div');
-        card.className = `${isWideBadge ? 'col-span-2' : ''} p-1.5 rounded border flex items-center justify-between gap-1.5 ${
+        card.className = `w-full h-8 px-2 rounded border flex items-center justify-between gap-2 ${
           isBirthday
             ? 'bg-amber-950/60 border-bcs-gold text-bcs-cream shadow-[0_0_10px_rgba(223,152,55,0.35)]'
             : isOnline 
@@ -1240,16 +1235,18 @@
               : 'bg-bcs-charcoal/80 border-bcs-border text-zinc-400'
         }`;
         card.innerHTML = `
-          <div class="flex items-center gap-1.5 min-w-0 truncate">
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <span class="font-bold text-xs truncate ${(isOnline || isBirthday) ? 'text-bcs-gold' : 'text-zinc-200'}">
+              ${m.name} ${isBirthday ? '🎂' : ''}
+            </span>
             ${m.badgeHtml}
-            <div class="truncate">
-              <span class="font-bold block leading-tight ${(isOnline || isBirthday) ? 'text-bcs-gold' : 'text-zinc-200'}">
-                ${m.name} ${isBirthday ? '🎂' : ''}
-              </span>
-              <span class="text-[8px] text-zinc-500 block leading-none">${isBirthday ? 'FÖDELSEDAG!' : (isOnline ? 'I verkstan' : 'Crew')}</span>
-            </div>
           </div>
-          <span class="w-2 h-2 rounded-full flex-shrink-0 ${isOnline ? 'bg-emerald-400 shadow-[0_0_6px_#2ecc71]' : (isBirthday ? 'bg-bcs-gold animate-ping' : 'bg-zinc-700')}"></span>
+          <div class="flex items-center gap-1.5 flex-shrink-0">
+            <span class="text-[9px] font-mono ${isBirthday ? 'text-bcs-gold font-bold' : (isOnline ? 'text-emerald-400' : 'text-zinc-500')}">
+              ${isBirthday ? 'GRATTIS!' : (isOnline ? 'På plats' : 'Crew')}
+            </span>
+            <span class="w-2 h-2 rounded-full flex-shrink-0 ${isOnline ? 'bg-emerald-400 shadow-[0_0_6px_#2ecc71]' : (isBirthday ? 'bg-bcs-gold animate-ping' : 'bg-zinc-700')}"></span>
+          </div>
         `;
         container.appendChild(card);
       });
