@@ -254,6 +254,56 @@
       color: #df9837;
     }
 
+    /* ==========================================================
+       CHECK-IN DEPÅSKYLT (POPUP OVERLAY VID INLOGGNING)
+       ========================================================== */
+    @keyframes signSlamIn {
+      0% { opacity: 0; transform: scale(0.72) translateY(-30px) rotate(-1.5deg); }
+      65% { opacity: 1; transform: scale(1.03) translateY(4px) rotate(0.4deg); }
+      100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+    }
+    @keyframes signSlamOut {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.88) translateY(25px); }
+    }
+    @keyframes progressShrink {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+    .checkin-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(7, 6, 6, 0.78);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .checkin-overlay.visible {
+      display: flex;
+    }
+    .checkin-sign {
+      width: 100%;
+      max-width: 780px;
+      background: linear-gradient(165deg, #211d1a 0%, #12100e 55%, #1d1510 100%);
+      border: 3px solid #df9837;
+      border-radius: 18px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.92), 0 0 55px rgba(178, 83, 41, 0.65);
+      overflow: hidden;
+      position: relative;
+      animation: signSlamIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .checkin-sign.closing {
+      animation: signSlamOut 0.35s ease-in forwards;
+    }
+    .checkin-progress-bar {
+      height: 6px;
+      background: linear-gradient(90deg, #b25329, #df9837, #2ecc71);
+      width: 100%;
+    }
+
     /* Scrollbars */
     #dash-todos-container::-webkit-scrollbar,
     #rssFeedContainer::-webkit-scrollbar {
@@ -275,6 +325,50 @@
   </style>
 </head>
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
+
+  <!-- ========================================================== -->
+  <!-- CHECK-IN DEPÅSKYLT (VISAS NÄR NÅGON LOGGAR IN I VERKSTAN)  -->
+  <!-- ========================================================== -->
+  <div id="checkinOverlay" class="checkin-overlay" onclick="dismissCheckinSign()">
+    <div id="checkinSignBox" class="checkin-sign" onclick="event.stopPropagation()">
+      <div class="checkered-border h-3.5 w-full opacity-90"></div>
+      <div class="rivet absolute top-5 left-5"></div>
+      <div class="rivet absolute top-5 right-5"></div>
+      <div class="rivet absolute bottom-5 left-5"></div>
+      <div class="rivet absolute bottom-5 right-5"></div>
+
+      <div class="px-8 py-7 text-center relative">
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/70 text-emerald-300 font-mono text-xs uppercase tracking-widest mb-3 shadow">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span id="checkinSignBadge">DEPÅ-INSLÄPP • NY INCHECKNING</span>
+        </div>
+
+        <div id="checkinSignIcons" class="flex items-center justify-center gap-2 mb-2 scale-150"></div>
+
+        <h2 id="checkinSignTitle" class="font-brand text-4xl md:text-6xl text-bcs-cream uppercase tracking-wider drop-shadow-[0_4px_0_#000] mt-2">
+          FREDRIK ÄR PÅ PLATS!
+        </h2>
+
+        <p id="checkinSignSubtitle" class="font-oswald text-xl md:text-2xl text-bcs-gold font-bold uppercase tracking-wide mt-2">
+          GMC & FORD HOT ROD MED CHEVA V8
+        </p>
+
+        <div class="mt-4 inline-block bg-bcs-black/90 border border-bcs-copper/70 rounded-xl px-6 py-2.5 shadow-inner">
+          <p id="checkinSignQuote" class="font-mono text-sm md:text-base text-bcs-creamMuted">
+            "Värm upp 350:n och fram med 10 mm-hylsan!"
+          </p>
+        </div>
+
+        <div class="mt-4 flex items-center justify-center gap-4 text-xs font-mono text-zinc-400">
+          <span id="checkinSignTime">Incheckad kl 00:00</span>
+          <span>•</span>
+          <span>Burn Creek Speedshop • Brännehylte</span>
+        </div>
+      </div>
+
+      <div id="checkinProgressBar" class="checkin-progress-bar"></div>
+    </div>
+  </div>
 
   <!-- ========================================================== -->
   <!-- 1. HEADER (LOGGA, KLOCKA OCH STATUS)                       -->
@@ -327,11 +421,15 @@
     </div>
 
     <!-- PRIVAT STATUS & KONTROLLER -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2.5">
       <div id="workshopStatusPill" class="px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70 transition-all duration-300">
         <span id="workshopStatusDot" class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
         <span id="workshopStatusText">PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
+
+      <button id="testCheckinBtn" title="Testa inchecknings-skylt" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-gold text-bcs-gold shadow">
+        <i class="ph-bold ph-megaphone text-xl"></i>
+      </button>
 
       <button id="fullscreenBtn" title="Fullskärm på TV" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow">
         <i class="ph-bold ph-corners-out text-xl"></i>
@@ -505,7 +603,7 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- KOLUMN 3: NÄRVARO + PLATSER/CREW + ATT FIXA (3 cols)     -->
+    <!-- KOLUMN 3: NÄRVARO + CREW + ATT FIXA (3 cols)             -->
     <!-- ======================================================== -->
     <section class="col-span-3 bg-bcs-charcoal border border-bcs-border rounded-xl p-2.5 flex flex-col justify-between shadow-xl overflow-hidden min-h-0 gap-2">
       
@@ -523,12 +621,12 @@
         </div>
       </div>
 
-      <!-- 2. REGISTRERADE MEDLEMMAR MED PLATS I VERKSTADEN -->
+      <!-- 2. REGISTRERADE MEDLEMMAR I VERKSTADEN -->
       <div class="bg-bcs-black/95 p-2 rounded-lg border border-bcs-border flex-shrink-0 shadow">
         <div class="flex justify-between items-center pb-1 border-b border-bcs-border/60">
           <span class="text-[11px] font-oswald uppercase text-zinc-300 font-bold flex items-center gap-1.5">
             <i class="ph-bold ph-warehouse text-bcs-copper"></i>
-            Verkstadens Platser / Crew
+            Verkstadens Crew
           </span>
           <span class="text-[9px] font-mono text-bcs-gold font-bold">5 Medlemmar</span>
         </div>
@@ -584,7 +682,7 @@
   <!-- JAVASCRIPT-LOGIK                                           -->
   <!-- ========================================================== -->
   <script>
-    /* LOGGA-FALLBACK (Testar olika stavningar om GitHub Pages är skiftlägeskänsligt) */
+    /* LOGGA-FALLBACK */
     function handleLogoError(img) {
       const candidates = [
         'Burn_Creek_Speedshop_rund_est.png',
@@ -619,16 +717,17 @@
     }
     const db = firebase.firestore();
 
-    /* CREW-MEDLEMMAR MED BILMÄRKEN FRAMFÖR NAMNEN, PLATS OCH FÖDELSEDAG */
+    /* CREW-MEDLEMMAR MED BILMÄRKEN, FÖDELSEDAG & INCHECKNINGSHÄLSNING (UTAN PLATSNUMMER & ÅRTAL) */
     const workshopSpots = [
       { 
         id: "p1", 
         name: "Fredrik", 
-        spot: "Plats 1",
+        vehicles: "GMC Vandura & Ford Hot Rod (Cheva V8)",
+        greeting: "Värm upp 350:n och fram med 10 mm-hylsan!",
         bMonth: 12,
         bDay: 28,
         bYear: 1986,
-        badgeHtml: `<span class="inline-flex items-center gap-0.5 flex-shrink-0" title="GMC Vandura & 1934 Ford Hot Rod med Cheva V8">
+        badgeHtml: `<span class="inline-flex items-center gap-0.5 flex-shrink-0" title="GMC Vandura & Ford Hot Rod med Cheva V8">
           <span class="px-1 py-0.2 rounded font-sans font-black text-[7px] tracking-tight bg-red-700 text-white border border-red-500 leading-tight">GMC</span>
           <span class="px-1 py-0.2 rounded-full font-serif italic font-bold text-[7px] bg-blue-800 text-white border border-blue-400 leading-tight">Ford</span>
           <span class="inline-flex items-center justify-center px-0.5 py-0.2 rounded bg-zinc-900 border border-amber-500/80">
@@ -641,7 +740,8 @@
       { 
         id: "p2", 
         name: "Tony", 
-        spot: "Plats 2",
+        vehicles: "Buick LeSabre",
+        greeting: "Sätt på kaffet, Buick-skeppet har lagt till i hamn!",
         bMonth: 2,
         bDay: 16,
         badgeHtml: `<span class="inline-flex items-center gap-0.5 px-1 py-0.5 rounded bg-zinc-900 border border-zinc-600 text-[8px] font-bold text-zinc-200 flex-shrink-0" title="Buick LeSabre"><span class="w-1.5 h-2.5 rounded-sm bg-red-600 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-zinc-100 inline-block rotate-[-12deg]"></span><span class="w-1.5 h-2.5 rounded-sm bg-blue-600 inline-block rotate-[-12deg]"></span></span>`
@@ -649,7 +749,8 @@
       { 
         id: "p3", 
         name: "Pierre", 
-        spot: "Plats 3",
+        vehicles: "MC-divisionen",
+        greeting: "Två hjul och full gas – Pierre har rullat in i depån!",
         bMonth: 12,
         bDay: 24,
         badgeHtml: `<span class="px-1 py-0.5 rounded bg-zinc-900 border border-amber-600 text-amber-400 flex items-center justify-center text-xs flex-shrink-0" title="Motorcyklar"><i class="ph-bold ph-motorcycle"></i></span>`
@@ -657,7 +758,8 @@
       { 
         id: "p4_k", 
         name: "Kenneth", 
-        spot: "Plats 4",
+        vehicles: "Ford Ranchero",
+        greeting: "Ranchero-chefen har klivit över tröskeln – nu åker vi!",
         bMonth: 12,
         bDay: 31,
         badgeHtml: `<span class="px-1.5 py-0.2 rounded-full font-serif italic font-bold text-[8px] tracking-wide bg-blue-800 text-white border border-blue-400 shadow-sm leading-tight flex-shrink-0" title="Ford Ranchero">Ford</span>`
@@ -665,7 +767,8 @@
       { 
         id: "p4_h", 
         name: "Håkan", 
-        spot: "Plats 4",
+        vehicles: "Ford Galaxie 500 Cab & Cadillac",
+        greeting: "Galaxie & Cadillac-divisionen är på plats i verkstan!",
         bMonth: 3,
         bDay: 9,
         badgeHtml: `<span class="inline-flex items-center gap-0.5 flex-shrink-0" title="Ford Galaxie & Cadillac">
@@ -686,10 +789,112 @@
     let lastActiveNames = [];
     let liveFirestoreAnnouncement = null;
 
+    function matchCrewMember(name) {
+      const n = (name || '').toLowerCase();
+      return workshopSpots.find(m => {
+        if (m.id === 'p1' && n.includes('fredrik')) return true;
+        if (m.id === 'p2' && n.includes('tony')) return true;
+        if (m.id === 'p3' && n.includes('pierre')) return true;
+        if (m.id === 'p4_k' && n.includes('kenneth')) return true;
+        if (m.id === 'p4_h' && (n.includes('håkan') || n.includes('hakan'))) return true;
+        return false;
+      }) || null;
+    }
+
     function getBirthdayMemberToday(now = new Date()) {
       const m = now.getMonth() + 1;
       const d = now.getDate();
       return workshopSpots.find(member => member.bMonth === m && member.bDay === d) || null;
+    }
+
+    /* ==========================================================
+       DEPÅ-INSLÄPP / CHECK-IN SKYLT (KÖ & VISNING I 7 SEK)
+       ========================================================== */
+    const checkinQueue = [];
+    let isShowingCheckin = false;
+    let checkinDismissTimer = null;
+
+    function queueCheckinSign(rawName, timeStr) {
+      checkinQueue.push({ rawName, timeStr });
+      if (!isShowingCheckin) {
+        showNextCheckinSign();
+      }
+    }
+
+    function showNextCheckinSign() {
+      if (checkinQueue.length === 0) {
+        isShowingCheckin = false;
+        return;
+      }
+
+      isShowingCheckin = true;
+      const { rawName, timeStr } = checkinQueue.shift();
+      const member = matchCrewMember(rawName);
+      const bdayToday = getBirthdayMemberToday();
+      const isBdayPerson = member && bdayToday && member.id === bdayToday.id;
+
+      const overlay = document.getElementById('checkinOverlay');
+      const box = document.getElementById('checkinSignBox');
+      const badgeEl = document.getElementById('checkinSignBadge');
+      const iconsEl = document.getElementById('checkinSignIcons');
+      const titleEl = document.getElementById('checkinSignTitle');
+      const subEl = document.getElementById('checkinSignSubtitle');
+      const quoteEl = document.getElementById('checkinSignQuote');
+      const timeEl = document.getElementById('checkinSignTime');
+      const barEl = document.getElementById('checkinProgressBar');
+
+      if (!overlay || !box) return;
+
+      const displayName = member ? member.name.toUpperCase() : (rawName || 'CREW').toUpperCase();
+
+      badgeEl.textContent = isBdayPerson
+        ? '🎂 VIP FÖDELSEDAGS-INSLÄPP • GRATTIS! 🎂'
+        : 'DEPÅ-INSLÄPP • NY INCHECKNING';
+
+      iconsEl.innerHTML = member
+        ? member.badgeHtml
+        : `<span class="px-2 py-0.5 rounded bg-bcs-copper text-white font-oswald text-xs font-bold">CREW</span>`;
+
+      titleEl.textContent = isBdayPerson
+        ? `🎂 GRATTIS ${displayName}! 🎂`
+        : `${displayName} ÄR PÅ PLATS!`;
+
+      subEl.textContent = member
+        ? `${member.vehicles.toUpperCase()}`
+        : 'VÄLKOMMEN IN I VÄRMEN I BRÄNNEHYLTE';
+
+      quoteEl.textContent = isBdayPerson
+        ? `"Födelsedagsbarnet har klivit in i verkstan – kaffet och kall dryck står redo!"`
+        : `"${member ? member.greeting : 'Skiftnyckeln väntar – kör hårt!'}"`;
+
+      timeEl.textContent = timeStr ? `Incheckad kl ${timeStr}` : 'Incheckad just nu';
+
+      box.classList.remove('closing');
+      void box.offsetWidth;
+      barEl.style.animation = 'none';
+      void barEl.offsetWidth;
+      barEl.style.animation = 'progressShrink 7s linear forwards';
+
+      overlay.classList.add('visible');
+
+      clearTimeout(checkinDismissTimer);
+      checkinDismissTimer = setTimeout(() => {
+        dismissCheckinSign();
+      }, 7000);
+    }
+
+    function dismissCheckinSign() {
+      clearTimeout(checkinDismissTimer);
+      const overlay = document.getElementById('checkinOverlay');
+      const box = document.getElementById('checkinSignBox');
+      if (!overlay || !box || !overlay.classList.contains('visible')) return;
+
+      box.classList.add('closing');
+      setTimeout(() => {
+        overlay.classList.remove('visible');
+        box.classList.remove('closing');
+        showNextCheckinSign();
+      }, 340);
     }
 
     function renderCrewList(activeNames = lastActiveNames) {
@@ -715,7 +920,7 @@
         const isWideBadge = m.id === 'p1' || m.id === 'p4_h';
 
         const card = document.createElement('div');
-        card.className = `${isWideBadge ? 'col-span-2' : ''} p-1 rounded border flex items-center justify-between gap-1.5 ${
+        card.className = `${isWideBadge ? 'col-span-2' : ''} p-1.5 rounded border flex items-center justify-between gap-1.5 ${
           isBirthday
             ? 'bg-amber-950/60 border-bcs-gold text-bcs-cream shadow-[0_0_10px_rgba(223,152,55,0.35)]'
             : isOnline 
@@ -729,7 +934,7 @@
               <span class="font-bold block leading-tight ${(isOnline || isBirthday) ? 'text-bcs-gold' : 'text-zinc-200'}">
                 ${m.name} ${isBirthday ? '🎂' : ''}
               </span>
-              <span class="text-[8px] text-zinc-500 block leading-none">${isBirthday ? 'FÖDELSEDAG!' : m.spot}</span>
+              <span class="text-[8px] text-zinc-500 block leading-none">${isBirthday ? 'FÖDELSEDAG!' : (isOnline ? 'I verkstan' : 'Crew')}</span>
             </div>
           </div>
           <span class="w-2 h-2 rounded-full flex-shrink-0 ${isOnline ? 'bg-emerald-400 shadow-[0_0_6px_#2ecc71]' : (isBirthday ? 'bg-bcs-gold animate-ping' : 'bg-zinc-700')}"></span>
@@ -755,7 +960,7 @@
           ? 'GOD JUL OCH STORT GRATTIS PÅ FÖDELSEDAGEN PIERRE!'
           : (m === 12 && d === 31)
             ? 'GOTT NYTT ÅR OCH STORT GRATTIS PÅ FÖDELSEDAGEN KENNETH!'
-            : `IDAG FIRAR VI ${bday.name.toUpperCase()} (${bday.spot.toUpperCase()})${ageText} KAFFET ÄR PÅ HUSET!`;
+            : `IDAG FIRAR VI ${bday.name.toUpperCase()}${ageText} KAFFET ÄR PÅ HUSET!`;
 
         return {
           type: 'takeover-birthday',
@@ -873,7 +1078,10 @@
       }
     }
 
-    /* NÄRVAROLYSSNARE */
+    /* NÄRVAROLYSSNARE (TRIGGAR ÄVEN DEPÅSKYLTEN VID NY INCHECKNING) */
+    let knownActiveIds = new Set();
+    let isInitialPresenceLoad = true;
+
     function initPresenceListener() {
       const listEl = document.getElementById('dash-presence-list');
       const ledEl = document.getElementById('dash-led');
@@ -882,8 +1090,11 @@
         if (!listEl) return;
 
         const activeNames = [];
+        const currentIds = new Set();
 
         if (snapshot.empty) {
+          knownActiveIds.clear();
+          isInitialPresenceLoad = false;
           if (ledEl) ledEl.classList.remove('active');
           listEl.innerHTML = '<span class="text-zinc-500 font-mono text-[10px]">Ingen i verkstan just nu</span>';
           renderCrewList([]);
@@ -897,11 +1108,18 @@
           const data = doc.data();
           const name = data.name || 'Medlem';
           activeNames.push(name);
-          let timeStr = '';
+          currentIds.add(doc.id);
 
+          let timeStr = '';
           if (data.checkedInAt && data.checkedInAt.toDate) {
             const d = data.checkedInAt.toDate();
             timeStr = d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+          } else {
+            timeStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+          }
+
+          if (!isInitialPresenceLoad && !knownActiveIds.has(doc.id)) {
+            queueCheckinSign(name, timeStr);
           }
 
           const badge = document.createElement('div');
@@ -913,6 +1131,8 @@
           listEl.appendChild(badge);
         });
 
+        knownActiveIds = currentIds;
+        isInitialPresenceLoad = false;
         renderCrewList(activeNames);
       }, err => {
         console.warn("Firestore presence error:", err);
@@ -1352,7 +1572,15 @@
       }
     });
 
-    /* 5. FULLSKÄRM & UPPDATERING */
+    /* 5. TESTKNAPP FÖR DEPÅSKYLT, FULLSKÄRM & UPPDATERING */
+    let testMemberIdx = 0;
+    document.getElementById('testCheckinBtn').addEventListener('click', () => {
+      const sample = workshopSpots[testMemberIdx % workshopSpots.length];
+      testMemberIdx++;
+      const nowStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+      queueCheckinSign(sample.name, nowStr);
+    });
+
     document.getElementById('fullscreenBtn').addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => {});
