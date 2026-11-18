@@ -439,23 +439,300 @@
       transform-origin: 106px 88px;
     }
 
-    /* Scrollbars */
-    #rssFeedContainer::-webkit-scrollbar {
-      width: 4px;
+    /* ==========================================================
+       INSTÄLLNINGSSIDA / MODAL OVERLAY
+       ========================================================== */
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9800;
+      background: rgba(8, 7, 6, 0.85);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
     }
-    #rssFeedContainer::-webkit-scrollbar-track {
+    .settings-overlay.open {
+      display: flex;
+    }
+    .settings-modal {
+      width: 100%;
+      max-width: 820px;
+      max-height: 90vh;
+      background: #181614;
+      border: 2px solid #b25329;
+      border-radius: 16px;
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.95), 0 0 40px rgba(178, 83, 41, 0.35);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #2e2924;
+      border: 1px solid #4a423a;
+      transition: 0.25s;
+      border-radius: 999px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #d3c5a6;
+      transition: 0.25s;
+      border-radius: 50%;
+    }
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: #b25329;
+      border-color: #df9837;
+    }
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+      background-color: #fff;
+    }
+
+    /* Scrollbars */
+    #rssFeedContainer::-webkit-scrollbar,
+    #settingsScrollBody::-webkit-scrollbar {
+      width: 5px;
+    }
+    #rssFeedContainer::-webkit-scrollbar-track,
+    #settingsScrollBody::-webkit-scrollbar-track {
       background: #121110;
     }
-    #rssFeedContainer::-webkit-scrollbar-thumb {
+    #rssFeedContainer::-webkit-scrollbar-thumb,
+    #settingsScrollBody::-webkit-scrollbar-thumb {
       background: #38322b;
-      border-radius: 2px;
+      border-radius: 3px;
     }
-    #rssFeedContainer::-webkit-scrollbar-thumb:hover {
+    #rssFeedContainer::-webkit-scrollbar-thumb:hover,
+    #settingsScrollBody::-webkit-scrollbar-thumb:hover {
       background: #b25329;
     }
   </style>
 </head>
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
+
+  <!-- ========================================================== -->
+  <!-- INSTÄLLNINGSSIDA (ÖPPNAS VIA KUGGHJULET I HEADERN)          -->
+  <!-- ========================================================== -->
+  <div id="settingsOverlay" class="settings-overlay" onclick="closeSettingsModal()">
+    <div class="settings-modal" onclick="event.stopPropagation()">
+      <div class="checkered-border h-2.5 w-full opacity-90 flex-shrink-0"></div>
+
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-bcs-charcoal border-b border-bcs-border flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-bcs-black border border-bcs-copper flex items-center justify-center text-bcs-gold text-xl">
+            <i class="ph-bold ph-gear-six"></i>
+          </div>
+          <div>
+            <h2 class="font-brand text-2xl text-bcs-cream uppercase tracking-wide leading-none">
+              Dashboard <span class="text-bcs-copper">Inställningar</span>
+            </h2>
+            <p class="font-mono text-[11px] text-zinc-400 mt-1">
+              Styr popups, maskotar, intervall & verkstadsskärmen (sparas på denna enhet)
+            </p>
+          </div>
+        </div>
+        <button onclick="closeSettingsModal()" class="p-2 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-zinc-300 hover:text-white">
+          <i class="ph-bold ph-x text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div id="settingsScrollBody" class="p-6 overflow-y-auto space-y-5 flex-1">
+
+        <!-- SEKTION 1: POPUPS & MASKOTAR -->
+        <div>
+          <h3 class="font-oswald text-sm uppercase tracking-wider text-bcs-gold font-bold mb-2.5 flex items-center gap-2">
+            <i class="ph-bold ph-sparkle text-bcs-copper"></i>
+            Popups & Maskotar på TV-skärmen
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- 1. Kolv-Kalle -->
+            <div class="bg-bcs-black/90 border border-bcs-border rounded-xl p-3.5 flex flex-col justify-between gap-2.5">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span class="font-oswald text-base font-bold text-bcs-cream block">Kolv-Kalle (Höger hörn)</span>
+                  <span class="font-mono text-[10px] text-zinc-400">Hoppar upp med pratbubbla & bus</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cfgPistonEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-bcs-border/60">
+                <div class="flex items-center gap-1.5 font-mono text-xs text-zinc-300">
+                  <span>Var</span>
+                  <input type="number" id="cfgPistonInterval" min="1" max="120" class="w-14 bg-bcs-charcoal border border-bcs-border rounded px-2 py-1 text-center text-bcs-gold font-bold focus:outline-none focus:border-bcs-copper">
+                  <span>min</span>
+                </div>
+                <button type="button" onclick="testFromSettings('piston')" class="px-2.5 py-1 rounded bg-bcs-charcoal hover:bg-bcs-copper border border-bcs-border font-mono text-[10px] font-bold text-bcs-cream transition-colors">
+                  Testa nu ▶
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. Pinuppan -->
+            <div class="bg-bcs-black/90 border border-bcs-border rounded-xl p-3.5 flex flex-col justify-between gap-2.5">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span class="font-oswald text-base font-bold text-bcs-cream block">50-tals Pinuppa (Vänster hörn)</span>
+                  <span class="font-mono text-[10px] text-zinc-400">Poppar upp och dansar med flagga</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cfgPinupEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-bcs-border/60">
+                <div class="flex items-center gap-1.5 font-mono text-xs text-zinc-300">
+                  <span>Var</span>
+                  <input type="number" id="cfgPinupInterval" min="1" max="120" class="w-14 bg-bcs-charcoal border border-bcs-border rounded px-2 py-1 text-center text-bcs-gold font-bold focus:outline-none focus:border-bcs-copper">
+                  <span>min</span>
+                </div>
+                <button type="button" onclick="testFromSettings('pinup')" class="px-2.5 py-1 rounded bg-bcs-charcoal hover:bg-rose-700 border border-bcs-border font-mono text-[10px] font-bold text-bcs-cream transition-colors">
+                  Testa nu ▶
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. Depå-insläpp / Incheckningsskylt -->
+            <div class="bg-bcs-black/90 border border-bcs-border rounded-xl p-3.5 flex flex-col justify-between gap-2.5">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span class="font-oswald text-base font-bold text-bcs-cream block">Depå-insläpp (Incheckning)</span>
+                  <span class="font-mono text-[10px] text-zinc-400">Stor välkomstskylt när någon checkar in</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cfgCheckinEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-bcs-border/60">
+                <div class="flex items-center gap-1.5 font-mono text-xs text-zinc-300">
+                  <span>Visas</span>
+                  <input type="number" id="cfgCheckinDuration" min="3" max="30" class="w-14 bg-bcs-charcoal border border-bcs-border rounded px-2 py-1 text-center text-bcs-gold font-bold focus:outline-none focus:border-bcs-copper">
+                  <span>sek</span>
+                </div>
+                <button type="button" onclick="testFromSettings('checkin')" class="px-2.5 py-1 rounded bg-bcs-charcoal hover:bg-bcs-copper border border-bcs-border font-mono text-[10px] font-bold text-bcs-cream transition-colors">
+                  Testa nu ▶
+                </button>
+              </div>
+            </div>
+
+            <!-- 4. Kaffelotteri-popup -->
+            <div class="bg-bcs-black/90 border border-bcs-border rounded-xl p-3.5 flex flex-col justify-between gap-2.5">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span class="font-oswald text-base font-bold text-bcs-cream block">Kaffelotteri-popup</span>
+                  <span class="font-mono text-[10px] text-zinc-400">Visar vem som ska sätta på kaffet</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cfgCoffeeEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-bcs-border/60">
+                <span class="font-mono text-[10px] text-zinc-400">Synkat med appen</span>
+                <button type="button" onclick="testFromSettings('coffee')" class="px-2.5 py-1 rounded bg-bcs-charcoal hover:bg-amber-700 border border-bcs-border font-mono text-[10px] font-bold text-bcs-cream transition-colors">
+                  Testa nu ▶
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEKTION 2: BANNER, VIDEO & VERKSTAD -->
+        <div>
+          <h3 class="font-oswald text-sm uppercase tracking-wider text-bcs-gold font-bold mb-2.5 flex items-center gap-2">
+            <i class="ph-bold ph-sliders text-bcs-copper"></i>
+            Verkstad, Video & Rullande Ticker
+          </h3>
+
+          <div class="bg-bcs-black/90 border border-bcs-border rounded-xl p-4 space-y-3.5">
+            <!-- Takeover & Garagets Bus -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pb-3 border-b border-bcs-border/60">
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <span class="font-oswald text-sm font-bold text-bcs-cream block">Födelsedags- & Högtidstakeover</span>
+                  <span class="font-mono text-[10px] text-zinc-400">Automatisk guld/helg-banner</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cfgTakeoverEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <span class="font-oswald text-sm font-bold text-bcs-cream block">Visa 10mm-räknaren</span>
+                  <span class="font-mono text-[10px] text-zinc-400">Dagar utan tappad 10mm hylsa</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cfgSocketCounterEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Standard YouTube Video ID -->
+            <div>
+              <label class="block font-oswald text-sm text-bcs-cream uppercase mb-1">
+                Standard YouTube-video / Stream vid start (Video-ID eller länk)
+              </label>
+              <input type="text" id="cfgDefaultVideo" placeholder="_vBPyEUb_hE" class="w-full bg-bcs-charcoal border border-bcs-border rounded-lg px-3 py-2 font-mono text-xs text-bcs-cream focus:outline-none focus:border-bcs-copper">
+            </div>
+
+            <!-- Garage Feed Rullande text -->
+            <div>
+              <label class="block font-oswald text-sm text-bcs-cream uppercase mb-1">
+                Garage Feed (Rullande text längst ner på skärmen)
+              </label>
+              <input type="text" id="cfgMarqueeText" class="w-full bg-bcs-charcoal border border-bcs-border rounded-lg px-3 py-2 font-mono text-xs text-bcs-cream focus:outline-none focus:border-bcs-copper">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3.5 bg-bcs-charcoal border-t border-bcs-border flex items-center justify-between gap-3 flex-shrink-0">
+        <button type="button" onclick="resetDashboardSettings()" class="px-3.5 py-2 rounded-lg bg-bcs-black hover:bg-red-950 border border-bcs-border hover:border-red-700 font-mono text-xs text-zinc-400 hover:text-red-300 transition-colors">
+          Återställ standard
+        </button>
+        <div class="flex items-center gap-2.5">
+          <button type="button" onclick="closeSettingsModal()" class="px-4 py-2 rounded-lg bg-bcs-black border border-bcs-border hover:border-zinc-500 font-oswald text-sm uppercase tracking-wider text-zinc-300">
+            Avbryt
+          </button>
+          <button type="button" onclick="saveDashboardSettings()" class="px-5 py-2 rounded-lg bg-bcs-copper hover:bg-bcs-copperLight border border-bcs-gold/60 font-oswald text-sm uppercase tracking-wider font-bold text-white shadow-lg flex items-center gap-1.5">
+            <i class="ph-bold ph-check-circle text-base"></i>
+            Spara Inställningar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================================== -->
   <!-- 50-TALS ROCKABILLY / HULA PINUPPA (DANSAR I VÄNSTER HÖRN)  -->
@@ -493,7 +770,6 @@
         <!-- Vänster arm (elegant hula-pose över huvudet/höften) -->
         <path d="M64 88 Q36 74 28 52 Q24 42 32 38" fill="none" stroke="url(#pinupSkin)" stroke-width="9.5" stroke-linecap="round"/>
         <path d="M64 88 Q36 74 28 52 Q24 42 32 38" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
-        <!-- Rött armband -->
         <ellipse cx="31" cy="57" rx="5.5" ry="2.5" transform="rotate(-25 31 57)" fill="#dc2626" stroke="#111827" stroke-width="1"/>
 
         <!-- Höger arm med schackrutig racingflagga -->
@@ -505,10 +781,8 @@
         </g>
 
         <!-- Långa pinupp-ben i korsad pose -->
-        <!-- Bakre ben -->
         <path d="M74 166 Q66 198 62 232 L50 238" fill="none" stroke="#e5a26c" stroke-width="12" stroke-linecap="round"/>
         <path d="M74 166 Q66 198 62 232 L50 238" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
-        <!-- Främre ben -->
         <path d="M96 164 Q108 196 102 234 L114 240" fill="none" stroke="url(#pinupSkin)" stroke-width="12.5" stroke-linecap="round"/>
         <path d="M96 164 Q108 196 102 234 L114 240" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
 
@@ -522,14 +796,11 @@
 
         <!-- Smal midja & kurvig överkropp -->
         <path d="M68 78 C66 96, 73 108, 72 120 L98 120 C97 108, 104 96, 102 78 Z" fill="url(#pinupSkin)" stroke="#111827" stroke-width="2"/>
-        <!-- Navel -->
         <circle cx="85" cy="112" r="1.4" fill="#c27d4e"/>
 
         <!-- Röd prickig 50-tals Halterneck-bikinitopp -->
         <path d="M65 86 Q76 98 85 90 Q94 98 105 86 L103 103 Q93 107 85 101 Q77 107 67 103 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="1.8"/>
-        <!-- Halterneck-band runt nacken -->
         <path d="M72 87 L79 73 M98 87 L91 73" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
-        <!-- Vita prickar på toppen -->
         <circle cx="73" cy="94" r="1.6" fill="#ffffff"/>
         <circle cx="79" cy="98" r="1.6" fill="#ffffff"/>
         <circle cx="91" cy="98" r="1.6" fill="#ffffff"/>
@@ -537,9 +808,7 @@
 
         <!-- Svajande kurviga höfter + Hula/Pinupp-volangkjol -->
         <g class="pinup-hips">
-          <!-- Kurvig höft- och kjolform -->
           <path d="M68 120 Q52 134 48 164 Q60 158 68 166 Q77 159 85 167 Q93 159 102 166 Q110 158 122 164 Q118 134 102 120 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="2"/>
-          <!-- Vita prickar på kjolen -->
           <circle cx="66" cy="134" r="2" fill="#ffffff"/>
           <circle cx="85" cy="132" r="2" fill="#ffffff"/>
           <circle cx="104" cy="134" r="2" fill="#ffffff"/>
@@ -547,7 +816,6 @@
           <circle cx="76" cy="146" r="2" fill="#ffffff"/>
           <circle cx="94" cy="146" r="2" fill="#ffffff"/>
           <circle cx="112" cy="148" r="2" fill="#ffffff"/>
-          <!-- Hula-blomsterbälte & Hibiskus på höften -->
           <path d="M67 121 Q85 127 103 121" fill="none" stroke="#fef08a" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="3 4"/>
           <circle cx="105" cy="123" r="6.5" fill="#f43f5e" stroke="#111827" stroke-width="1.4"/>
           <circle cx="105" cy="123" r="2.2" fill="#fef08a"/>
@@ -566,27 +834,22 @@
         <circle cx="106" cy="37" r="6" fill="#f43f5e" stroke="#111827" stroke-width="1.4"/>
         <circle cx="106" cy="37" r="2" fill="#fef08a"/>
 
-        <!-- Förföriska 50-tals ögon med långa ögonfransar (ena ögat blinkar!) -->
-        <!-- Vänster öga (öppet med eyeliner & fransar) -->
+        <!-- Förföriska 50-tals ögon -->
         <ellipse cx="76" cy="49" rx="4.5" ry="3.5" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
         <circle cx="77" cy="49" r="2.2" fill="#0284c7"/>
         <circle cx="77.6" cy="48.3" r="0.8" fill="#ffffff"/>
         <path d="M70 47 L73 48 M71 45 L74 47" stroke="#111827" stroke-width="1.3" stroke-linecap="round"/>
 
-        <!-- Höger öga (flörtig blinkning!) -->
         <path d="M90 49 Q94.5 52 99 49" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
         <path d="M98 49 L101 47 M96 50 L99 49" stroke="#111827" stroke-width="1.3" stroke-linecap="round"/>
 
-        <!-- Snygga ögonbryn -->
         <path d="M70 43 Q76 40 81 43" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
         <path d="M89 43 Q94 40 100 43" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
 
-        <!-- Rosiga kinder & Skönhetsfläck -->
         <circle cx="71" cy="56" r="3.2" fill="#f43f5e" opacity="0.45"/>
         <circle cx="99" cy="56" r="3.2" fill="#f43f5e" opacity="0.45"/>
         <circle cx="96" cy="60" r="1.1" fill="#18181b"/>
 
-        <!-- Fylliga röda pinupp-läppar -->
         <path d="M78 62 Q82 59.5 85 61.5 Q88 59.5 92 62 Q85 69 78 62 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.2"/>
         <path d="M80 62.5 Q85 64.5 90 62.5" fill="none" stroke="#fecaca" stroke-width="0.9" stroke-linecap="round"/>
       </svg>
@@ -594,7 +857,7 @@
   </div>
 
   <!-- ========================================================== -->
-  <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") – HÖGER HÖRN (VAR 5:E MIN) -->
+  <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") – HÖGER HÖRN               -->
   <!-- ========================================================== -->
   <div id="pistonMascot" class="piston-mascot-wrap" onclick="hidePistonMascot()" title="Klicka för att skicka ner Kolv-Kalle i cylindern igen">
     <div class="piston-bubble">
@@ -772,33 +1035,21 @@
     </div>
 
     <!-- PRIVAT STATUS & KONTROLLER -->
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2.5">
       <div id="workshopStatusPill" class="px-4 py-2 rounded-lg font-oswald text-xs xl:text-sm uppercase tracking-wider font-bold border-2 flex items-center gap-2.5 shadow-md bg-zinc-900/90 text-bcs-cream border-bcs-copper/70 transition-all duration-300">
         <span id="workshopStatusDot" class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
         <span id="workshopStatusText">PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
 
-      <button id="summonPinupBtn" title="Släpp fram Pinuppan!" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-rose-500 text-rose-400 shadow">
-        <i class="ph-bold ph-flower-lotus text-xl"></i>
+      <button id="openSettingsBtn" title="Inställningar för Dashboard & Popups" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-gold text-bcs-gold shadow transition-colors">
+        <i class="ph-bold ph-gear-six text-xl"></i>
       </button>
 
-      <button id="testCoffeeBtn" title="Testa kaffelotteri-popup" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-amber-500 text-amber-400 shadow">
-        <i class="ph-bold ph-coffee text-xl"></i>
-      </button>
-
-      <button id="summonPistonBtn" title="Släpp lös Kolv-Kalle!" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-copper shadow">
-        <i class="ph-bold ph-engine text-xl"></i>
-      </button>
-
-      <button id="testCheckinBtn" title="Testa inchecknings-skylt" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-gold text-bcs-gold shadow">
-        <i class="ph-bold ph-megaphone text-xl"></i>
-      </button>
-
-      <button id="fullscreenBtn" title="Fullskärm på TV" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow">
+      <button id="fullscreenBtn" title="Fullskärm på TV" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow transition-colors">
         <i class="ph-bold ph-corners-out text-xl"></i>
       </button>
 
-      <button id="refreshBtn" title="Uppdatera" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow">
+      <button id="refreshBtn" title="Uppdatera" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-bcs-copper text-bcs-cream shadow transition-colors">
         <i class="ph-bold ph-arrows-clockwise text-xl"></i>
       </button>
     </div>
@@ -918,7 +1169,7 @@
           </div>
           
           <div class="flex items-center gap-1.5">
-            <button onclick="switchStream('_vBPyEUb_hE')" title="Vald Drag Video" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-copper text-white font-bold hover:bg-bcs-copperLight transition-colors">
+            <button onclick="switchStream(dashSettings.defaultVideo)" title="Standardvideo (ändras i inställningar)" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-copper text-white font-bold hover:bg-bcs-copperLight transition-colors">
               Aktiv Video
             </button>
             <button onclick="switchStream('IW4TXPrB8Ug')" title="NHRA Top Fuel & Nitro Highlights" class="px-2 py-0.5 text-[10px] font-mono rounded bg-bcs-black hover:bg-bcs-copper text-zinc-300 hover:text-white border border-bcs-border transition-colors">
@@ -1029,7 +1280,7 @@
         </div>
 
         <!-- 10mm Hyls-incident Räknare -->
-        <div class="pt-1.5 border-t border-bcs-border/60 flex items-center justify-between gap-1.5 flex-shrink-0">
+        <div id="socketCounterRow" class="pt-1.5 border-t border-bcs-border/60 flex items-center justify-between gap-1.5 flex-shrink-0">
           <div class="flex items-center gap-1.5 min-w-0">
             <span class="px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/50 font-mono text-[10px] font-extrabold text-bcs-gold">
               <span id="socketSafeDays">0</span> DGR
@@ -1068,6 +1319,156 @@
   <!-- JAVASCRIPT-LOGIK                                           -->
   <!-- ========================================================== -->
   <script>
+    /* ==========================================================
+       INSTÄLLNINGAR (SPARAS I LOCALSTORAGE)
+       ========================================================== */
+    const DEFAULT_SETTINGS = {
+      pistonEnabled: true,
+      pistonIntervalMin: 5,
+      pinupEnabled: true,
+      pinupIntervalMin: 10,
+      checkinEnabled: true,
+      checkinDurationSec: 7,
+      coffeeEnabled: true,
+      takeoverEnabled: true,
+      socketCounterEnabled: true,
+      defaultVideo: "_vBPyEUb_hE",
+      marqueeText: "BURN CREEK SPEEDSHOP • BRÄNNEHYLTE • HÄNG TILLBAKA VERKTYGEN PÅ PLATS • KOLLA OLJETRYCK OCH STIFT • STÄNG AV GASTUBER & SVETS EFTER ARBETSPASSET • TÖM KOMPRESSORN PÅ KONDENSVATTEN • ALLTID NYBRYGGT KAFFE I HÖRNET • KEEP RACING ALIVE •"
+    };
+
+    function loadSettings() {
+      try {
+        const raw = localStorage.getItem('bcs_dashboard_settings');
+        if (!raw) return { ...DEFAULT_SETTINGS };
+        return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
+      } catch (e) {
+        return { ...DEFAULT_SETTINGS };
+      }
+    }
+
+    let dashSettings = loadSettings();
+    let pistonIntervalId = null;
+    let pinupIntervalId = null;
+
+    function applySettingsToDashboard(reloadVideo = false) {
+      // 1. Ticker-text
+      const marqueeEl = document.getElementById('garageMarqueeText');
+      if (marqueeEl && dashSettings.marqueeText) {
+        marqueeEl.textContent = dashSettings.marqueeText;
+      }
+
+      // 2. 10mm-räknare synlighet
+      const socketRow = document.getElementById('socketCounterRow');
+      if (socketRow) {
+        socketRow.style.display = dashSettings.socketCounterEnabled ? 'flex' : 'none';
+      }
+
+      // 3. Kolv-Kalle timer
+      clearInterval(pistonIntervalId);
+      if (!dashSettings.pistonEnabled) {
+        hidePistonMascot();
+      } else {
+        const mins = Math.max(1, Number(dashSettings.pistonIntervalMin) || 5);
+        pistonIntervalId = setInterval(() => {
+          const overlay = document.getElementById('checkinOverlay');
+          if (!overlay || !overlay.classList.contains('visible')) {
+            showPistonMascot();
+          }
+        }, mins * 60 * 1000);
+      }
+
+      // 4. Pinuppa timer
+      clearInterval(pinupIntervalId);
+      if (!dashSettings.pinupEnabled) {
+        hidePinupMascot();
+      } else {
+        const mins = Math.max(1, Number(dashSettings.pinupIntervalMin) || 10);
+        pinupIntervalId = setInterval(() => {
+          const overlay = document.getElementById('checkinOverlay');
+          if (!overlay || !overlay.classList.contains('visible')) {
+            showPinupMascot();
+          }
+        }, mins * 60 * 1000);
+      }
+
+      // 5. Takeover & banner
+      refreshAnnouncementAndTakeover();
+
+      // 6. Standardvideo om begärt
+      if (reloadVideo && dashSettings.defaultVideo) {
+        switchStream(dashSettings.defaultVideo);
+      }
+    }
+
+    function openSettingsModal() {
+      document.getElementById('cfgPistonEnabled').checked = dashSettings.pistonEnabled;
+      document.getElementById('cfgPistonInterval').value = dashSettings.pistonIntervalMin;
+      document.getElementById('cfgPinupEnabled').checked = dashSettings.pinupEnabled;
+      document.getElementById('cfgPinupInterval').value = dashSettings.pinupIntervalMin;
+      document.getElementById('cfgCheckinEnabled').checked = dashSettings.checkinEnabled;
+      document.getElementById('cfgCheckinDuration').value = dashSettings.checkinDurationSec;
+      document.getElementById('cfgCoffeeEnabled').checked = dashSettings.coffeeEnabled;
+      document.getElementById('cfgTakeoverEnabled').checked = dashSettings.takeoverEnabled;
+      document.getElementById('cfgSocketCounterEnabled').checked = dashSettings.socketCounterEnabled;
+      document.getElementById('cfgDefaultVideo').value = dashSettings.defaultVideo;
+      document.getElementById('cfgMarqueeText').value = dashSettings.marqueeText;
+
+      document.getElementById('settingsOverlay').classList.add('open');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsOverlay').classList.remove('open');
+    }
+
+    function saveDashboardSettings() {
+      const prevVideo = dashSettings.defaultVideo;
+
+      dashSettings = {
+        pistonEnabled: document.getElementById('cfgPistonEnabled').checked,
+        pistonIntervalMin: Math.max(1, parseInt(document.getElementById('cfgPistonInterval').value, 10) || 5),
+        pinupEnabled: document.getElementById('cfgPinupEnabled').checked,
+        pinupIntervalMin: Math.max(1, parseInt(document.getElementById('cfgPinupInterval').value, 10) || 10),
+        checkinEnabled: document.getElementById('cfgCheckinEnabled').checked,
+        checkinDurationSec: Math.max(3, parseInt(document.getElementById('cfgCheckinDuration').value, 10) || 7),
+        coffeeEnabled: document.getElementById('cfgCoffeeEnabled').checked,
+        takeoverEnabled: document.getElementById('cfgTakeoverEnabled').checked,
+        socketCounterEnabled: document.getElementById('cfgSocketCounterEnabled').checked,
+        defaultVideo: document.getElementById('cfgDefaultVideo').value.trim() || "_vBPyEUb_hE",
+        marqueeText: document.getElementById('cfgMarqueeText').value.trim() || DEFAULT_SETTINGS.marqueeText
+      };
+
+      localStorage.setItem('bcs_dashboard_settings', JSON.stringify(dashSettings));
+      applySettingsToDashboard(dashSettings.defaultVideo !== prevVideo);
+      closeSettingsModal();
+    }
+
+    function resetDashboardSettings() {
+      dashSettings = { ...DEFAULT_SETTINGS };
+      localStorage.setItem('bcs_dashboard_settings', JSON.stringify(dashSettings));
+      openSettingsModal();
+      applySettingsToDashboard(true);
+    }
+
+    let testCycleIdx = 0;
+    function testFromSettings(type) {
+      closeSettingsModal();
+      const sample = workshopSpots[testCycleIdx % workshopSpots.length];
+      testCycleIdx++;
+      const nowStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+
+      if (type === 'piston') {
+        showPistonMascot();
+      } else if (type === 'pinup') {
+        showPinupMascot();
+      } else if (type === 'checkin') {
+        queuePopupSign({ type: 'checkin', name: sample.name, timeStr: nowStr }, true);
+      } else if (type === 'coffee') {
+        queuePopupSign({ type: 'coffee', name: sample.name, spunBy: 'Inställningar', timeStr: nowStr }, true);
+      }
+    }
+
+    document.getElementById('openSettingsBtn').addEventListener('click', openSettingsModal);
+
     /* LOGGA-FALLBACK */
     function handleLogoError(img) {
       const candidates = [
@@ -1194,7 +1595,7 @@
     }
 
     /* ==========================================================
-       BUSIG KOLV-GUBBE ("KOLV-KALLE") – HÖGER HÖRN (VAR 5:E MIN)
+       BUSIG KOLV-GUBBE ("KOLV-KALLE") – HÖGER HÖRN
        ========================================================== */
     const pistonQuotes = [
       "Hallå där! Har ni sett min 10 mm hylsa eller har ni supit bort den igen?!",
@@ -1247,18 +1648,13 @@
     }
 
     setTimeout(() => {
-      showPistonMascot("Tjena gubbar! Kolv-Kalle har koll på er i Brännehylte – dyker upp var 5:e minut!");
+      if (dashSettings.pistonEnabled) {
+        showPistonMascot("Tjena gubbar! Kolv-Kalle har koll på er i Brännehylte – kör hårt!");
+      }
     }, 5000);
 
-    setInterval(() => {
-      const overlay = document.getElementById('checkinOverlay');
-      if (!overlay || !overlay.classList.contains('visible')) {
-        showPistonMascot();
-      }
-    }, 5 * 60 * 1000);
-
     /* ==========================================================
-       50-TALS PINUPPA – VÄNSTER HÖRN (DANSAR VAR 10:E MIN)
+       50-TALS PINUPPA – VÄNSTER HÖRN (DANSAR)
        ========================================================== */
     let pinupHideTimer = null;
 
@@ -1287,20 +1683,12 @@
       }, 440);
     }
 
-    // Dansar en sväng efter 16 sek, därefter exakt var 10:e minut
     setTimeout(() => {
       const overlay = document.getElementById('checkinOverlay');
-      if (!overlay || !overlay.classList.contains('visible')) {
+      if (dashSettings.pinupEnabled && (!overlay || !overlay.classList.contains('visible'))) {
         showPinupMascot();
       }
     }, 16000);
-
-    setInterval(() => {
-      const overlay = document.getElementById('checkinOverlay');
-      if (!overlay || !overlay.classList.contains('visible')) {
-        showPinupMascot();
-      }
-    }, 10 * 60 * 1000);
 
     /* ==========================================================
        GARAGETS BUS, MEK-HOROSKOP & 10MM-RÄKNARE
@@ -1348,7 +1736,9 @@
     function resetSocketCounter() {
       localStorage.setItem('bcs_10mm_last_lost', String(Date.now()));
       updateSocketCounterDisplay();
-      showPistonMascot("NÄMEN!! NÅGON TAPPADE PRECIS EN 10 MM HYLSA! RÄKNAREN ÄR NOLLSTÄLLD TILL 0 DAGAR!");
+      if (dashSettings.pistonEnabled) {
+        showPistonMascot("NÄMEN!! NÅGON TAPPADE PRECIS EN 10 MM HYLSA! RÄKNAREN ÄR NOLLSTÄLLD TILL 0 DAGAR!");
+      }
     }
 
     rotateGarageWisdom();
@@ -1369,7 +1759,12 @@
       "Kaffebryggaren väntar – och glöm inte skölja ur kannan först!"
     ];
 
-    function queuePopupSign(payload) {
+    function queuePopupSign(payload, forceShow = false) {
+      if (!forceShow) {
+        if (payload.type === 'coffee' && !dashSettings.coffeeEnabled) return;
+        if (payload.type !== 'coffee' && !dashSettings.checkinEnabled) return;
+      }
+
       popupQueue.push(payload);
       if (!isShowingPopup) {
         showNextPopupSign();
@@ -1454,7 +1849,8 @@
         timeEl.textContent = item.timeStr ? `Incheckad kl ${item.timeStr}` : 'Incheckad just nu';
       }
 
-      const durationSec = item.type === 'coffee' ? 9 : 7;
+      const baseSec = Math.max(3, Number(dashSettings.checkinDurationSec) || 7);
+      const durationSec = item.type === 'coffee' ? baseSec + 2 : baseSec;
 
       box.classList.remove('closing');
       void box.offsetWidth;
@@ -1535,6 +1931,8 @@
        FÖDELSEDAGS- & HÖGTIDS-TAKEOVER CONTROLLER
        ========================================================== */
     function getSeasonalTakeover(now = new Date()) {
+      if (!dashSettings.takeoverEnabled) return null;
+
       const m = now.getMonth() + 1;
       const d = now.getDate();
       const dayOfWeek = now.getDay();
@@ -1888,7 +2286,7 @@
     }
 
     renderCrewList([]);
-    refreshAnnouncementAndTakeover();
+    applySettingsToDashboard(true);
     initPresenceListener();
     initCoffeeLotteryListener();
     initAnnouncementListener();
@@ -2154,31 +2552,7 @@
       }
     });
 
-    /* 5. KNAPPAR I HEADER (PINUPPA, KAFFELOTTERI-TEST, KOLV-KALLE, DEPÅSKYLT, FULLSKÄRM, UPPDATERA) */
-    document.getElementById('summonPinupBtn').addEventListener('click', () => {
-      showPinupMascot();
-    });
-
-    let testCoffeeIdx = 0;
-    document.getElementById('testCoffeeBtn').addEventListener('click', () => {
-      const sample = workshopSpots[testCoffeeIdx % workshopSpots.length];
-      testCoffeeIdx++;
-      const nowStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
-      queuePopupSign({ type: 'coffee', name: sample.name, spunBy: 'Appen', timeStr: nowStr });
-    });
-
-    document.getElementById('summonPistonBtn').addEventListener('click', () => {
-      showPistonMascot();
-    });
-
-    let testMemberIdx = 0;
-    document.getElementById('testCheckinBtn').addEventListener('click', () => {
-      const sample = workshopSpots[testMemberIdx % workshopSpots.length];
-      testMemberIdx++;
-      const nowStr = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
-      queuePopupSign({ type: 'checkin', name: sample.name, timeStr: nowStr });
-    });
-
+    /* 5. FULLSKÄRM & UPPDATERING */
     document.getElementById('fullscreenBtn').addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => {});
