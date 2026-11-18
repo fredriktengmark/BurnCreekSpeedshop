@@ -383,72 +383,60 @@
     }
 
     /* ==========================================================
-       HULA / ROCKABILLY PINUPPA ("ROSIE" VÄNSTER HÖRN)
+       ROCKABILLY / HULA PINUPPA (VÄNSTER HÖRN – DANSAR UTAN TEXT)
        ========================================================== */
     @keyframes pinupSlideIn {
-      0% { transform: translateY(130%) rotate(-14deg) scale(0.82); opacity: 0; }
-      65% { transform: translateY(-8px) rotate(3deg) scale(1.03); opacity: 1; }
-      100% { transform: translateY(0) rotate(1.5deg) scale(1); opacity: 1; }
+      0% { transform: translateY(130%) rotate(-12deg) scale(0.85); opacity: 0; }
+      65% { transform: translateY(-8px) rotate(2deg) scale(1.03); opacity: 1; }
+      100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
     }
     @keyframes pinupSlideOut {
-      0% { transform: translateY(0) rotate(1.5deg) scale(1); opacity: 1; }
-      100% { transform: translateY(135%) rotate(-18deg) scale(0.85); opacity: 0; }
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translateY(135%) rotate(-15deg) scale(0.85); opacity: 0; }
     }
-    @keyframes hulaHipSway {
-      0%, 100% { transform: rotate(-3deg) translateX(-2px); }
-      50% { transform: rotate(3.5deg) translateX(3px); }
+    @keyframes pinupBodyDance {
+      0%, 100% { transform: rotate(-2.5deg) translateY(0px); }
+      25% { transform: rotate(2.5deg) translateY(-4px); }
+      50% { transform: rotate(-2deg) translateY(0px); }
+      75% { transform: rotate(3deg) translateY(-5px); }
     }
-    @keyframes skirtWiggle {
-      0%, 100% { transform: skewX(-4deg); }
-      50% { transform: skewX(5deg); }
+    @keyframes pinupHipSway {
+      0%, 100% { transform: translateX(-3px) rotate(-4deg); }
+      50% { transform: translateX(3.5px) rotate(4.5deg); }
+    }
+    @keyframes pinupFlagWave {
+      0%, 100% { transform: rotate(-6deg); }
+      50% { transform: rotate(8deg); }
     }
     .pinup-mascot-wrap {
       position: fixed;
-      bottom: 34px;
-      left: 26px;
+      bottom: 30px;
+      left: 24px;
       z-index: 9500;
       display: none;
       align-items: flex-end;
-      gap: 12px;
       pointer-events: auto;
       cursor: pointer;
     }
     .pinup-mascot-wrap.active {
       display: flex;
-      animation: pinupSlideIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: pinupSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .pinup-mascot-wrap.hiding {
       animation: pinupSlideOut 0.45s ease-in forwards;
     }
     .pinup-character {
-      animation: hulaHipSway 1.3s ease-in-out infinite;
+      animation: pinupBodyDance 1.6s ease-in-out infinite;
       transform-origin: bottom center;
-      filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.95));
-      flex-shrink: 0;
+      filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.95));
     }
-    .hula-skirt {
-      animation: skirtWiggle 0.9s ease-in-out infinite;
-      transform-origin: top center;
+    .pinup-hips {
+      animation: pinupHipSway 0.8s ease-in-out infinite;
+      transform-origin: 85px 125px;
     }
-    .pinup-bubble {
-      background: linear-gradient(180deg, #fff5f5 0%, #f4ecd8 100%);
-      color: #121110;
-      border: 3px solid #dc2626;
-      border-radius: 16px;
-      padding: 12px 16px;
-      max-width: 310px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.85), 0 0 0 2px #121110;
-      position: relative;
-      margin-bottom: 62px;
-    }
-    .pinup-bubble::after {
-      content: '';
-      position: absolute;
-      left: -14px;
-      bottom: 18px;
-      border-width: 10px 14px 10px 0;
-      border-style: solid;
-      border-color: transparent #dc2626 transparent transparent;
+    .pinup-flag-arm {
+      animation: pinupFlagWave 0.8s ease-in-out infinite;
+      transform-origin: 106px 88px;
     }
 
     /* Scrollbars */
@@ -470,21 +458,26 @@
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
 
   <!-- ========================================================== -->
-  <!-- HULA / ROCKABILLY PINUPPA ("ROSIE") – VÄNSTER HÖRN         -->
+  <!-- 50-TALS ROCKABILLY / HULA PINUPPA (DANSAR I VÄNSTER HÖRN)  -->
   <!-- ========================================================== -->
-  <div id="pinupMascot" class="pinup-mascot-wrap" onclick="hidePinupMascot()" title="Klicka för att vinka hejdå till Rosie">
-    <!-- Custom 50-tals Hula / Hot-Rod Pinuppa SVG -->
-    <div class="pinup-character w-32 h-44">
-      <svg viewBox="0 0 160 220" class="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
+  <div id="pinupMascot" class="pinup-mascot-wrap" onclick="hidePinupMascot()" title="Klicka för att vinka hejdå">
+    <div class="pinup-character w-44 h-60">
+      <svg viewBox="0 0 180 250" class="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="skinTone" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#fde2c4"/>
-            <stop offset="100%" stop-color="#f2b885"/>
+          <linearGradient id="pinupSkin" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffe6cc"/>
+            <stop offset="60%" stop-color="#f7c496"/>
+            <stop offset="100%" stop-color="#e5a26c"/>
           </linearGradient>
-          <linearGradient id="grassSkirt" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#65a30d"/>
-            <stop offset="50%" stop-color="#84cc16"/>
-            <stop offset="100%" stop-color="#4d7c0f"/>
+          <linearGradient id="pinupHair" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#27272a"/>
+            <stop offset="50%" stop-color="#09090b"/>
+            <stop offset="100%" stop-color="#18181b"/>
+          </linearGradient>
+          <linearGradient id="redSatin" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="55%" stop-color="#dc2626"/>
+            <stop offset="100%" stop-color="#991b1b"/>
           </linearGradient>
           <pattern id="checkerFlag" width="8" height="8" patternUnits="userSpaceOnUse">
             <rect width="4" height="4" fill="#111827"/>
@@ -494,88 +487,109 @@
           </pattern>
         </defs>
 
-        <!-- Långt korpsvart 50-tals pinupp-hår bakom ryggen -->
-        <path d="M52 44 C32 62, 30 112, 46 132 C56 140, 104 140, 114 132 C130 112, 128 62, 108 44 Z" fill="#18181b" stroke="#09090b" stroke-width="2.5"/>
+        <!-- Långt korpsvart 50-tals hår som faller ner över axlarna -->
+        <path d="M56 44 C30 64, 26 116, 44 138 C56 148, 114 148, 126 138 C144 116, 140 64, 114 44 Z" fill="url(#pinupHair)" stroke="#09090b" stroke-width="2.5"/>
 
-        <!-- Vänster arm (hula-våg) -->
-        <path d="M58 84 Q34 74 24 88 Q16 96 10 88" fill="none" stroke="url(#skinTone)" stroke-width="9" stroke-linecap="round"/>
-        <path d="M58 84 Q34 74 24 88 Q16 96 10 88" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+        <!-- Vänster arm (elegant hula-pose över huvudet/höften) -->
+        <path d="M64 88 Q36 74 28 52 Q24 42 32 38" fill="none" stroke="url(#pinupSkin)" stroke-width="9.5" stroke-linecap="round"/>
+        <path d="M64 88 Q36 74 28 52 Q24 42 32 38" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- Rött armband -->
+        <ellipse cx="31" cy="57" rx="5.5" ry="2.5" transform="rotate(-25 31 57)" fill="#dc2626" stroke="#111827" stroke-width="1"/>
 
-        <!-- Höger arm som håller schackrutig racingflagga -->
-        <path d="M102 84 Q126 74 134 54" fill="none" stroke="url(#skinTone)" stroke-width="9" stroke-linecap="round"/>
-        <path d="M102 84 Q126 74 134 54" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
-        <!-- Racingflagga -->
-        <line x1="134" y1="68" x2="138" y2="12" stroke="#d1d5db" stroke-width="3" stroke-linecap="round"/>
-        <path d="M138 14 Q152 10 162 18 L160 38 Q150 30 137 34 Z" fill="url(#checkerFlag)" stroke="#111827" stroke-width="2"/>
-
-        <!-- Ben (pinuppa-pose) -->
-        <path d="M68 156 L62 206 L52 212" fill="none" stroke="url(#skinTone)" stroke-width="11" stroke-linecap="round"/>
-        <path d="M92 156 L98 206 L108 212" fill="none" stroke="url(#skinTone)" stroke-width="11" stroke-linecap="round"/>
-        <!-- Röda 50-tals klackskor -->
-        <path d="M46 210 L65 206 L64 214 L46 214 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
-        <path d="M114 210 L95 206 L96 214 L114 214 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
-
-        <!-- Svajande Hula-bastkjol -->
-        <g class="hula-skirt">
-          <path d="M54 122 L106 122 L118 168 L108 163 L100 170 L90 163 L80 171 L70 163 L60 170 L52 163 L42 168 Z" fill="url(#grassSkirt)" stroke="#1a2e05" stroke-width="2"/>
-          <!-- Blomsterbälte på kjolen -->
-          <rect x="53" y="120" width="54" height="6" rx="3" fill="#dc2626"/>
-          <circle cx="62" cy="123" r="3.5" fill="#fef08a"/>
-          <circle cx="80" cy="123" r="3.5" fill="#ffffff"/>
-          <circle cx="98" cy="123" r="3.5" fill="#fef08a"/>
+        <!-- Höger arm med schackrutig racingflagga -->
+        <g class="pinup-flag-arm">
+          <path d="M106 88 Q134 78 144 56" fill="none" stroke="url(#pinupSkin)" stroke-width="9.5" stroke-linecap="round"/>
+          <path d="M106 88 Q134 78 144 56" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="143" y1="70" x2="149" y2="12" stroke="#e5e7eb" stroke-width="3" stroke-linecap="round"/>
+          <path d="M149 14 Q164 9 175 18 L172 39 Q161 31 148 35 Z" fill="url(#checkerFlag)" stroke="#111827" stroke-width="2"/>
         </g>
 
-        <!-- Överkropp & Röd prickig Halterneck-topp -->
-        <path d="M62 76 L98 76 L103 121 L57 121 Z" fill="url(#skinTone)" stroke="#111827" stroke-width="2"/>
-        <path d="M60 82 Q80 94 100 82 L102 103 Q80 107 58 103 Z" fill="#dc2626" stroke="#111827" stroke-width="2"/>
-        <!-- Vita prickar på toppen -->
-        <circle cx="68" cy="91" r="1.8" fill="#ffffff"/>
-        <circle cx="80" cy="95" r="1.8" fill="#ffffff"/>
-        <circle cx="92" cy="91" r="1.8" fill="#ffffff"/>
-        <circle cx="74" cy="99" r="1.8" fill="#ffffff"/>
-        <circle cx="86" cy="99" r="1.8" fill="#ffffff"/>
+        <!-- Långa pinupp-ben i korsad pose -->
+        <!-- Bakre ben -->
+        <path d="M74 166 Q66 198 62 232 L50 238" fill="none" stroke="#e5a26c" stroke-width="12" stroke-linecap="round"/>
+        <path d="M74 166 Q66 198 62 232 L50 238" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- Främre ben -->
+        <path d="M96 164 Q108 196 102 234 L114 240" fill="none" stroke="url(#pinupSkin)" stroke-width="12.5" stroke-linecap="round"/>
+        <path d="M96 164 Q108 196 102 234 L114 240" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
 
-        <!-- Hawaiiansk blomsterkrans (Lei) runt halsen -->
-        <path d="M64 74 Q80 86 96 74" fill="none" stroke="#f97316" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 4"/>
-        <path d="M66 75 Q80 87 94 75" fill="none" stroke="#fef08a" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 5"/>
+        <!-- Röda strumpeband på låret -->
+        <path d="M93 175 Q101 178 107 174" fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="105" cy="175" r="2.5" fill="#ffffff" stroke="#111827" stroke-width="0.8"/>
+
+        <!-- Röda 50-tals stilettklackar -->
+        <path d="M44 236 L65 231 L64 242 L44 241 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="1.6"/>
+        <path d="M120 238 L99 233 L100 244 L120 243 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="1.6"/>
+
+        <!-- Smal midja & kurvig överkropp -->
+        <path d="M68 78 C66 96, 73 108, 72 120 L98 120 C97 108, 104 96, 102 78 Z" fill="url(#pinupSkin)" stroke="#111827" stroke-width="2"/>
+        <!-- Navel -->
+        <circle cx="85" cy="112" r="1.4" fill="#c27d4e"/>
+
+        <!-- Röd prickig 50-tals Halterneck-bikinitopp -->
+        <path d="M65 86 Q76 98 85 90 Q94 98 105 86 L103 103 Q93 107 85 101 Q77 107 67 103 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="1.8"/>
+        <!-- Halterneck-band runt nacken -->
+        <path d="M72 87 L79 73 M98 87 L91 73" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+        <!-- Vita prickar på toppen -->
+        <circle cx="73" cy="94" r="1.6" fill="#ffffff"/>
+        <circle cx="79" cy="98" r="1.6" fill="#ffffff"/>
+        <circle cx="91" cy="98" r="1.6" fill="#ffffff"/>
+        <circle cx="97" cy="94" r="1.6" fill="#ffffff"/>
+
+        <!-- Svajande kurviga höfter + Hula/Pinupp-volangkjol -->
+        <g class="pinup-hips">
+          <!-- Kurvig höft- och kjolform -->
+          <path d="M68 120 Q52 134 48 164 Q60 158 68 166 Q77 159 85 167 Q93 159 102 166 Q110 158 122 164 Q118 134 102 120 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="2"/>
+          <!-- Vita prickar på kjolen -->
+          <circle cx="66" cy="134" r="2" fill="#ffffff"/>
+          <circle cx="85" cy="132" r="2" fill="#ffffff"/>
+          <circle cx="104" cy="134" r="2" fill="#ffffff"/>
+          <circle cx="58" cy="148" r="2" fill="#ffffff"/>
+          <circle cx="76" cy="146" r="2" fill="#ffffff"/>
+          <circle cx="94" cy="146" r="2" fill="#ffffff"/>
+          <circle cx="112" cy="148" r="2" fill="#ffffff"/>
+          <!-- Hula-blomsterbälte & Hibiskus på höften -->
+          <path d="M67 121 Q85 127 103 121" fill="none" stroke="#fef08a" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="3 4"/>
+          <circle cx="105" cy="123" r="6.5" fill="#f43f5e" stroke="#111827" stroke-width="1.4"/>
+          <circle cx="105" cy="123" r="2.2" fill="#fef08a"/>
+        </g>
 
         <!-- Huvud & Ansikte -->
-        <ellipse cx="80" cy="48" rx="20" ry="22" fill="url(#skinTone)" stroke="#111827" stroke-width="2.5"/>
+        <ellipse cx="85" cy="50" rx="20" ry="22.5" fill="url(#pinupSkin)" stroke="#111827" stroke-width="2.2"/>
 
         <!-- 50-tals Victory Rolls (lugg) -->
-        <path d="M58 42 C54 24, 76 18, 80 32 C84 18, 106 24, 102 42 C94 34, 66 34, 58 42 Z" fill="#18181b" stroke="#09090b" stroke-width="2"/>
+        <path d="M63 44 C58 24, 80 18, 85 33 C90 18, 112 24, 107 44 C98 35, 72 35, 63 44 Z" fill="url(#pinupHair)" stroke="#09090b" stroke-width="2"/>
 
-        <!-- Röd prickig Bandana + Hibiskusblomma -->
-        <path d="M59 35 Q80 22 101 35 L98 28 Q80 16 62 28 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
-        <!-- Rosett upptill -->
-        <path d="M74 22 L66 15 L72 25 Z M86 22 L94 15 L88 25 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
-        <circle cx="80" cy="23" r="3.5" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
-        <!-- Hibiskusblomma vid örat -->
-        <circle cx="101" cy="36" r="6" fill="#f43f5e" stroke="#111827" stroke-width="1.5"/>
-        <circle cx="101" cy="36" r="2" fill="#fef08a"/>
+        <!-- Röd prickig Bandana + Rosett + Hibiskus -->
+        <path d="M64 36 Q85 22 106 36 L103 29 Q85 16 67 29 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="1.5"/>
+        <path d="M79 22 L70 14 L77 25 Z M91 22 L100 14 L93 25 Z" fill="url(#redSatin)" stroke="#111827" stroke-width="1.5"/>
+        <circle cx="85" cy="23" r="3.5" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
+        <circle cx="106" cy="37" r="6" fill="#f43f5e" stroke="#111827" stroke-width="1.4"/>
+        <circle cx="106" cy="37" r="2" fill="#fef08a"/>
 
-        <!-- Cat-eye solglasögon & Blinkande öga -->
-        <path d="M62 45 L77 47 L75 54 L63 53 Z" fill="#111827" stroke="#f4ecd8" stroke-width="1.5"/>
-        <path d="M98 45 L83 47 L85 54 L97 53 Z" fill="#111827" stroke="#f4ecd8" stroke-width="1.5"/>
-        <line x1="77" y1="48" x2="83" y2="48" stroke="#f4ecd8" stroke-width="1.5"/>
+        <!-- Förföriska 50-tals ögon med långa ögonfransar (ena ögat blinkar!) -->
+        <!-- Vänster öga (öppet med eyeliner & fransar) -->
+        <ellipse cx="76" cy="49" rx="4.5" ry="3.5" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+        <circle cx="77" cy="49" r="2.2" fill="#0284c7"/>
+        <circle cx="77.6" cy="48.3" r="0.8" fill="#ffffff"/>
+        <path d="M70 47 L73 48 M71 45 L74 47" stroke="#111827" stroke-width="1.3" stroke-linecap="round"/>
 
-        <!-- Röda pinupp-läppar & glatt leende -->
-        <path d="M72 60 Q80 68 88 60 Q80 63 72 60 Z" fill="#dc2626" stroke="#991b1b" stroke-width="1.2"/>
-        <!-- Rosiga kinder -->
-        <circle cx="66" cy="57" r="3" fill="#f43f5e" opacity="0.45"/>
-        <circle cx="94" cy="57" r="3" fill="#f43f5e" opacity="0.45"/>
+        <!-- Höger öga (flörtig blinkning!) -->
+        <path d="M90 49 Q94.5 52 99 49" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+        <path d="M98 49 L101 47 M96 50 L99 49" stroke="#111827" stroke-width="1.3" stroke-linecap="round"/>
+
+        <!-- Snygga ögonbryn -->
+        <path d="M70 43 Q76 40 81 43" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M89 43 Q94 40 100 43" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
+
+        <!-- Rosiga kinder & Skönhetsfläck -->
+        <circle cx="71" cy="56" r="3.2" fill="#f43f5e" opacity="0.45"/>
+        <circle cx="99" cy="56" r="3.2" fill="#f43f5e" opacity="0.45"/>
+        <circle cx="96" cy="60" r="1.1" fill="#18181b"/>
+
+        <!-- Fylliga röda pinupp-läppar -->
+        <path d="M78 62 Q82 59.5 85 61.5 Q88 59.5 92 62 Q85 69 78 62 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.2"/>
+        <path d="M80 62.5 Q85 64.5 90 62.5" fill="none" stroke="#fecaca" stroke-width="0.9" stroke-linecap="round"/>
       </svg>
-    </div>
-
-    <!-- Pratbubbla -->
-    <div class="pinup-bubble">
-      <div class="flex items-center justify-between gap-2 border-b border-red-600/25 pb-1 mb-1">
-        <span class="font-brand text-xs text-red-700 uppercase tracking-wider">Aloha Rosie • Pit Crew</span>
-        <span class="font-mono text-[9px] font-bold bg-bcs-black text-bcs-gold px-1.5 py-0.5 rounded">BURN CREEK</span>
-      </div>
-      <p id="pinupSpeechText" class="font-oswald text-base font-bold leading-snug text-bcs-black">
-        Aloha pojkar! Glöm inte att torka av händerna innan ni tar i kromet!
-      </p>
     </div>
   </div>
 
@@ -764,7 +778,7 @@
         <span id="workshopStatusText">PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
 
-      <button id="summonPinupBtn" title="Släpp fram Aloha Rosie!" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-rose-500 text-rose-400 shadow">
+      <button id="summonPinupBtn" title="Släpp fram Pinuppan!" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-rose-500 text-rose-400 shadow">
         <i class="ph-bold ph-flower-lotus text-xl"></i>
       </button>
 
@@ -1244,33 +1258,13 @@
     }, 5 * 60 * 1000);
 
     /* ==========================================================
-       HULA / ROCKABILLY PINUPPA ("ALOHA ROSIE") – VÄNSTER HÖRN (VAR 10:E MIN)
+       50-TALS PINUPPA – VÄNSTER HÖRN (DANSAR VAR 10:E MIN)
        ========================================================== */
-    const pinupQuotes = [
-      "Aloha pojkar! Glöm inte att torka av oljan från händerna innan ni tar i kromet!",
-      "Vilken motor sång! Jag viftar med målflaggan när ni är redo för en provtur!",
-      "Hula-paus i Brännehylte! Vem står för nybryggt kaffe och kalla drycker idag?",
-      "Snyggt jobbat i depån gubbar – glöm bara inte att hänga tillbaka verktygen på tavlan!",
-      "Om en bult krånglar: andas lugnt, ta en klunk kaffe och hämta en längre hävarm!",
-      "Jag håller tummarna för noll oljeläckage och max kompression på alla åtta cylindrar!",
-      "Aloha! Ser ut som ett riktigt vinnarbygge här i Burn Creek Speedshop!"
-    ];
     let pinupHideTimer = null;
-    let lastPinupQuoteIdx = -1;
 
-    function showPinupMascot(customMessage = null) {
+    function showPinupMascot() {
       const wrap = document.getElementById('pinupMascot');
-      const speech = document.getElementById('pinupSpeechText');
-      if (!wrap || !speech) return;
-
-      if (customMessage) {
-        speech.textContent = customMessage;
-      } else {
-        let idx = Math.floor(Math.random() * pinupQuotes.length);
-        if (idx === lastPinupQuoteIdx) idx = (idx + 1) % pinupQuotes.length;
-        lastPinupQuoteIdx = idx;
-        speech.textContent = pinupQuotes[idx];
-      }
+      if (!wrap) return;
 
       wrap.classList.remove('hiding');
       wrap.classList.remove('active');
@@ -1280,7 +1274,7 @@
       clearTimeout(pinupHideTimer);
       pinupHideTimer = setTimeout(() => {
         hidePinupMascot();
-      }, 9500);
+      }, 10000);
     }
 
     function hidePinupMascot() {
@@ -1293,11 +1287,11 @@
       }, 440);
     }
 
-    // Kort premiär-vinkning efter 16 sek (precis efter att Kolv-Kalle gått ner), därefter exakt var 10:e minut
+    // Dansar en sväng efter 16 sek, därefter exakt var 10:e minut
     setTimeout(() => {
       const overlay = document.getElementById('checkinOverlay');
       if (!overlay || !overlay.classList.contains('visible')) {
-        showPinupMascot("Aloha gubbar! Rosie håller ställningarna i vänstra hörnet var 10:e minut!");
+        showPinupMascot();
       }
     }, 16000);
 
