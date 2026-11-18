@@ -401,7 +401,7 @@
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
 
   <!-- ========================================================== -->
-  <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") SOM HOPPAR UPP IBLAND      -->
+  <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") SOM HOPPAR UPP VAR 5:E MIN -->
   <!-- ========================================================== -->
   <div id="pistonMascot" class="piston-mascot-wrap" onclick="hidePistonMascot()" title="Klicka för att skicka ner Kolv-Kalle i cylindern igen">
     <div class="piston-bubble">
@@ -997,7 +997,7 @@
     }
 
     /* ==========================================================
-       BUSIG KOLV-GUBBE ("KOLV-KALLE") CONTROLLER
+       BUSIG KOLV-GUBBE ("KOLV-KALLE") – FAST 5-MINUTERS INTERVALL
        ========================================================== */
     const pistonQuotes = [
       "Hallå där! Har ni sett min 10 mm hylsa eller har ni supit bort den igen?!",
@@ -1011,7 +1011,6 @@
       "Fredrik, Tony, Pierre, Kenneth, Håkan – vem av er bjuder på bullar till kaffet idag?!",
       "Tips från kolvtoppen: 'Bara ett litet varv till' är exakt då bulten går rakt av!"
     ];
-    let pistonTimer = null;
     let pistonHideTimer = null;
     let lastPistonQuoteIdx = -1;
 
@@ -1037,7 +1036,7 @@
       clearTimeout(pistonHideTimer);
       pistonHideTimer = setTimeout(() => {
         hidePistonMascot();
-      }, 8500);
+      }, 9000);
     }
 
     function hidePistonMascot() {
@@ -1050,22 +1049,17 @@
       }, 440);
     }
 
-    function scheduleRandomPistonMascot() {
-      clearTimeout(pistonTimer);
-      const delayMs = (180 + Math.floor(Math.random() * 180)) * 1000;
-      pistonTimer = setTimeout(() => {
-        const overlay = document.getElementById('checkinOverlay');
-        if (!overlay || !overlay.classList.contains('visible')) {
-          showPistonMascot();
-        }
-        scheduleRandomPistonMascot();
-      }, delayMs);
-    }
-
+    // Starta Kolv-Kalle: en snabb hälsning efter 5 sek, därefter exakt var 5:e minut
     setTimeout(() => {
-      showPistonMascot("Tjena gubbar! Kolv-Kalle har koll på er i Brännehylte – kör hårt!");
-      scheduleRandomPistonMascot();
-    }, 8000);
+      showPistonMascot("Tjena gubbar! Kolv-Kalle har koll på er i Brännehylte – dyker upp var 5:e minut!");
+    }, 5000);
+
+    setInterval(() => {
+      const overlay = document.getElementById('checkinOverlay');
+      if (!overlay || !overlay.classList.contains('visible')) {
+        showPistonMascot();
+      }
+    }, 5 * 60 * 1000);
 
     /* ==========================================================
        GARAGETS BUS, MEK-HOROSKOP & 10MM-RÄKNARE
@@ -1518,14 +1512,12 @@
               ? data.spunAt.toMillis()
               : (data.updatedAt && data.updatedAt.toMillis ? data.updatedAt.toMillis() : 0));
 
-        // Ignorera gammal vinnare som redan låg i databasen innan TV:n laddades
         if (isInitialCoffeeLoad) {
           lastCoffeeTriggeredAt = tsMs || Date.now();
           isInitialCoffeeLoad = false;
           return;
         }
 
-        // Förhindra dubbeltrigging från serverTimestamp-uppdatering inom 4 sekunder
         const now = Date.now();
         if (tsMs && tsMs === lastCoffeeTriggeredAt) return;
         if (!tsMs && (now - lastCoffeeTriggeredAt) < 4000) return;
