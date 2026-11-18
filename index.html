@@ -321,7 +321,7 @@
     }
 
     /* ==========================================================
-       BUSIG KOLV-GUBBE ("KOLV-KALLE" POP-UP MASKOT)
+       BUSIG KOLV-GUBBE ("KOLV-KALLE" HÖGER HÖRN)
        ========================================================== */
     @keyframes pistonJumpIn {
       0% { transform: translateY(130%) rotate(18deg) scale(0.8); opacity: 0; }
@@ -382,6 +382,75 @@
       border-color: transparent transparent transparent #b25329;
     }
 
+    /* ==========================================================
+       HULA / ROCKABILLY PINUPPA ("ROSIE" VÄNSTER HÖRN)
+       ========================================================== */
+    @keyframes pinupSlideIn {
+      0% { transform: translateY(130%) rotate(-14deg) scale(0.82); opacity: 0; }
+      65% { transform: translateY(-8px) rotate(3deg) scale(1.03); opacity: 1; }
+      100% { transform: translateY(0) rotate(1.5deg) scale(1); opacity: 1; }
+    }
+    @keyframes pinupSlideOut {
+      0% { transform: translateY(0) rotate(1.5deg) scale(1); opacity: 1; }
+      100% { transform: translateY(135%) rotate(-18deg) scale(0.85); opacity: 0; }
+    }
+    @keyframes hulaHipSway {
+      0%, 100% { transform: rotate(-3deg) translateX(-2px); }
+      50% { transform: rotate(3.5deg) translateX(3px); }
+    }
+    @keyframes skirtWiggle {
+      0%, 100% { transform: skewX(-4deg); }
+      50% { transform: skewX(5deg); }
+    }
+    .pinup-mascot-wrap {
+      position: fixed;
+      bottom: 34px;
+      left: 26px;
+      z-index: 9500;
+      display: none;
+      align-items: flex-end;
+      gap: 12px;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .pinup-mascot-wrap.active {
+      display: flex;
+      animation: pinupSlideIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .pinup-mascot-wrap.hiding {
+      animation: pinupSlideOut 0.45s ease-in forwards;
+    }
+    .pinup-character {
+      animation: hulaHipSway 1.3s ease-in-out infinite;
+      transform-origin: bottom center;
+      filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.95));
+      flex-shrink: 0;
+    }
+    .hula-skirt {
+      animation: skirtWiggle 0.9s ease-in-out infinite;
+      transform-origin: top center;
+    }
+    .pinup-bubble {
+      background: linear-gradient(180deg, #fff5f5 0%, #f4ecd8 100%);
+      color: #121110;
+      border: 3px solid #dc2626;
+      border-radius: 16px;
+      padding: 12px 16px;
+      max-width: 310px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.85), 0 0 0 2px #121110;
+      position: relative;
+      margin-bottom: 62px;
+    }
+    .pinup-bubble::after {
+      content: '';
+      position: absolute;
+      left: -14px;
+      bottom: 18px;
+      border-width: 10px 14px 10px 0;
+      border-style: solid;
+      border-color: transparent #dc2626 transparent transparent;
+    }
+
     /* Scrollbars */
     #rssFeedContainer::-webkit-scrollbar {
       width: 4px;
@@ -401,7 +470,117 @@
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
 
   <!-- ========================================================== -->
-  <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") SOM HOPPAR UPP VAR 5:E MIN -->
+  <!-- HULA / ROCKABILLY PINUPPA ("ROSIE") – VÄNSTER HÖRN         -->
+  <!-- ========================================================== -->
+  <div id="pinupMascot" class="pinup-mascot-wrap" onclick="hidePinupMascot()" title="Klicka för att vinka hejdå till Rosie">
+    <!-- Custom 50-tals Hula / Hot-Rod Pinuppa SVG -->
+    <div class="pinup-character w-32 h-44">
+      <svg viewBox="0 0 160 220" class="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="skinTone" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#fde2c4"/>
+            <stop offset="100%" stop-color="#f2b885"/>
+          </linearGradient>
+          <linearGradient id="grassSkirt" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#65a30d"/>
+            <stop offset="50%" stop-color="#84cc16"/>
+            <stop offset="100%" stop-color="#4d7c0f"/>
+          </linearGradient>
+          <pattern id="checkerFlag" width="8" height="8" patternUnits="userSpaceOnUse">
+            <rect width="4" height="4" fill="#111827"/>
+            <rect x="4" y="4" width="4" height="4" fill="#111827"/>
+            <rect x="4" width="4" height="4" fill="#f8fafc"/>
+            <rect y="4" width="4" height="4" fill="#f8fafc"/>
+          </pattern>
+        </defs>
+
+        <!-- Långt korpsvart 50-tals pinupp-hår bakom ryggen -->
+        <path d="M52 44 C32 62, 30 112, 46 132 C56 140, 104 140, 114 132 C130 112, 128 62, 108 44 Z" fill="#18181b" stroke="#09090b" stroke-width="2.5"/>
+
+        <!-- Vänster arm (hula-våg) -->
+        <path d="M58 84 Q34 74 24 88 Q16 96 10 88" fill="none" stroke="url(#skinTone)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M58 84 Q34 74 24 88 Q16 96 10 88" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+
+        <!-- Höger arm som håller schackrutig racingflagga -->
+        <path d="M102 84 Q126 74 134 54" fill="none" stroke="url(#skinTone)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M102 84 Q126 74 134 54" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+        <!-- Racingflagga -->
+        <line x1="134" y1="68" x2="138" y2="12" stroke="#d1d5db" stroke-width="3" stroke-linecap="round"/>
+        <path d="M138 14 Q152 10 162 18 L160 38 Q150 30 137 34 Z" fill="url(#checkerFlag)" stroke="#111827" stroke-width="2"/>
+
+        <!-- Ben (pinuppa-pose) -->
+        <path d="M68 156 L62 206 L52 212" fill="none" stroke="url(#skinTone)" stroke-width="11" stroke-linecap="round"/>
+        <path d="M92 156 L98 206 L108 212" fill="none" stroke="url(#skinTone)" stroke-width="11" stroke-linecap="round"/>
+        <!-- Röda 50-tals klackskor -->
+        <path d="M46 210 L65 206 L64 214 L46 214 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
+        <path d="M114 210 L95 206 L96 214 L114 214 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
+
+        <!-- Svajande Hula-bastkjol -->
+        <g class="hula-skirt">
+          <path d="M54 122 L106 122 L118 168 L108 163 L100 170 L90 163 L80 171 L70 163 L60 170 L52 163 L42 168 Z" fill="url(#grassSkirt)" stroke="#1a2e05" stroke-width="2"/>
+          <!-- Blomsterbälte på kjolen -->
+          <rect x="53" y="120" width="54" height="6" rx="3" fill="#dc2626"/>
+          <circle cx="62" cy="123" r="3.5" fill="#fef08a"/>
+          <circle cx="80" cy="123" r="3.5" fill="#ffffff"/>
+          <circle cx="98" cy="123" r="3.5" fill="#fef08a"/>
+        </g>
+
+        <!-- Överkropp & Röd prickig Halterneck-topp -->
+        <path d="M62 76 L98 76 L103 121 L57 121 Z" fill="url(#skinTone)" stroke="#111827" stroke-width="2"/>
+        <path d="M60 82 Q80 94 100 82 L102 103 Q80 107 58 103 Z" fill="#dc2626" stroke="#111827" stroke-width="2"/>
+        <!-- Vita prickar på toppen -->
+        <circle cx="68" cy="91" r="1.8" fill="#ffffff"/>
+        <circle cx="80" cy="95" r="1.8" fill="#ffffff"/>
+        <circle cx="92" cy="91" r="1.8" fill="#ffffff"/>
+        <circle cx="74" cy="99" r="1.8" fill="#ffffff"/>
+        <circle cx="86" cy="99" r="1.8" fill="#ffffff"/>
+
+        <!-- Hawaiiansk blomsterkrans (Lei) runt halsen -->
+        <path d="M64 74 Q80 86 96 74" fill="none" stroke="#f97316" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 4"/>
+        <path d="M66 75 Q80 87 94 75" fill="none" stroke="#fef08a" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 5"/>
+
+        <!-- Huvud & Ansikte -->
+        <ellipse cx="80" cy="48" rx="20" ry="22" fill="url(#skinTone)" stroke="#111827" stroke-width="2.5"/>
+
+        <!-- 50-tals Victory Rolls (lugg) -->
+        <path d="M58 42 C54 24, 76 18, 80 32 C84 18, 106 24, 102 42 C94 34, 66 34, 58 42 Z" fill="#18181b" stroke="#09090b" stroke-width="2"/>
+
+        <!-- Röd prickig Bandana + Hibiskusblomma -->
+        <path d="M59 35 Q80 22 101 35 L98 28 Q80 16 62 28 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
+        <!-- Rosett upptill -->
+        <path d="M74 22 L66 15 L72 25 Z M86 22 L94 15 L88 25 Z" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
+        <circle cx="80" cy="23" r="3.5" fill="#dc2626" stroke="#111827" stroke-width="1.5"/>
+        <!-- Hibiskusblomma vid örat -->
+        <circle cx="101" cy="36" r="6" fill="#f43f5e" stroke="#111827" stroke-width="1.5"/>
+        <circle cx="101" cy="36" r="2" fill="#fef08a"/>
+
+        <!-- Cat-eye solglasögon & Blinkande öga -->
+        <path d="M62 45 L77 47 L75 54 L63 53 Z" fill="#111827" stroke="#f4ecd8" stroke-width="1.5"/>
+        <path d="M98 45 L83 47 L85 54 L97 53 Z" fill="#111827" stroke="#f4ecd8" stroke-width="1.5"/>
+        <line x1="77" y1="48" x2="83" y2="48" stroke="#f4ecd8" stroke-width="1.5"/>
+
+        <!-- Röda pinupp-läppar & glatt leende -->
+        <path d="M72 60 Q80 68 88 60 Q80 63 72 60 Z" fill="#dc2626" stroke="#991b1b" stroke-width="1.2"/>
+        <!-- Rosiga kinder -->
+        <circle cx="66" cy="57" r="3" fill="#f43f5e" opacity="0.45"/>
+        <circle cx="94" cy="57" r="3" fill="#f43f5e" opacity="0.45"/>
+      </svg>
+    </div>
+
+    <!-- Pratbubbla -->
+    <div class="pinup-bubble">
+      <div class="flex items-center justify-between gap-2 border-b border-red-600/25 pb-1 mb-1">
+        <span class="font-brand text-xs text-red-700 uppercase tracking-wider">Aloha Rosie • Pit Crew</span>
+        <span class="font-mono text-[9px] font-bold bg-bcs-black text-bcs-gold px-1.5 py-0.5 rounded">BURN CREEK</span>
+      </div>
+      <p id="pinupSpeechText" class="font-oswald text-base font-bold leading-snug text-bcs-black">
+        Aloha pojkar! Glöm inte att torka av händerna innan ni tar i kromet!
+      </p>
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- BUSIG KOLV-GUBBE ("KOLV-KALLE") – HÖGER HÖRN (VAR 5:E MIN) -->
   <!-- ========================================================== -->
   <div id="pistonMascot" class="piston-mascot-wrap" onclick="hidePistonMascot()" title="Klicka för att skicka ner Kolv-Kalle i cylindern igen">
     <div class="piston-bubble">
@@ -584,6 +763,10 @@
         <span id="workshopStatusDot" class="h-3.5 w-3.5 rounded-full bg-bcs-copper animate-pulse shadow-sm shadow-bcs-copper"></span>
         <span id="workshopStatusText">PRIVAT VERKSTAD • CREW ONLY</span>
       </div>
+
+      <button id="summonPinupBtn" title="Släpp fram Aloha Rosie!" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-rose-500 text-rose-400 shadow">
+        <i class="ph-bold ph-flower-lotus text-xl"></i>
+      </button>
 
       <button id="testCoffeeBtn" title="Testa kaffelotteri-popup" class="p-2.5 rounded-lg bg-bcs-black border border-bcs-border hover:border-amber-500 text-amber-400 shadow">
         <i class="ph-bold ph-coffee text-xl"></i>
@@ -997,7 +1180,7 @@
     }
 
     /* ==========================================================
-       BUSIG KOLV-GUBBE ("KOLV-KALLE") – FAST 5-MINUTERS INTERVALL
+       BUSIG KOLV-GUBBE ("KOLV-KALLE") – HÖGER HÖRN (VAR 5:E MIN)
        ========================================================== */
     const pistonQuotes = [
       "Hallå där! Har ni sett min 10 mm hylsa eller har ni supit bort den igen?!",
@@ -1049,7 +1232,6 @@
       }, 440);
     }
 
-    // Starta Kolv-Kalle: en snabb hälsning efter 5 sek, därefter exakt var 5:e minut
     setTimeout(() => {
       showPistonMascot("Tjena gubbar! Kolv-Kalle har koll på er i Brännehylte – dyker upp var 5:e minut!");
     }, 5000);
@@ -1060,6 +1242,71 @@
         showPistonMascot();
       }
     }, 5 * 60 * 1000);
+
+    /* ==========================================================
+       HULA / ROCKABILLY PINUPPA ("ALOHA ROSIE") – VÄNSTER HÖRN (VAR 10:E MIN)
+       ========================================================== */
+    const pinupQuotes = [
+      "Aloha pojkar! Glöm inte att torka av oljan från händerna innan ni tar i kromet!",
+      "Vilken motor sång! Jag viftar med målflaggan när ni är redo för en provtur!",
+      "Hula-paus i Brännehylte! Vem står för nybryggt kaffe och kalla drycker idag?",
+      "Snyggt jobbat i depån gubbar – glöm bara inte att hänga tillbaka verktygen på tavlan!",
+      "Om en bult krånglar: andas lugnt, ta en klunk kaffe och hämta en längre hävarm!",
+      "Jag håller tummarna för noll oljeläckage och max kompression på alla åtta cylindrar!",
+      "Aloha! Ser ut som ett riktigt vinnarbygge här i Burn Creek Speedshop!"
+    ];
+    let pinupHideTimer = null;
+    let lastPinupQuoteIdx = -1;
+
+    function showPinupMascot(customMessage = null) {
+      const wrap = document.getElementById('pinupMascot');
+      const speech = document.getElementById('pinupSpeechText');
+      if (!wrap || !speech) return;
+
+      if (customMessage) {
+        speech.textContent = customMessage;
+      } else {
+        let idx = Math.floor(Math.random() * pinupQuotes.length);
+        if (idx === lastPinupQuoteIdx) idx = (idx + 1) % pinupQuotes.length;
+        lastPinupQuoteIdx = idx;
+        speech.textContent = pinupQuotes[idx];
+      }
+
+      wrap.classList.remove('hiding');
+      wrap.classList.remove('active');
+      void wrap.offsetWidth;
+      wrap.classList.add('active');
+
+      clearTimeout(pinupHideTimer);
+      pinupHideTimer = setTimeout(() => {
+        hidePinupMascot();
+      }, 9500);
+    }
+
+    function hidePinupMascot() {
+      clearTimeout(pinupHideTimer);
+      const wrap = document.getElementById('pinupMascot');
+      if (!wrap || !wrap.classList.contains('active')) return;
+      wrap.classList.add('hiding');
+      setTimeout(() => {
+        wrap.classList.remove('active', 'hiding');
+      }, 440);
+    }
+
+    // Kort premiär-vinkning efter 16 sek (precis efter att Kolv-Kalle gått ner), därefter exakt var 10:e minut
+    setTimeout(() => {
+      const overlay = document.getElementById('checkinOverlay');
+      if (!overlay || !overlay.classList.contains('visible')) {
+        showPinupMascot("Aloha gubbar! Rosie håller ställningarna i vänstra hörnet var 10:e minut!");
+      }
+    }, 16000);
+
+    setInterval(() => {
+      const overlay = document.getElementById('checkinOverlay');
+      if (!overlay || !overlay.classList.contains('visible')) {
+        showPinupMascot();
+      }
+    }, 10 * 60 * 1000);
 
     /* ==========================================================
        GARAGETS BUS, MEK-HOROSKOP & 10MM-RÄKNARE
@@ -1913,7 +2160,11 @@
       }
     });
 
-    /* 5. KNAPPAR I HEADER (KAFFELOTTERI-TEST, KOLV-KALLE, DEPÅSKYLT, FULLSKÄRM, UPPDATERA) */
+    /* 5. KNAPPAR I HEADER (PINUPPA, KAFFELOTTERI-TEST, KOLV-KALLE, DEPÅSKYLT, FULLSKÄRM, UPPDATERA) */
+    document.getElementById('summonPinupBtn').addEventListener('click', () => {
+      showPinupMascot();
+    });
+
     let testCoffeeIdx = 0;
     document.getElementById('testCoffeeBtn').addEventListener('click', () => {
       const sample = workshopSpots[testCoffeeIdx % workshopSpots.length];
