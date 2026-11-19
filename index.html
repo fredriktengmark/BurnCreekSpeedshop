@@ -164,7 +164,7 @@
       font-weight: normal;
     }
 
-    /* Anslag / Banner styling */
+    /* Takeover-banner styling (för Födelsedagar & Högtider) */
     .dash-announcement-card {
       background: linear-gradient(180deg, #24140d 0%, #150d08 100%);
       border: 2px solid #d9622b;
@@ -255,7 +255,7 @@
     }
 
     /* ==========================================================
-       POPUP OVERLAY (CHECK-IN & KAFFE-LOTTERI)
+       POPUP OVERLAY (CHECK-IN, KAFFE-LOTTERI & DEPÅMEDDELANDE)
        ========================================================== */
     @keyframes signSlamIn {
       0% { opacity: 0; transform: scale(0.72) translateY(-30px) rotate(-1.5deg); }
@@ -294,7 +294,7 @@
     }
     .checkin-sign {
       width: 100%;
-      max-width: 780px;
+      max-width: 820px;
       background: linear-gradient(165deg, #211d1a 0%, #12100e 55%, #1d1510 100%);
       border: 3px solid #df9837;
       border-radius: 18px;
@@ -308,6 +308,11 @@
       border: 3px solid #df9837;
       box-shadow: 0 25px 70px rgba(0, 0, 0, 0.94), 0 0 65px rgba(223, 152, 55, 0.65);
     }
+    .checkin-sign.depot-theme {
+      background: linear-gradient(165deg, #2b150c 0%, #130e0b 55%, #24120a 100%);
+      border: 3px solid #d9622b;
+      box-shadow: 0 25px 75px rgba(0, 0, 0, 0.95), 0 0 65px rgba(217, 98, 43, 0.72);
+    }
     .checkin-sign.closing {
       animation: signSlamOut 0.35s ease-in forwards;
     }
@@ -318,6 +323,9 @@
     }
     .coffee-theme .checkin-progress-bar {
       background: linear-gradient(90deg, #78350f, #d97706, #fef08a);
+    }
+    .depot-theme .checkin-progress-bar {
+      background: linear-gradient(90deg, #991b1b, #d9622b, #df9837);
     }
 
     /* ==========================================================
@@ -703,6 +711,30 @@
                 </button>
               </div>
             </div>
+
+            <!-- 5. Meddelande från depån popup -->
+            <div class="md:col-span-2 bg-bcs-black/90 border border-bcs-border rounded-xl p-3.5 flex flex-col justify-between gap-2.5">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span class="font-oswald text-base font-bold text-bcs-cream block">Meddelande från depån (Popup-fönster)</span>
+                  <span class="font-mono text-[10px] text-zinc-400">Smäller upp som stort depåfönster när ett meddelande skickas i appen</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cfgDepotMsgEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-bcs-border/60">
+                <div class="flex items-center gap-1.5 font-mono text-xs text-zinc-300">
+                  <span>Visas</span>
+                  <input type="number" id="cfgDepotMsgDuration" min="4" max="60" class="w-14 bg-bcs-charcoal border border-bcs-border rounded px-2 py-1 text-center text-bcs-gold font-bold focus:outline-none focus:border-bcs-copper">
+                  <span>sek</span>
+                </div>
+                <button type="button" onclick="testFromSettings('depot')" class="px-2.5 py-1 rounded bg-bcs-charcoal hover:bg-bcs-copper border border-bcs-border font-mono text-[10px] font-bold text-bcs-cream transition-colors">
+                  Testa nu ▶
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1027,7 +1059,7 @@
   </div>
 
   <!-- ========================================================== -->
-  <!-- GEMENSAM DEPÅ- & KAFFELOTTERI-POPUP                        -->
+  <!-- GEMENSAM DEPÅ-POPUP (CHECK-IN, KAFFE & MEDDELANDE FRÅN DEPÅN) -->
   <!-- ========================================================== -->
   <div id="checkinOverlay" class="checkin-overlay" onclick="dismissCheckinSign()">
     <div id="checkinSignBox" class="checkin-sign" onclick="event.stopPropagation()">
@@ -1053,7 +1085,7 @@
           GMC & FORD HOT ROD MED CHEVA V8
         </p>
 
-        <div class="mt-4 inline-block bg-bcs-black/90 border border-bcs-copper/70 rounded-xl px-6 py-2.5 shadow-inner">
+        <div id="checkinQuoteBox" class="mt-4 inline-block max-w-2xl bg-bcs-black/90 border border-bcs-copper/70 rounded-xl px-6 py-3 shadow-inner">
           <p id="checkinSignQuote" class="font-mono text-sm md:text-base text-bcs-creamMuted">
             "Värm upp 350:n och fram med 10 mm-hylsan!"
           </p>
@@ -1146,15 +1178,15 @@
   </header>
 
   <!-- ========================================================== -->
-  <!-- 2. HUVUDYTA: 3 KOLUMNER + ANSLAG / TAKEOVER                -->
+  <!-- 2. HUVUDYTA: 3 KOLUMNER + TAKEOVER-BANNER                  -->
   <!-- ========================================================== -->
   <main class="grid grid-cols-12 gap-2.5 my-2 flex-1 min-h-0">
     
-    <!-- DEDIKERAT ANSLAG & TAKEOVER PÅ DASHBOARDEN -->
+    <!-- TAKEOVER-BANNER (FÖDELSEDAGAR & HÖGTIDER) -->
     <div id="dash-announcement-card" class="col-span-12 dash-announcement-card" style="display: none;">
       <div class="announcement-header">
         <div class="announcement-pulse"></div>
-        <span id="dash-announcement-title" class="announcement-title">MEDDELANDE FRÅN DEPÅN</span>
+        <span id="dash-announcement-title" class="announcement-title">BURN CREEK TAKEOVER</span>
         <span id="dash-announcement-time" class="announcement-time"></span>
       </div>
       <div id="dash-announcement-text" class="announcement-body"></div>
@@ -1425,6 +1457,8 @@
       checkinEnabled: true,
       checkinDurationSec: 7,
       coffeeEnabled: true,
+      depotMsgEnabled: true,
+      depotMsgDurationSec: 10,
       nightEnabled: true,
       nightStart: "22:00",
       nightEnd: "06:00",
@@ -1451,7 +1485,7 @@
     let pistonIntervalId = null;
     let pinupIntervalId = null;
     let lastActiveNames = [];
-    let manualNightOverride = null; // null = auto, true = tvinga på, false = tvinga av
+    let manualNightOverride = null;
     let tempWakeUntil = 0;
     let isNightModeCurrentlyActive = false;
 
@@ -1466,7 +1500,6 @@
       if (startMin < endMin) {
         return curMin >= startMin && curMin < endMin;
       } else {
-        // Går över midnatt (t.ex. 22:00 -> 06:00)
         return curMin >= startMin || curMin < endMin;
       }
     }
@@ -1524,7 +1557,6 @@
         }
       }
 
-      // Pausa / återuppta video vid skifte av nattläge
       if (shouldDim !== isNightModeCurrentlyActive) {
         isNightModeCurrentlyActive = shouldDim;
         if (shouldDim) {
@@ -1553,7 +1585,7 @@
       if (manualNightOverride === true) {
         manualNightOverride = false;
       } else {
-        tempWakeUntil = Date.now() + 15 * 60 * 1000; // Väck i 15 min
+        tempWakeUntil = Date.now() + 15 * 60 * 1000;
       }
       evaluateNightAndSaverMode();
     }
@@ -1621,6 +1653,8 @@
       document.getElementById('cfgCheckinEnabled').checked = dashSettings.checkinEnabled;
       document.getElementById('cfgCheckinDuration').value = dashSettings.checkinDurationSec;
       document.getElementById('cfgCoffeeEnabled').checked = dashSettings.coffeeEnabled;
+      document.getElementById('cfgDepotMsgEnabled').checked = dashSettings.depotMsgEnabled;
+      document.getElementById('cfgDepotMsgDuration').value = dashSettings.depotMsgDurationSec;
 
       document.getElementById('cfgNightEnabled').checked = dashSettings.nightEnabled;
       document.getElementById('cfgNightStart').value = dashSettings.nightStart || "22:00";
@@ -1653,6 +1687,8 @@
         checkinEnabled: document.getElementById('cfgCheckinEnabled').checked,
         checkinDurationSec: Math.max(3, parseInt(document.getElementById('cfgCheckinDuration').value, 10) || 7),
         coffeeEnabled: document.getElementById('cfgCoffeeEnabled').checked,
+        depotMsgEnabled: document.getElementById('cfgDepotMsgEnabled').checked,
+        depotMsgDurationSec: Math.max(4, parseInt(document.getElementById('cfgDepotMsgDuration').value, 10) || 10),
         nightEnabled: document.getElementById('cfgNightEnabled').checked,
         nightStart: document.getElementById('cfgNightStart').value || "22:00",
         nightEnd: document.getElementById('cfgNightEnd').value || "06:00",
@@ -1694,6 +1730,13 @@
         queuePopupSign({ type: 'checkin', name: sample.name, timeStr: nowStr }, true);
       } else if (type === 'coffee') {
         queuePopupSign({ type: 'coffee', name: sample.name, spunBy: 'Inställningar', timeStr: nowStr }, true);
+      } else if (type === 'depot') {
+        queuePopupSign({
+          type: 'depot',
+          name: sample.name,
+          message: "Kaffet är nybryggt och kompressorn är laddad – kom ut i garaget!",
+          timeStr: nowStr
+        }, true);
       }
     }
 
@@ -1802,8 +1845,6 @@
         </span>`
       }
     ];
-
-    let liveFirestoreAnnouncement = null;
 
     function matchCrewMember(name) {
       const n = (name || '').toLowerCase();
@@ -1975,7 +2016,7 @@
     updateSocketCounterDisplay();
 
     /* ==========================================================
-       POPUP-KÖ (CHECK-IN SKYLT & KAFFE-LOTTERI FRÅN APPEN)
+       POPUP-KÖ (CHECK-IN, KAFFE-LOTTERI & MEDDELANDE FRÅN DEPÅN)
        ========================================================== */
     const popupQueue = [];
     let isShowingPopup = false;
@@ -1991,14 +2032,13 @@
     function queuePopupSign(payload, forceShow = false) {
       if (!forceShow) {
         if (payload.type === 'coffee' && !dashSettings.coffeeEnabled) return;
-        if (payload.type !== 'coffee' && !dashSettings.checkinEnabled) return;
+        if (payload.type === 'depot' && !dashSettings.depotMsgEnabled) return;
+        if (payload.type === 'checkin' && !dashSettings.checkinEnabled) return;
       }
 
-      // Väck skärmen automatiskt om någon checkar in eller snurrar kaffe!
-      if (payload.type === 'checkin' || payload.type === 'coffee') {
-        tempWakeUntil = Date.now() + 15 * 60 * 1000;
-        evaluateNightAndSaverMode();
-      }
+      // Väck skärmen automatiskt vid incheckning, kaffe eller depåmeddelande
+      tempWakeUntil = Date.now() + 15 * 60 * 1000;
+      evaluateNightAndSaverMode();
 
       popupQueue.push(payload);
       if (!isShowingPopup) {
@@ -2030,11 +2070,34 @@
       if (!overlay || !box) return;
 
       const member = matchCrewMember(item.name);
-      const displayName = member ? member.name.toUpperCase() : (item.name || 'CREW').toUpperCase();
+      const displayName = member ? member.name.toUpperCase() : (item.name || 'DEPÅ').toUpperCase();
 
-      box.classList.remove('coffee-theme');
+      box.classList.remove('coffee-theme', 'depot-theme');
 
-      if (item.type === 'coffee') {
+      let durationSec = Math.max(3, Number(dashSettings.checkinDurationSec) || 7);
+
+      if (item.type === 'depot') {
+        // MEDDELANDE FRÅN DEPÅN POPUP
+        box.classList.add('depot-theme');
+        badgePill.className = 'inline-flex items-center gap-2 px-4 py-1 rounded-full bg-red-950/90 border border-bcs-copper text-bcs-cream font-mono text-xs uppercase tracking-widest mb-3 shadow';
+        badgeDot.className = 'w-2.5 h-2.5 rounded-full bg-red-500 animate-ping';
+        badgeEl.textContent = '📢 MEDDELANDE FRÅN DEPÅN 📢';
+
+        iconsEl.innerHTML = `
+          <span class="inline-flex items-center justify-center px-2 py-0.5 rounded bg-bcs-copper/30 border border-bcs-copper text-bcs-gold text-sm">
+            <i class="ph-fill ph-megaphone"></i>
+          </span>
+          ${member ? member.badgeHtml : ''}
+        `;
+
+        titleEl.textContent = item.message || 'VIKTIGT MEDDELANDE FRÅN DEPÅN!';
+        subEl.textContent = `SKICKAT AV ${displayName}${member ? ' • ' + member.vehicles.toUpperCase() : ''}`;
+        quoteEl.textContent = 'Burn Creek Depå-utrop • Klicka var som helst på skärmen för att stänga';
+        timeEl.textContent = item.timeStr ? `Utskickat kl ${item.timeStr}` : 'Utskickat just nu';
+
+        durationSec = Math.max(4, Number(dashSettings.depotMsgDurationSec) || 10);
+      } else if (item.type === 'coffee') {
+        // KAFFE-LOTTERI POPUP
         box.classList.add('coffee-theme');
         badgePill.className = 'inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-950/90 border border-amber-500/80 text-amber-300 font-mono text-xs uppercase tracking-widest mb-3 shadow';
         badgeDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping';
@@ -2055,7 +2118,10 @@
         const randomCoffeeQuote = coffeeQuotes[Math.floor(Math.random() * coffeeQuotes.length)];
         quoteEl.textContent = `"${randomCoffeeQuote}"`;
         timeEl.textContent = item.timeStr ? `Snurrad kl ${item.timeStr}` : 'Snurrad just nu';
+
+        durationSec = durationSec + 2;
       } else {
+        // DEPÅ-INSLÄPP / CHECK-IN POPUP
         const bdayToday = getBirthdayMemberToday();
         const isBdayPerson = member && bdayToday && member.id === bdayToday.id;
 
@@ -2083,9 +2149,6 @@
 
         timeEl.textContent = item.timeStr ? `Incheckad kl ${item.timeStr}` : 'Incheckad just nu';
       }
-
-      const baseSec = Math.max(3, Number(dashSettings.checkinDurationSec) || 7);
-      const durationSec = item.type === 'coffee' ? baseSec + 2 : baseSec;
 
       box.classList.remove('closing');
       void box.offsetWidth;
@@ -2267,26 +2330,6 @@
 
       card.classList.remove('takeover-birthday', 'takeover-holiday', 'takeover-weekend');
 
-      if (liveFirestoreAnnouncement && liveFirestoreAnnouncement.text) {
-        const data = liveFirestoreAnnouncement;
-        const timeStr = data.updatedAt && data.updatedAt.toDate
-          ? new Date(data.updatedAt.toDate()).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
-          : '';
-
-        if (takeover && takeover.type === 'takeover-birthday') {
-          card.classList.add('takeover-birthday');
-          titleEl.innerText = `MEDDELANDE FRÅN DEPÅN • ${takeover.pillText}`;
-        } else {
-          titleEl.innerText = 'MEDDELANDE FRÅN DEPÅN';
-        }
-
-        textEl.innerText = data.text;
-        authorEl.innerText = `Skickat av: ${data.author || 'Depå'}`;
-        timeEl.innerText = timeStr ? `kl ${timeStr}` : '';
-        card.style.display = 'block';
-        return;
-      }
-
       if (takeover) {
         card.classList.add(takeover.type);
         titleEl.innerText = takeover.title;
@@ -2299,7 +2342,7 @@
       }
     }
 
-    /* NÄRVAROLYSSNARE (TRIGGAR ÄVEN DEPÅSKYLTEN VID NY INCHECKNING) */
+    /* NÄRVAROLYSSNARE (TRIGGAR DEPÅ-INSLÄPP VID NY INCHECKNING) */
     let knownActiveIds = new Set();
     let isInitialPresenceLoad = true;
 
@@ -2412,15 +2455,49 @@
       });
     }
 
-    /* ANSLAGSLYSSNARE (MEDDELANDE FRÅN DEPÅN) */
+    /* MEDDELANDE FRÅN DEPÅN – POPUP-LYSSNARE (SAMMA FÖNSTER STIL SOM INLOGGNING) */
+    let isInitialAnnouncementLoad = true;
+    let lastAnnouncementSignature = null;
+
     function initAnnouncementListener() {
-      db.collection('announcements').doc('current').onSnapshot(doc => {
-        if (doc.exists && doc.data().text) {
-          liveFirestoreAnnouncement = doc.data();
-        } else {
-          liveFirestoreAnnouncement = null;
+      db.collection('announcements').doc('current').onSnapshot({ includeMetadataChanges: true }, doc => {
+        if (!doc.exists || !doc.data().text) {
+          isInitialAnnouncementLoad = false;
+          lastAnnouncementSignature = null;
+          return;
         }
-        refreshAnnouncementAndTakeover();
+
+        const data = doc.data();
+        const msgText = String(data.text || '').trim();
+        if (!msgText) {
+          isInitialAnnouncementLoad = false;
+          return;
+        }
+
+        const tsMs = data.updatedAt && data.updatedAt.toMillis
+          ? data.updatedAt.toMillis()
+          : 0;
+        const signature = `${msgText}_${data.author || ''}_${tsMs}`;
+
+        if (isInitialAnnouncementLoad) {
+          lastAnnouncementSignature = signature;
+          isInitialAnnouncementLoad = false;
+          return;
+        }
+
+        if (signature === lastAnnouncementSignature) return;
+        lastAnnouncementSignature = signature;
+
+        const timeStr = tsMs
+          ? new Date(tsMs).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
+          : new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+
+        queuePopupSign({
+          type: 'depot',
+          name: data.author || 'Depå',
+          message: msgText,
+          timeStr
+        });
       }, err => {
         console.error('Fel vid hämtning av anslag:', err);
       });
