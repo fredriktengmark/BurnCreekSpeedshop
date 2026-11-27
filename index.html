@@ -1643,7 +1643,7 @@ body[data-theme="race"]{--accent:#e33c35;--gold:#f5d35c;--panel:#292b30;--edge:#
     const v2Panels = {weather:['weatherTemp',0,0],news:['rssFeedContainer',0,1],video:['',1,0],calendar:['dash-calendar-container',1,1],presence:['dash-presence-list',2,0],crew:['crewMembersList',2,1],wisdom:['wisdomBody',2,2],quiz:['v2Quiz',2,3]};
     function applyV2(){
       document.body.dataset.theme = ['rat','classic','drag','rockabilly'].includes(dashSettings.theme)?dashSettings.theme:'rat';
-      applySeason();
+      if (typeof applySeason === "function") applySeason();
       const sections=document.querySelectorAll('body > main > section');
       Object.entries(v2Panels).forEach(([key, spec])=>{const el=sections[spec[1]]?.children[spec[2]]; if(el)el.classList.toggle('v2-hidden',dashSettings.panels?.[key]===false);});
     }
