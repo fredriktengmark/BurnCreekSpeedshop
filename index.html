@@ -594,9 +594,10 @@ body[data-theme="drag"] .checkered-border {background-color:#eee} body[data-them
 @media(max-width:1050px){body{height:auto!important;min-height:100vh;overflow:auto!important}body > header{height:auto!important;flex-wrap:wrap}body > main{grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}body > main > section{grid-row:auto;min-height:380px}body > main > section:last-child{grid-column:1/-1!important} }
 @media(max-width:650px){body > main{grid-template-columns:1fr!important}body > main > section{grid-column:1!important}body > header{justify-content:center}body > header h1{font-size:24px!important}}
 </style>
-</head>
+<style>#chaosLayer{position:fixed;inset:0;z-index:9300;display:none;pointer-events:none;align-items:flex-end;justify-content:center;padding:3vh 3vw}#chaosLayer.on{display:flex}#chaosLayer.full{align-items:center;background:rgba(10,8,6,.94)}#chaosSign{position:relative;max-width:85vw;width: min(760px,85vw);background:linear-gradient(145deg,#39271b,#151311);border:3px solid #b25329;border-radius:12px;padding:24px;text-align:center;color:#f4ecd8;box-shadow:0 12px 45px #000;pointer-events:auto;animation:chaosEnter .65s ease-out}#chaosLayer.full #chaosSign{width:min(1100px,90vw)}#chaosIcon{font-size:clamp(48px,10vh,120px);display:block;animation:chaosFloat 2s ease-in-out infinite}#chaosTitle{font-family:Rye,serif;font-size:clamp(22px,4vw,54px);color:#df9837}#chaosText{font-size:clamp(18px,2.4vw,36px)}#chaosTag{font: bold 13px monospace;letter-spacing:2px;color:#df9837}#chaosClose{position:absolute;right:10px;top:8px;color:#fff;font-size:24px}#chaosLayer.race #chaosIcon{animation:chaosRace 3s ease-in-out infinite}#chaosLayer.legend #chaosSign{border-color:#ffd36b;box-shadow:0 0 60px #a87925} @keyframes chaosEnter{from{opacity:0;transform:translateY(45px)}to{opacity:1;transform:translateY(0)}}@keyframes chaosFloat{50%{transform:translateY(-8px)}}@keyframes chaosRace{0%{transform:translateX(-35%)}100%{transform:translateX(35%)}}@media(prefers-reduced-motion:reduce){#chaosSign,#chaosIcon{animation:none!important}}</style></head>
 <body class="font-sans h-screen w-screen flex flex-col justify-between p-2.5 selection:bg-bcs-copper selection:text-white select-none">
 
+<div id="chaosLayer" role="status"><div id="chaosSign"><button id="chaosClose" aria-label="Stäng" onclick="chaosHide()">×</button><div id="chaosTag"></div><span id="chaosIcon"></span><h2 id="chaosTitle"></h2><p id="chaosText"></p></div></div>
   <!-- ========================================================== -->
   <!-- NATT- & SKÄRMSLÄCKAR-DIMMER                                -->
   <!-- ========================================================== -->
@@ -636,7 +637,7 @@ body[data-theme="drag"] .checkered-border {background-color:#eee} body[data-them
       </div>
 
       <!-- Modal Body -->
-      <div id="settingsScrollBody" class="p-6 overflow-y-auto space-y-5 flex-1">
+      <div id="settingsScrollBody" class="p-6 overflow-y-auto space-y-5 flex-1"><section class="bg-bcs-black border border-bcs-copper rounded-xl p-4 space-y-3"><h3 class="font-brand text-bcs-gold text-lg">Burn Creek Chaos Engine</h3><p class="text-sm">Hemliga garageöverraskningar • sparas på denna enhet</p><label class="flex items-center gap-3"><input type="checkbox" id="chaos-enabled"> Aktivera överraskningar</label><label class="flex items-center gap-3"><input type="checkbox" id="chaos-full"> Tillåt helskärm</label><label class="flex items-center gap-3"><input type="checkbox" id="chaos-presence"> Endast när någon är incheckad</label><label class="flex items-center gap-3"><input type="checkbox" id="chaos-personal"> Personliga medlemsskämt</label><label class="flex items-center gap-3"><input type="checkbox" id="chaos-rare"> Legendariska överraskningar</label><label class="flex items-center gap-3"><input type="checkbox" id="chaos-sound"> Diskret ljudeffekt (av som standard)</label><label>Frekvens <select id="chaos-frequency" class="bg-bcs-charcoal border rounded p-2"><option value="low">Lugnt (30–60 min)</option><option value="normal">Normalt (15–30 min)</option><option value="chaos">Kaos (5–10 min)</option><option value="random">Oförutsägbart (5–90 min)</option></select></label><div><button type="button" class="bg-bcs-copper rounded p-2" onclick="chaosTest()">Testa slumpmässig överraskning</button></div></section>
 
 <div class="v2-extra"><strong>V2 • DESIGN & PANELER</strong><label class="block mt-2">Tema <select id="cfgTheme" class="bg-bcs-black border rounded p-2"><option value="rat">Rat Rod</option><option value="classic">Classic Speedshop</option><option value="drag">Drag Racing</option><option value="rockabilly">Rockabilly</option></select></label><div class="grid grid-cols-2 gap-2 mt-3"><label><input type="checkbox" id="v2cfg-weather"> Väder</label><label><input type="checkbox" id="v2cfg-news"> Motorsportnyheter</label><label><input type="checkbox" id="v2cfg-video"> Live TV</label><label><input type="checkbox" id="v2cfg-calendar"> Kalender</label><label><input type="checkbox" id="v2cfg-presence"> Närvaro</label><label><input type="checkbox" id="v2cfg-crew"> Crew</label><label><input type="checkbox" id="v2cfg-wisdom"> Garagevisdom</label><label><input type="checkbox" id="v2cfg-quiz"> Bilfråga</label></div></div>
         <!-- SEKTION 1: POPUPS & MASKOTAR -->
@@ -1479,7 +1480,7 @@ body[data-theme="drag"] .checkered-border {background-color:#eee} body[data-them
        INSTÄLLNINGAR (SPARAS I LOCALSTORAGE)
        ========================================================== */
     const DEFAULT_SETTINGS = {
-      theme: "rat", panels: {},
+      theme: "rat", panels: {}, chaos: {enabled:true,full:true,presence:true,personal:true,rare:true,sound:false,frequency:"random"},
       pistonEnabled: true,
       pistonIntervalMin: 5,
       pinupEnabled: true,
@@ -1691,6 +1692,7 @@ body[data-theme="drag"] .checkered-border {background-color:#eee} body[data-them
     }
 
     function openSettingsModal() {
+      chaosLoadControls();
       document.getElementById('cfgTheme').value = dashSettings.theme || 'rat';
       Object.keys(v2Panels).forEach(k => document.getElementById('v2cfg-'+k).checked = dashSettings.panels?.[k] !== false);
       document.getElementById('cfgPistonEnabled').checked = dashSettings.pistonEnabled;
@@ -1725,8 +1727,10 @@ body[data-theme="drag"] .checkered-border {background-color:#eee} body[data-them
 
     function saveDashboardSettings() {
       const prevVideo = dashSettings.defaultVideo;
+      const chaos = chaosReadControls();
 
       dashSettings = {
+        chaos,
         theme: document.getElementById("cfgTheme").value, panels: Object.fromEntries(Object.keys(v2Panels).map(k=>[k,document.getElementById("v2cfg-"+k).checked])),
         pistonEnabled: document.getElementById('cfgPistonEnabled').checked,
         pistonIntervalMin: Math.max(1, parseInt(document.getElementById('cfgPistonInterval').value, 10) || 5),
@@ -2078,6 +2082,7 @@ body[data-theme="drag"] .checkered-border {background-color:#eee} body[data-them
     ];
 
     function queuePopupSign(payload, forceShow = false) {
+      chaosHide();
       if (!forceShow) {
         if (payload.type === 'coffee' && !dashSettings.coffeeEnabled) return;
         if (payload.type === 'depot' && !dashSettings.depotMsgEnabled) return;
@@ -2941,5 +2946,56 @@ body[data-theme="drag"] .checkered-border {background-color:#eee} body[data-them
       rotateGarageWisdom();
     });
   </script>
+<script>
+const chaosDefaults={enabled:true,full:true,presence:true,personal:true,rare:true,sound:false,frequency:'random'};
+function chaosConfig(){return {...chaosDefaults,...dashSettings.chaos};}
+function chaosLoadControls(){const c=chaosConfig();for(const k of Object.keys(chaosDefaults)){const e=document.getElementById('chaos-'+k);if(k==='frequency')e.value=c[k];else e.checked=c[k];}}
+function chaosReadControls(){return Object.fromEntries(Object.keys(chaosDefaults).map(k=>[k,k==='frequency'?document.getElementById('chaos-'+k).value:document.getElementById('chaos-'+k).checked]));}
+const chaosEvents=[
+[0, "🛸", "UFO över Burn Creek", "Intelligent liv eftersöks. Inga fynd ännu."],
+[0, "🔩", "Den förrymda 10 mm-hylsan", "Ni kommer aldrig att hitta mig!"],
+[0, "📋", "Verkstadsinspektören", "För mycket snack, för lite mek."],
+[0, "💀", "Reservdelarna är på väg", "När leverantören säger 2–3 arbetsdagar."],
+[0, "☕", "Akut kaffebrist", "Produktiviteten har sjunkit med 98 %."],
+[0, "🦝", "Verkstadstvättbjörnen", "En skiftnyckel har fått nya ägare."],
+[0, "🧰", "Verktyg på semester", "Tillbaka när de känner för det."],
+[0, "🐌", "Projektstatus", "Framåt. Tekniskt sett."],
+[0, "🧲", "Magnetisk personlighet", "Alla lösa skruvar söker kontakt."],
+[0, "📦", "Reservdelslogik", "Beställde en del. Behöver nu tre."],
+[0, "🧹", "Städpatrullen", "Golvet har ansökt om semester."],
+[0, "🛞", "Däckfilosofi", "Allt går runt till slut."],
+[0, "🦆", "Garageankan", "Kvack. Det där var inte original."],
+[0, "🕰️", "Fem minuter till", "Verkstadens längsta tidsenhet."],
+[0, "🧾", "Budgetrapport", "Budgeten vill inte kommentera."],
+[0, "🔧", "Specialverktyg", "Det ligger precis där du inte letar."],
+[1, "👑", "Dagens arbetsledare", "{name} får dagens hederstitel.", "personal"],
+[1, "☕", "Kaffeminister", "{name} utses till hedersminister för fika.", "personal"],
+[1, "🏆", "Garagelegend", "{name} får dagens symboliska guldstjärna.", "personal"],
+[1, "🎬", "Dagens ursäkt", "{name}: reservdelen var på fel planet.", "personal"],
+[1, "🎺", "Röda mattan", "En applåd för hela crewet!"],
+[1, "🧠", "Verkstadsbingo", "Har någon sagt: det är bara en bult?"],
+[1, "🐈", "Garagekatten", "Kvalitetskontroll genomförd. Mjau."],
+[1, "🎙️", "Garage Radio", "Dagens låt: symfonin om den saknade hylsan."],
+[2, "💻", "Blue Screen of Burn Creek", "SKÄMT • ERROR_10MM_NOT_FOUND"],
+[2, "📺", "Breaking News", "PÅHITTADE NYHETER: En reservdel passade direkt."],
+[2, "🏎️ 🏁", "Drag Race", "Burn Creek Grand Prix • digital uppvisning", "race"],
+[2, "🤠", "Western-duell", "Vem hittar rätt verktyg först?"],
+[2, "📺", "Burn Creek TV 1955", "Reklampaus: köp en skruv, leta efter två."],
+[2, "🚗 🚙", "V8-invasion", "Digital bilparad genom depån.", "race"],
+[2, "🟩", "Matrix-läge", "350 • 454 • 327 • 10MM • 383 • V8"],
+[2, "🎰", "Tre symboler", "🔧 ☕ 🛞 — dagens skämt: allt snurrar utom projektet."],
+[3, "👑", "Kolv-Kalles uppror", "Jag har tagit över dashboarden. Fika för alla!"],
+[3, "🌙", "Garage på månen", "Första verkstaden med reservdelar i omloppsbana."],
+[4, "🏆", "Den gyllene 10 mm-hylsan", "LEGENDARISKT! Den mytomspunna hylsan har visat sig."]];
+let chaosTimer=0,chaosEnd=0,chaosLast=null,chaosAudio=null;
+function chaosHide(){clearTimeout(chaosEnd);document.getElementById('chaosLayer')?.classList.remove('on');}
+function chaosBlocked(c){return document.hidden||isNightModeCurrentlyActive||document.getElementById('settingsOverlay').classList.contains('open')||document.getElementById('checkinOverlay').classList.contains('visible')||popupQueue.length>0||(c.presence&&(lastActiveNames.length===0||!navigator.onLine));}
+function chaosPick(c){const eligible=chaosEvents.filter(e=>(c.full||e[0]<2)&&(c.rare||e[0]!==4)&&(e[4]!=='personal'||(c.personal&&lastActiveNames.length)));const weights=[70,20,8,1.9,.1];const tiers=weights.map((w,i)=>eligible.some(e=>e[0]===i)?w:0);let r=Math.random()*tiers.reduce((a,b)=>a+b,0),tier=0;for(;tier<4;tier++){r-=tiers[tier];if(r<0)break;}let pool=eligible.filter(e=>e[0]===tier);if(pool.length>1)pool=pool.filter(e=>e!==chaosLast);return pool[Math.floor(Math.random()*pool.length)]||eligible[0];}
+function chaosShow(c){const e=chaosPick(c);if(!e)return;chaosLast=e;const layer=document.getElementById('chaosLayer');layer.className='on '+(e[0]>=2?'full ':'')+(e[4]==='race'?'race ':'')+(e[0]===4?'legend':'');document.getElementById('chaosTag').textContent='BURN CREEK CHAOS ENGINE • '+['VANLIG','OVANLIG','SÄLLSYNT','EPISK','LEGENDARISK'][e[0]];document.getElementById('chaosIcon').textContent=e[1];document.getElementById('chaosTitle').textContent=e[2];document.getElementById('chaosText').textContent=e[3].replace('{name}',lastActiveNames[Math.floor(Math.random()*lastActiveNames.length)]||'Crewet');if(c.sound&&chaosAudio?.state==='running'){const o=chaosAudio.createOscillator(),g=chaosAudio.createGain();o.frequency.value=440;g.gain.value=.025;o.connect(g);g.connect(chaosAudio.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,chaosAudio.currentTime+.25);o.stop(chaosAudio.currentTime+.3);}clearTimeout(chaosEnd);chaosEnd=setTimeout(chaosHide,e[0]>=2?10000:7000);}
+function chaosSchedule(){clearTimeout(chaosTimer);const c=chaosConfig();const [a,b]=({low:[30,60],normal:[15,30],chaos:[5,10],random:[5,90]})[c.frequency]||[5,90];chaosTimer=setTimeout(chaosTick,(a+Math.random()*(b-a))*60000);}
+function chaosTick(){const c=chaosConfig();if(c.enabled&&chaosBlocked(c)){chaosTimer=setTimeout(chaosTick,30000);return;}if(c.enabled)chaosShow(c);chaosSchedule();}
+function chaosTest(){const c=chaosReadControls();if(c.sound){try{chaosAudio=chaosAudio||new AudioContext();chaosAudio.resume();}catch(e){}}closeSettingsModal();if(!chaosBlocked({...c,presence:false}))chaosShow(c);}
+const chaosSaveButton=document.querySelector('[onclick="saveDashboardSettings()"]');chaosSaveButton?.addEventListener('click',()=>{chaosHide();chaosSchedule();});document.querySelector('[onclick="resetDashboardSettings()"]')?.addEventListener('click',()=>{chaosHide();chaosSchedule();});setInterval(()=>{if(document.getElementById('chaosLayer').classList.contains('on')&&(isNightModeCurrentlyActive||document.hidden||document.getElementById('checkinOverlay').classList.contains('visible')||document.getElementById('settingsOverlay').classList.contains('open')))chaosHide();},250);chaosSchedule();
+</script>
 </body>
 </html>
